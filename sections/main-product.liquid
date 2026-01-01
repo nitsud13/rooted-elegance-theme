@@ -1,0 +1,817 @@
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<section class="main-product section" data-section-id="{{ section.id }}">
+  <div class="container">
+    {% if product %}
+      <div class="product-layout">
+        <!-- Product Gallery -->
+        <div class="product-gallery">
+          <div class="gallery-main">
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                class="gallery-main-image"
+                id="main-product-image"
+                width="800"
+                height="800"
+                loading="eager"
+              >
+            {% else %}
+              <div class="gallery-placeholder">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="200" height="200" fill="var(--color-cream-warm)"/>
+                  <path d="M100 40 L60 100 L75 100 L50 150 L150 150 L125 100 L140 100 Z" fill="var(--color-sage)" opacity="0.5"/>
+                </svg>
+              </div>
+            {% endif %}
+
+            {% if product.images.size > 1 %}
+              <button class="gallery-nav gallery-prev" aria-label="Previous image" onclick="changeImage(-1)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <button class="gallery-nav gallery-next" aria-label="Next image" onclick="changeImage(1)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            {% endif %}
+          </div>
+
+          {% if product.images.size > 1 %}
+            <div class="gallery-thumbnails">
+              {% for image in product.images %}
+                <button
+                  class="thumbnail{% if forloop.first %} active{% endif %}"
+                  onclick="selectImage({{ forloop.index0 }}, '{{ image | image_url: width: 800 }}')"
+                  aria-label="View image {{ forloop.index }}"
+                >
+                  <img
+                    src="{{ image | image_url: width: 120 }}"
+                    alt="{{ image.alt | escape }}"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  >
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+          {% if product.vendor %}
+            <p class="product-vendor">{{ product.vendor }}</p>
+          {% endif %}
+
+          <h1 class="product-title">{{ product.title }}</h1>
+
+          <!-- Rating -->
+          {% if product.metafields.reviews.rating.value %}
+            <div class="product-rating">
+              {% render 'star-rating', rating: product.metafields.reviews.rating.value %}
+              <span class="rating-count">({{ product.metafields.reviews.rating_count }} reviews)</span>
+            </div>
+          {% endif %}
+
+          <!-- Price -->
+          <div class="product-price">
+            {% if product.compare_at_price > product.price %}
+              <span class="price-sale">{{ product.price | money }}</span>
+              <span class="price-compare">{{ product.compare_at_price | money }}</span>
+              <span class="price-badge">
+                Save {{ product.compare_at_price | minus: product.price | money }}
+              </span>
+            {% else %}
+              <span class="price-regular">{{ product.price | money }}</span>
+            {% endif %}
+          </div>
+
+          <!-- Growing Zone Badge -->
+          {% if product.metafields.custom.growing_zones %}
+            <div class="zone-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              <span>Grows in Zones {{ product.metafields.custom.growing_zones }}</span>
+            </div>
+          {% endif %}
+
+          <!-- Short Description -->
+          {% if product.metafields.custom.short_description %}
+            <p class="product-excerpt">{{ product.metafields.custom.short_description }}</p>
+          {% endif %}
+
+          <!-- Product Form -->
+          {% form 'product', product, id: 'product-form', class: 'product-form' %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="variant-id">
+
+            {% unless product.has_only_default_variant %}
+              <div class="product-options">
+                {% for option in product.options_with_values %}
+                  <div class="option-group">
+                    <label class="option-label" for="option-{{ option.name | handleize }}">
+                      {{ option.name }}
+                    </label>
+                    <select
+                      name="options[{{ option.name }}]"
+                      id="option-{{ option.name | handleize }}"
+                      class="option-select"
+                      onchange="updateVariant()"
+                    >
+                      {% for value in option.values %}
+                        <option
+                          value="{{ value }}"
+                          {% if option.selected_value == value %}selected{% endif %}
+                        >
+                          {{ value }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endunless %}
+
+            <!-- Quantity -->
+            <div class="quantity-group">
+              <label class="quantity-label">Quantity</label>
+              <div class="quantity-selector">
+                <button type="button" class="quantity-btn" onclick="adjustQuantity(-1)" aria-label="Decrease quantity">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  class="quantity-input"
+                  id="quantity-input"
+                  aria-label="Quantity"
+                >
+                <button type="button" class="quantity-btn" onclick="adjustQuantity(1)" aria-label="Increase quantity">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Add to Cart -->
+            <button
+              type="submit"
+              class="btn btn--primary btn--lg add-to-cart-btn"
+              {% unless product.available %}disabled{% endunless %}
+              id="add-to-cart"
+            >
+              {% if product.available %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          {% endform %}
+
+          <!-- Trust Badges -->
+          <div class="product-trust">
+            <div class="trust-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <polyline points="9 12 11 14 15 10"/>
+              </svg>
+              <span>1-Year Guarantee</span>
+            </div>
+            <div class="trust-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+              <span>Free Shipping $100+</span>
+            </div>
+            <div class="trust-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+              <span>Expert Packaging</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Details Tabs -->
+      <div class="product-details">
+        <div class="details-tabs">
+          <button class="tab-btn active" onclick="showTab('description')" data-tab="description">Description</button>
+          <button class="tab-btn" onclick="showTab('care')" data-tab="care">Care Guide</button>
+          <button class="tab-btn" onclick="showTab('shipping')" data-tab="shipping">Shipping</button>
+        </div>
+
+        <div class="tab-content active" id="tab-description">
+          <div class="rte">
+            {{ product.description }}
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-care">
+          <div class="rte">
+            {% if product.metafields.custom.care_guide %}
+              {{ product.metafields.custom.care_guide | metafield_tag }}
+            {% else %}
+              <h3>General Care Instructions</h3>
+              <ul>
+                <li><strong>Watering:</strong> Water deeply after planting. Continue regular watering for the first growing season.</li>
+                <li><strong>Mulching:</strong> Apply 2-4 inches of mulch around the base, keeping it away from the trunk.</li>
+                <li><strong>Pruning:</strong> Prune during dormant season to maintain shape and remove dead branches.</li>
+                <li><strong>Fertilizing:</strong> Apply balanced fertilizer in early spring for optimal growth.</li>
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-shipping">
+          <div class="rte">
+            <h3>Shipping Information</h3>
+            <ul>
+              <li><strong>Processing Time:</strong> Orders ship within 2-5 business days</li>
+              <li><strong>Shipping Season:</strong> We ship year-round to most zones, weather permitting</li>
+              <li><strong>Packaging:</strong> Plants are carefully packaged to ensure safe arrival</li>
+              <li><strong>Free Shipping:</strong> Orders over $100 qualify for free standard shipping</li>
+            </ul>
+            <p>Questions? Contact our plant experts at <a href="mailto:support@example.com">support@example.com</a></p>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="product-not-found">
+        <p>Product not found</p>
+        <a href="{{ routes.collections_url }}" class="btn btn--primary">Browse Collections</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  // Image Gallery
+  let currentImageIndex = 0;
+  const productImages = [
+    {% for image in product.images %}
+      '{{ image | image_url: width: 800 }}'{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+
+  function changeImage(direction) {
+    currentImageIndex += direction;
+    if (currentImageIndex >= productImages.length) currentImageIndex = 0;
+    if (currentImageIndex < 0) currentImageIndex = productImages.length - 1;
+    selectImage(currentImageIndex, productImages[currentImageIndex]);
+  }
+
+  function selectImage(index, src) {
+    currentImageIndex = index;
+    const mainImage = document.getElementById('main-product-image');
+    if (mainImage) {
+      mainImage.src = src;
+    }
+
+    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === index);
+    });
+  }
+
+  // Quantity
+  function adjustQuantity(change) {
+    const input = document.getElementById('quantity-input');
+    const newValue = Math.max(1, parseInt(input.value) + change);
+    input.value = newValue;
+  }
+
+  // Variant Selection
+  const productVariants = {{ product.variants | json }};
+
+  function updateVariant() {
+    const options = [];
+    document.querySelectorAll('.option-select').forEach(select => {
+      options.push(select.value);
+    });
+
+    const variant = productVariants.find(v => {
+      return v.options.every((opt, i) => opt === options[i]);
+    });
+
+    if (variant) {
+      document.getElementById('variant-id').value = variant.id;
+
+      // Update price
+      const priceContainer = document.querySelector('.product-price');
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        priceContainer.innerHTML = `
+          <span class="price-sale">${formatMoney(variant.price)}</span>
+          <span class="price-compare">${formatMoney(variant.compare_at_price)}</span>
+          <span class="price-badge">Save ${formatMoney(variant.compare_at_price - variant.price)}</span>
+        `;
+      } else {
+        priceContainer.innerHTML = `<span class="price-regular">${formatMoney(variant.price)}</span>`;
+      }
+
+      // Update button state
+      const addBtn = document.getElementById('add-to-cart');
+      if (variant.available) {
+        addBtn.disabled = false;
+        addBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          Add to Cart
+        `;
+      } else {
+        addBtn.disabled = true;
+        addBtn.innerHTML = 'Sold Out';
+      }
+
+      // Update URL
+      const url = new URL(window.location);
+      url.searchParams.set('variant', variant.id);
+      history.replaceState({}, '', url);
+    }
+  }
+
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  // Tabs
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.toggle('active', content.id === 'tab-' + tabId);
+    });
+  }
+</script>
+
+<style>
+  .main-product {
+    padding: var(--space-12) 0 var(--space-20);
+  }
+
+  .product-layout {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  @media (min-width: 1024px) {
+    .product-layout {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+    }
+  }
+
+  /* Gallery */
+  .product-gallery {
+    position: sticky;
+    top: var(--space-8);
+  }
+
+  .gallery-main {
+    position: relative;
+    background: var(--color-cream-warm);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+  }
+
+  .gallery-main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .gallery-placeholder {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-placeholder svg {
+    width: 50%;
+    height: 50%;
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--color-white);
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-bark);
+    transition: all var(--duration-normal) var(--ease-out);
+    opacity: 0;
+  }
+
+  .gallery-main:hover .gallery-nav {
+    opacity: 1;
+  }
+
+  .gallery-nav:hover {
+    background: var(--color-forest);
+    color: var(--color-white);
+  }
+
+  .gallery-prev { left: var(--space-4); }
+  .gallery-next { right: var(--space-4); }
+
+  .gallery-thumbnails {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding: var(--space-2);
+  }
+
+  .thumbnail {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    background: var(--color-cream-warm);
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbnail:hover,
+  .thumbnail.active {
+    border-color: var(--color-forest);
+  }
+
+  /* Product Info */
+  .product-info {
+    animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+  }
+
+  .product-vendor {
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+
+  .product-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-forest);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+
+  @media (min-width: 1024px) {
+    .product-title {
+      font-size: var(--text-4xl);
+    }
+  }
+
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .rating-count {
+    font-size: var(--text-sm);
+    color: var(--color-bark-light);
+  }
+
+  .product-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .price-regular,
+  .price-sale {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+    color: var(--color-forest);
+  }
+
+  .price-sale {
+    color: var(--color-earth);
+  }
+
+  .price-compare {
+    font-size: var(--text-lg);
+    color: var(--color-bark-light);
+    text-decoration: line-through;
+  }
+
+  .price-badge {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-white);
+    background: var(--color-earth);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+  }
+
+  .zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: rgba(139, 168, 136, 0.15);
+    color: var(--color-forest);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    margin-bottom: var(--space-6);
+  }
+
+  .product-excerpt {
+    font-size: var(--text-lg);
+    color: var(--color-bark);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-8);
+  }
+
+  /* Product Form */
+  .product-form {
+    margin-bottom: var(--space-8);
+  }
+
+  .product-options {
+    margin-bottom: var(--space-6);
+  }
+
+  .option-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .option-label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-bark);
+    margin-bottom: var(--space-2);
+  }
+
+  .option-select {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    border: 1px solid var(--color-cream-warm);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    color: var(--color-bark);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .option-select:hover,
+  .option-select:focus {
+    border-color: var(--color-sage);
+    outline: none;
+  }
+
+  .quantity-group {
+    margin-bottom: var(--space-6);
+  }
+
+  .quantity-label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-bark);
+    margin-bottom: var(--space-2);
+  }
+
+  .quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-cream-warm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .quantity-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-cream);
+    border: none;
+    cursor: pointer;
+    color: var(--color-bark);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .quantity-btn:hover {
+    background: var(--color-sage);
+    color: var(--color-white);
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    border: none;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    -moz-appearance: textfield;
+  }
+
+  .quantity-input::-webkit-inner-spin-button,
+  .quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Trust Badges */
+  .product-trust {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-cream-warm);
+  }
+
+  .trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--color-bark-light);
+  }
+
+  .trust-item svg {
+    color: var(--color-sage);
+  }
+
+  /* Product Details Tabs */
+  .product-details {
+    margin-top: var(--space-16);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--color-cream-warm);
+  }
+
+  .details-tabs {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-cream-warm);
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark-light);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--duration-fast) var(--ease-out);
+    margin-bottom: -1px;
+  }
+
+  .tab-btn:hover {
+    color: var(--color-forest);
+  }
+
+  .tab-btn.active {
+    color: var(--color-forest);
+    border-bottom-color: var(--color-forest);
+  }
+
+  .tab-content {
+    display: none;
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .tab-content .rte {
+    max-width: 800px;
+  }
+
+  .product-not-found {
+    text-align: center;
+    padding: var(--space-16) 0;
+  }
+
+  .product-not-found p {
+    font-size: var(--text-xl);
+    color: var(--color-bark-light);
+    margin-bottom: var(--space-6);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "tag": "section",
+  "class": "main-product-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_zone_badge",
+      "label": "Show growing zone badge",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

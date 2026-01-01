@@ -1,0 +1,170 @@
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<section class="main-page section" data-section-id="{{ section.id }}">
+  <div class="container container--narrow">
+    <article class="page-content">
+      <header class="page-header">
+        <h1 class="page-title">{{ page.title }}</h1>
+      </header>
+
+      <div class="page-body rte">
+        {{ page.content }}
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .main-page {
+    padding: var(--space-16) 0;
+    min-height: 50vh;
+  }
+
+  @media (min-width: 768px) {
+    .main-page {
+      padding: var(--space-24) 0;
+    }
+  }
+
+  .page-header {
+    margin-bottom: var(--space-10);
+    text-align: center;
+  }
+
+  .page-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-forest);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+  }
+
+  .page-body {
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 100ms both;
+  }
+
+  /* Rich Text Editor Styles */
+  .rte {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-bark);
+  }
+
+  .rte h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-forest);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-6);
+  }
+
+  .rte h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-forest);
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+  }
+
+  .rte h4 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-forest);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+
+  .rte p {
+    margin-bottom: var(--space-6);
+  }
+
+  .rte ul,
+  .rte ol {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-8);
+  }
+
+  .rte li {
+    margin-bottom: var(--space-2);
+  }
+
+  .rte a {
+    color: var(--color-earth);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .rte a:hover {
+    color: var(--color-earth-dark);
+  }
+
+  .rte blockquote {
+    margin: var(--space-8) 0;
+    padding: var(--space-6) var(--space-8);
+    background: var(--color-cream-warm);
+    border-left: 4px solid var(--color-sage);
+    border-radius: var(--radius-md);
+    font-style: italic;
+    color: var(--color-bark-light);
+  }
+
+  .rte img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: var(--space-8) 0;
+  }
+
+  .rte table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-8) 0;
+  }
+
+  .rte th,
+  .rte td {
+    padding: var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--color-cream-warm);
+  }
+
+  .rte th {
+    font-weight: var(--weight-semibold);
+    color: var(--color-forest);
+    background: var(--color-cream-warm);
+  }
+
+  .rte hr {
+    border: none;
+    height: 1px;
+    background: var(--color-cream-warm);
+    margin: var(--space-12) 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "tag": "section",
+  "class": "main-page-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Page Settings"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,274 @@
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<section class="main-404 section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="not-found-content">
+      <!-- Decorative Tree Illustration -->
+      <div class="not-found-illustration">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="tree-icon">
+          <circle cx="100" cy="100" r="90" fill="var(--color-cream-warm)" opacity="0.5"/>
+          <path d="M100 40 L60 100 L75 100 L50 150 L150 150 L125 100 L140 100 Z" fill="var(--color-sage)" opacity="0.6"/>
+          <path d="M100 30 L70 80 L82 80 L60 120 L140 120 L118 80 L130 80 Z" fill="var(--color-forest)"/>
+          <rect x="92" y="120" width="16" height="35" fill="var(--color-bark)" rx="2"/>
+          <circle cx="100" cy="60" r="4" fill="var(--color-earth)" opacity="0.8"/>
+          <circle cx="85" cy="75" r="3" fill="var(--color-gold)" opacity="0.7"/>
+          <circle cx="115" cy="70" r="3" fill="var(--color-earth)" opacity="0.6"/>
+          <circle cx="75" cy="100" r="3" fill="var(--color-gold)" opacity="0.8"/>
+          <circle cx="125" cy="95" r="3" fill="var(--color-earth)" opacity="0.7"/>
+        </svg>
+      </div>
+
+      <div class="not-found-text">
+        <span class="not-found-code">404</span>
+        <h1 class="not-found-title">{{ section.settings.title }}</h1>
+        <p class="not-found-message">{{ section.settings.message }}</p>
+      </div>
+
+      <div class="not-found-actions">
+        <a href="{{ routes.root_url }}" class="btn btn--primary btn--lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Back to Home
+        </a>
+        <a href="{{ routes.collections_url }}" class="btn btn--secondary btn--lg">
+          Browse Collections
+        </a>
+      </div>
+
+      {% if section.settings.show_search %}
+        <div class="not-found-search">
+          <p class="search-label">Or try searching for what you need:</p>
+          <form action="{{ routes.search_url }}" method="get" class="search-form">
+            <input
+              type="search"
+              name="q"
+              placeholder="Search trees, shrubs, and more..."
+              class="input input--lg search-input"
+              aria-label="Search"
+            >
+            <button type="submit" class="btn btn--primary search-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <span class="sr-only">Search</span>
+            </button>
+          </form>
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_popular_links %}
+        <div class="popular-links">
+          <h3 class="popular-links-title">Popular Categories</h3>
+          <div class="popular-links-grid">
+            <a href="/collections/shade-trees" class="popular-link">
+              <span class="popular-link-icon">🌳</span>
+              <span>Shade Trees</span>
+            </a>
+            <a href="/collections/flowering-trees" class="popular-link">
+              <span class="popular-link-icon">🌸</span>
+              <span>Flowering Trees</span>
+            </a>
+            <a href="/collections/evergreens" class="popular-link">
+              <span class="popular-link-icon">🌲</span>
+              <span>Evergreens</span>
+            </a>
+            <a href="/collections/fruit-trees" class="popular-link">
+              <span class="popular-link-icon">🍎</span>
+              <span>Fruit Trees</span>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .main-404 {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) 0;
+    background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-warm) 100%);
+  }
+
+  .not-found-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .not-found-illustration {
+    margin-bottom: var(--space-8);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .tree-icon {
+    width: 160px;
+    height: 160px;
+  }
+
+  .not-found-text {
+    margin-bottom: var(--space-10);
+  }
+
+  .not-found-code {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: var(--weight-bold);
+    color: var(--color-sage);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: var(--space-4);
+    animation: fadeInDown var(--duration-slow) var(--ease-out) both;
+  }
+
+  .not-found-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-forest);
+    margin-bottom: var(--space-4);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 100ms both;
+  }
+
+  .not-found-message {
+    font-size: var(--text-lg);
+    color: var(--color-bark-light);
+    line-height: var(--leading-relaxed);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 200ms both;
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-12);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 300ms both;
+  }
+
+  .not-found-search {
+    margin-bottom: var(--space-12);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 400ms both;
+  }
+
+  .search-label {
+    font-size: var(--text-sm);
+    color: var(--color-bark-light);
+    margin-bottom: var(--space-4);
+  }
+
+  .search-form {
+    display: flex;
+    gap: var(--space-3);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    flex: 1;
+  }
+
+  .search-btn {
+    padding: var(--space-4) var(--space-5);
+    flex-shrink: 0;
+  }
+
+  .popular-links {
+    padding-top: var(--space-10);
+    border-top: 1px solid rgba(139, 168, 136, 0.3);
+    animation: fadeInUp var(--duration-slow) var(--ease-out) 500ms both;
+  }
+
+  .popular-links-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-forest);
+    margin-bottom: var(--space-6);
+  }
+
+  .popular-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .popular-links-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .popular-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--duration-normal) var(--ease-out);
+    text-decoration: none;
+    color: var(--color-bark);
+  }
+
+  .popular-link:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    color: var(--color-forest);
+  }
+
+  .popular-link-icon {
+    font-size: var(--text-2xl);
+  }
+
+  .popular-link span:last-child {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "class": "main-404-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Page Not Found"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Message",
+      "default": "Looks like this page has gone to seed! The page you're looking for may have been moved or no longer exists."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_popular_links",
+      "label": "Show popular categories",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
