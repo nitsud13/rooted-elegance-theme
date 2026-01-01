@@ -1,0 +1,103 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Rooted Elegance",
+    "theme_version": "1.0.0",
+    "theme_author": "Rooted Elegance",
+    "theme_documentation_url": "https://github.com/nitsud13/rooted-elegance-theme",
+    "theme_support_url": "https://github.com/nitsud13/rooted-elegance-theme/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Primary Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary (Forest Green)",
+        "default": "#1B4D3E"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary (Soft Sage)",
+        "default": "#8BA888"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent (Rich Earth)",
+        "default": "#C45C26"
+      },
+      {
+        "type": "header",
+        "content": "Background Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background (Warm Cream)",
+        "default": "#FAF7F2"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text (Deep Bark)",
+        "default": "#3D2B1F"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading font",
+        "default": "fraunces_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "inter_n4"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https://facebook.com/shopname"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/shopname"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https://pinterest.com/shopname"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube",
+        "info": "https://youtube.com/shopname"
+      }
+    ]
+  }
+]

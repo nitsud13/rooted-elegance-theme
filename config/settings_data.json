@@ -1,0 +1,18 @@
+{
+  "current": {
+    "color_primary": "#1B4D3E",
+    "color_secondary": "#8BA888",
+    "color_accent": "#C45C26",
+    "color_background": "#FAF7F2",
+    "color_text": "#3D2B1F"
+  },
+  "presets": {
+    "Default": {
+      "color_primary": "#1B4D3E",
+      "color_secondary": "#8BA888",
+      "color_accent": "#C45C26",
+      "color_background": "#FAF7F2",
+      "color_text": "#3D2B1F"
+    }
+  }
+}
