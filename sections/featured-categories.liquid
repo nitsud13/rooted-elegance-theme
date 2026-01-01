@@ -1,0 +1,378 @@
+{% comment %}
+  Featured Categories Grid
+  A visually rich category grid with overlay text and hover effects.
+  Designed for 6 categories with responsive layout.
+{% endcomment %}
+
+<section
+  class="categories section"
+  id="categories-{{ section.id }}"
+  aria-label="Browse by category"
+>
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <header class="categories__header">
+        <h2 class="categories__title">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="categories__subtitle">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="categories__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'category' -%}
+            <a
+              href="{{ block.settings.link | default: '#' }}"
+              class="category-card category-card--{{ forloop.index }}"
+              style="--delay: {{ forloop.index | times: 100 }}ms"
+              {{ block.shopify_attributes }}
+            >
+              <div class="category-card__media">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                    loading="lazy"
+                    class="category-card__image"
+                  >
+                {%- else -%}
+                  <div class="category-card__placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12"/>
+                      <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                  </div>
+                {%- endif -%}
+                <div class="category-card__overlay"></div>
+              </div>
+
+              <div class="category-card__content">
+                {%- if block.settings.icon != blank -%}
+                  <span class="category-card__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+                {%- endif -%}
+                <h3 class="category-card__title">{{ block.settings.title | default: 'Category' }}</h3>
+                <span class="category-card__cta">
+                  <span>Shop Now</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+              </div>
+
+              {%- comment -%} Decorative corner accent {%- endcomment -%}
+              <div class="category-card__accent" aria-hidden="true"></div>
+            </a>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_view_all and section.settings.view_all_link != blank -%}
+      <div class="categories__footer">
+        <a href="{{ section.settings.view_all_link }}" class="btn btn--secondary">
+          {{ section.settings.view_all_text | default: 'View All Categories' }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .categories {
+    background: var(--color-cream);
+  }
+
+  .categories__header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .categories__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .categories__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-bark-light);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .categories__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .categories__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .categories__grid {
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-4);
+    }
+
+    /* Create visual interest with varying heights */
+    .category-card--1,
+    .category-card--4 {
+      grid-row: span 2;
+    }
+
+    .category-card--2,
+    .category-card--3 {
+      grid-column: span 2;
+    }
+  }
+
+  /* Category Card */
+  .category-card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 280px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    text-decoration: none;
+    animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @media (min-width: 1024px) {
+    .category-card {
+      min-height: 320px;
+    }
+
+    .category-card--1,
+    .category-card--4 {
+      min-height: 100%;
+    }
+  }
+
+  .category-card__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .category-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .category-card:hover .category-card__image {
+    transform: scale(1.08);
+  }
+
+  .category-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-forest), var(--color-forest-dark));
+    color: var(--color-sage-light);
+  }
+
+  .category-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(27, 77, 62, 0.9) 0%,
+      rgba(27, 77, 62, 0.4) 50%,
+      transparent 100%
+    );
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+
+  .category-card:hover .category-card__overlay {
+    opacity: 0.9;
+  }
+
+  .category-card__content {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-5);
+    width: 100%;
+  }
+
+  .category-card__icon {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  .category-card__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-white);
+    margin-bottom: var(--space-2);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .category-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-sage-light);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .category-card:hover .category-card__cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .category-card__cta svg {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .category-card:hover .category-card__cta svg {
+    transform: translateX(4px);
+  }
+
+  /* Decorative accent */
+  .category-card__accent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--color-earth) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+
+  .category-card:hover .category-card__accent {
+    opacity: 0.8;
+  }
+
+  /* Footer */
+  .categories__footer {
+    text-align: center;
+    margin-top: var(--space-10);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .categories__title {
+      font-size: var(--text-3xl);
+    }
+
+    .category-card {
+      min-height: 200px;
+    }
+
+    .category-card__title {
+      font-size: var(--text-lg);
+    }
+
+    .category-card__cta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Categories",
+  "tag": "section",
+  "class": "section-categories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Find the perfect trees and shrubs for every purpose"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View All Categories"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: 800x1000px"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category Name"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon emoji",
+          "info": "Optional emoji icon"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Categories",
+      "category": "Collection",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Shade Trees", "icon": "🌳" } },
+        { "type": "category", "settings": { "title": "Flowering Trees", "icon": "🌸" } },
+        { "type": "category", "settings": { "title": "Evergreens", "icon": "🌲" } },
+        { "type": "category", "settings": { "title": "Fruit Trees", "icon": "🍎" } },
+        { "type": "category", "settings": { "title": "Shrubs", "icon": "🌿" } },
+        { "type": "category", "settings": { "title": "Privacy Trees", "icon": "🏡" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

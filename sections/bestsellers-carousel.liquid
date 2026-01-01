@@ -1,0 +1,504 @@
+{% comment %}
+  Bestsellers Carousel
+  A horizontally scrollable product carousel featuring bestselling items.
+  Supports touch swipe, arrow navigation, and dot indicators.
+{% endcomment %}
+
+<section
+  class="bestsellers section"
+  id="bestsellers-{{ section.id }}"
+  aria-label="{{ section.settings.heading | default: 'Bestsellers' }}"
+>
+  <div class="container">
+    <header class="bestsellers__header">
+      <div class="bestsellers__header-content">
+        {%- if section.settings.subtitle != blank -%}
+          <span class="bestsellers__subtitle">{{ section.settings.subtitle }}</span>
+        {%- endif -%}
+        <h2 class="bestsellers__title">{{ section.settings.heading | default: 'Customer Favorites' }}</h2>
+        {%- if section.settings.description != blank -%}
+          <p class="bestsellers__description">{{ section.settings.description }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_view_all and section.settings.collection != blank -%}
+        <a href="{{ section.settings.collection.url }}" class="bestsellers__view-all btn btn--secondary">
+          <span>{{ section.settings.view_all_text | default: 'View All' }}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </header>
+
+    <div class="bestsellers__carousel-wrapper">
+      {%- comment -%} Navigation arrows {%- endcomment -%}
+      <button
+        type="button"
+        class="bestsellers__nav bestsellers__nav--prev"
+        aria-label="Previous products"
+        data-carousel-prev
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <div class="bestsellers__carousel" data-carousel>
+        <div class="bestsellers__track" data-carousel-track>
+          {%- if section.settings.collection != blank -%}
+            {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+              <div class="bestsellers__slide" data-carousel-slide>
+                {% render 'product-card', product: product, show_zone_badge: true, show_quick_add: true %}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Placeholder products for preview {%- endcomment -%}
+            {%- for i in (1..6) -%}
+              <div class="bestsellers__slide" data-carousel-slide>
+                <article class="product-card product-card--placeholder">
+                  <div class="product-card__media">
+                    <div class="product-card__placeholder">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12"/>
+                        <circle cx="12" cy="12" r="4"/>
+                      </svg>
+                    </div>
+                    <div class="product-card__badges">
+                      <span class="product-card__badge product-card__badge--zone">Zone 5-9</span>
+                    </div>
+                  </div>
+                  <div class="product-card__content">
+                    <h3 class="product-card__title">Sample Tree {{ i }}</h3>
+                    <div class="product-card__price">
+                      <span class="product-card__price-current">$49.95</span>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="bestsellers__nav bestsellers__nav--next"
+        aria-label="Next products"
+        data-carousel-next
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- comment -%} Dot indicators {%- endcomment -%}
+    <div class="bestsellers__dots" data-carousel-dots aria-label="Carousel navigation">
+      {%- comment -%} Dots are generated via JavaScript {%- endcomment -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .bestsellers {
+    background: var(--color-cream);
+    overflow: hidden;
+  }
+
+  .bestsellers__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .bestsellers__header-content {
+    max-width: 600px;
+  }
+
+  .bestsellers__subtitle {
+    display: inline-block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-earth);
+    margin-bottom: var(--space-2);
+  }
+
+  .bestsellers__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .bestsellers__description {
+    font-size: var(--text-lg);
+    color: var(--color-bark-light);
+    margin: 0;
+  }
+
+  .bestsellers__view-all {
+    flex-shrink: 0;
+  }
+
+  /* Carousel */
+  .bestsellers__carousel-wrapper {
+    position: relative;
+    margin: 0 calc(-1 * var(--space-4));
+    padding: 0 var(--space-4);
+  }
+
+  @media (min-width: 1024px) {
+    .bestsellers__carousel-wrapper {
+      margin: 0 calc(-1 * var(--space-12));
+      padding: 0 var(--space-12);
+    }
+  }
+
+  .bestsellers__carousel {
+    overflow: hidden;
+    margin: 0 calc(-1 * var(--space-3));
+  }
+
+  .bestsellers__track {
+    display: flex;
+    gap: var(--space-6);
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .bestsellers__slide {
+    flex: 0 0 calc(100% - var(--space-6));
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .bestsellers__slide {
+      flex: 0 0 calc(50% - var(--space-4));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .bestsellers__slide {
+      flex: 0 0 calc(33.333% - var(--space-5));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .bestsellers__slide {
+      flex: 0 0 calc(25% - var(--space-5));
+    }
+  }
+
+  /* Navigation arrows */
+  .bestsellers__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: var(--color-white);
+    border: 2px solid var(--color-cream-warm);
+    border-radius: var(--radius-full);
+    color: var(--color-forest);
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--duration-fast) var(--ease-out);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bestsellers__carousel-wrapper:hover .bestsellers__nav {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .bestsellers__nav:hover {
+    background: var(--color-forest);
+    border-color: var(--color-forest);
+    color: var(--color-white);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .bestsellers__nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .bestsellers__nav:disabled:hover {
+    background: var(--color-white);
+    color: var(--color-forest);
+    transform: translateY(-50%);
+  }
+
+  .bestsellers__nav--prev {
+    left: var(--space-2);
+  }
+
+  .bestsellers__nav--next {
+    right: var(--space-2);
+  }
+
+  @media (min-width: 1024px) {
+    .bestsellers__nav--prev {
+      left: var(--space-4);
+    }
+
+    .bestsellers__nav--next {
+      right: var(--space-4);
+    }
+  }
+
+  /* Hide arrows on touch devices */
+  @media (hover: none) {
+    .bestsellers__nav {
+      display: none;
+    }
+  }
+
+  /* Dot indicators */
+  .bestsellers__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-8);
+  }
+
+  .bestsellers__dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    background: var(--color-sage-light);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .bestsellers__dot:hover {
+    background: var(--color-sage);
+    transform: scale(1.2);
+  }
+
+  .bestsellers__dot.is-active {
+    background: var(--color-forest);
+    width: 28px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .bestsellers__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-4);
+    }
+
+    .bestsellers__title {
+      font-size: var(--text-3xl);
+    }
+
+    .bestsellers__view-all {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Placeholder styles */
+  .product-card--placeholder .product-card__media {
+    aspect-ratio: 1;
+    background: var(--color-cream-warm);
+  }
+
+  .product-card--placeholder .product-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--color-sage);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('bestsellers-{{ section.id }}');
+    if (!section) return;
+
+    const track = section.querySelector('[data-carousel-track]');
+    const slides = section.querySelectorAll('[data-carousel-slide]');
+    const prevBtn = section.querySelector('[data-carousel-prev]');
+    const nextBtn = section.querySelector('[data-carousel-next]');
+    const dotsContainer = section.querySelector('[data-carousel-dots]');
+
+    if (!track || slides.length === 0) return;
+
+    let currentIndex = 0;
+    let slidesPerView = getSlidesPerView();
+    let totalSlides = slides.length;
+    let maxIndex = Math.max(0, totalSlides - slidesPerView);
+
+    function getSlidesPerView() {
+      const width = window.innerWidth;
+      if (width >= 1280) return 4;
+      if (width >= 1024) return 3;
+      if (width >= 640) return 2;
+      return 1;
+    }
+
+    function createDots() {
+      dotsContainer.innerHTML = '';
+      const dotCount = maxIndex + 1;
+
+      for (let i = 0; i < dotCount; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'bestsellers__dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const dots = dotsContainer.querySelectorAll('.bestsellers__dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === currentIndex);
+      });
+    }
+
+    function updateNavButtons() {
+      if (prevBtn) prevBtn.disabled = currentIndex === 0;
+      if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+    }
+
+    function goToSlide(index) {
+      currentIndex = Math.max(0, Math.min(index, maxIndex));
+      const slideWidth = slides[0].offsetWidth + parseInt(getComputedStyle(track).gap);
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+      updateDots();
+      updateNavButtons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < maxIndex) {
+        goToSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      }
+    }
+
+    // Event listeners
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+
+    // Resize handler
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        slidesPerView = getSlidesPerView();
+        maxIndex = Math.max(0, totalSlides - slidesPerView);
+        currentIndex = Math.min(currentIndex, maxIndex);
+        createDots();
+        goToSlide(currentIndex);
+      }, 150);
+    });
+
+    // Initialize
+    createDots();
+    updateNavButtons();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Bestsellers Carousel",
+  "tag": "section",
+  "class": "section-bestsellers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Most Popular"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Favorites"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Tried, tested, and loved by thousands of gardeners across the country."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View All"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bestsellers Carousel",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}

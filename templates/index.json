@@ -1,0 +1,251 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-dual-cta",
+      "settings": {
+        "heading": "Transform Your Landscape",
+        "subheading": "Premium trees and shrubs delivered to your door, guaranteed to thrive in your growing zone.",
+        "primary_button_text": "Shop by Growing Zone",
+        "primary_button_link": "/collections/all",
+        "secondary_button_text": "Browse All Trees",
+        "secondary_button_link": "/collections/all",
+        "text_position": "center",
+        "overlay_opacity": 40
+      }
+    },
+    "zone-selector": {
+      "type": "zone-selector",
+      "settings": {
+        "heading": "Find Plants Perfect for Your Zone",
+        "subheading": "Enter your ZIP code to discover trees and shrubs that will thrive in your climate.",
+        "shop_link": "/collections/all"
+      }
+    },
+    "featured-categories": {
+      "type": "featured-categories",
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": "Find the perfect trees and shrubs for every purpose",
+        "show_view_all": true,
+        "view_all_text": "View All Categories"
+      },
+      "blocks": {
+        "category-1": {
+          "type": "category",
+          "settings": {
+            "title": "Shade Trees",
+            "icon": "🌳"
+          }
+        },
+        "category-2": {
+          "type": "category",
+          "settings": {
+            "title": "Flowering Trees",
+            "icon": "🌸"
+          }
+        },
+        "category-3": {
+          "type": "category",
+          "settings": {
+            "title": "Evergreens",
+            "icon": "🌲"
+          }
+        },
+        "category-4": {
+          "type": "category",
+          "settings": {
+            "title": "Fruit Trees",
+            "icon": "🍎"
+          }
+        },
+        "category-5": {
+          "type": "category",
+          "settings": {
+            "title": "Shrubs",
+            "icon": "🌿"
+          }
+        },
+        "category-6": {
+          "type": "category",
+          "settings": {
+            "title": "Privacy Trees",
+            "icon": "🏡"
+          }
+        }
+      },
+      "block_order": [
+        "category-1",
+        "category-2",
+        "category-3",
+        "category-4",
+        "category-5",
+        "category-6"
+      ]
+    },
+    "bestsellers": {
+      "type": "bestsellers-carousel",
+      "settings": {
+        "subtitle": "Most Popular",
+        "heading": "Customer Favorites",
+        "description": "Tried, tested, and loved by thousands of gardeners across the country.",
+        "products_to_show": 8,
+        "show_view_all": true,
+        "view_all_text": "View All Bestsellers"
+      }
+    },
+    "trust-bar": {
+      "type": "trust-bar",
+      "settings": {
+        "layout": "grid"
+      },
+      "blocks": {
+        "trust-1": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "guarantee",
+            "title": "1-Year Guarantee",
+            "description": "Every plant guaranteed to thrive"
+          }
+        },
+        "trust-2": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "support",
+            "title": "Expert Support",
+            "description": "Real horticulturists, real advice"
+          }
+        },
+        "trust-3": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "secure",
+            "title": "Secure Checkout",
+            "description": "SSL encrypted payments"
+          }
+        },
+        "trust-4": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "trees",
+            "title": "50K+ Trees Planted",
+            "description": "One tree planted per order"
+          }
+        }
+      },
+      "block_order": [
+        "trust-1",
+        "trust-2",
+        "trust-3",
+        "trust-4"
+      ]
+    },
+    "reviews": {
+      "type": "customer-reviews",
+      "settings": {
+        "subtitle": "Real Customer Stories",
+        "heading": "Why Gardeners Love Us",
+        "show_rating_summary": true,
+        "average_rating": "4.8",
+        "total_reviews": "12,400+",
+        "show_photo_gallery": true
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "content": "The maple tree arrived in perfect condition and has thrived since day one. Customer service helped me pick the perfect variety for my zone. Couldn't be happier!",
+            "author_name": "Sarah M.",
+            "author_location": "Colorado",
+            "verified": true,
+            "product_name": "Autumn Blaze Maple"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "content": "I've ordered from many nurseries online, and Rooted Elegance is by far the best. Healthy plants, great packaging, and they actually care about helping you succeed.",
+            "author_name": "Michael T.",
+            "author_location": "Texas",
+            "verified": true,
+            "product_name": "Leyland Cypress"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "content": "The zone selector made it so easy to find trees that would work in my area. Three years later, my privacy screen is absolutely beautiful!",
+            "author_name": "Jennifer K.",
+            "author_location": "Michigan",
+            "verified": true,
+            "product_name": "Thuja Green Giant"
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "content": "Great selection of fruit trees. My peach tree took a little time to establish but is now producing beautifully. Support team was very helpful with planting tips.",
+            "author_name": "David R.",
+            "author_location": "Georgia",
+            "verified": true,
+            "product_name": "Elberta Peach"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter-signup",
+      "settings": {
+        "icon_type": "leaf",
+        "heading": "Get Growing Tips & Exclusive Offers",
+        "subheading": "Join 50,000+ gardeners receiving seasonal planting guides, care tips, and subscriber-only savings.",
+        "button_text": "Subscribe",
+        "show_privacy_note": true,
+        "show_benefits": true
+      },
+      "blocks": {
+        "benefit-1": {
+          "type": "benefit",
+          "settings": {
+            "text": "Weekly growing tips"
+          }
+        },
+        "benefit-2": {
+          "type": "benefit",
+          "settings": {
+            "text": "Early access to sales"
+          }
+        },
+        "benefit-3": {
+          "type": "benefit",
+          "settings": {
+            "text": "Exclusive subscriber discounts"
+          }
+        }
+      },
+      "block_order": [
+        "benefit-1",
+        "benefit-2",
+        "benefit-3"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "zone-selector",
+    "featured-categories",
+    "bestsellers",
+    "trust-bar",
+    "reviews",
+    "newsletter"
+  ]
+}

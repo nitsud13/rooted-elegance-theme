@@ -1,0 +1,624 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="{{ settings.color_primary | default: '#1B4D3E' }}">
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+
+  {%- comment -%} Preconnect to Google Fonts {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  {%- comment -%} Load Google Fonts - Fraunces and Inter {%- endcomment -%}
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  {%- comment -%} Base CSS {%- endcomment -%}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%} Additional CSS from settings {%- endcomment -%}
+  {%- if settings.custom_css != blank -%}
+    <style>{{ settings.custom_css }}</style>
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    {%- comment -%} Store zone in window for global access {%- endcomment -%}
+    window.customerZone = localStorage.getItem('customer_zone') || null;
+
+    {%- comment -%} Theme settings accessible globally {%- endcomment -%}
+    window.theme = {
+      shopUrl: '{{ shop.url }}',
+      moneyFormat: {{ shop.money_format | json }},
+      routes: {
+        cart: '{{ routes.cart_url }}',
+        cartAdd: '{{ routes.cart_add_url }}',
+        cartChange: '{{ routes.cart_change_url }}'
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      /* Dynamic color overrides from theme settings */
+      {%- if settings.color_primary -%}
+        --color-forest: {{ settings.color_primary }};
+      {%- endif -%}
+      {%- if settings.color_accent -%}
+        --color-earth: {{ settings.color_accent }};
+      {%- endif -%}
+      {%- if settings.color_background -%}
+        --color-cream: {{ settings.color_background }};
+      {%- endif -%}
+    }
+
+    /* Skip link for accessibility */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-forest);
+      color: var(--color-white);
+      font-weight: var(--weight-semibold);
+      text-decoration: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      transition: top var(--duration-fast) var(--ease-out);
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Page wrapper */
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Main content */
+    main {
+      flex: 1;
+    }
+
+    /* Announcement bar */
+    .announcement-bar {
+      background: var(--color-forest-dark);
+      color: var(--color-white);
+      padding: var(--space-2) var(--space-4);
+      text-align: center;
+      font-size: var(--text-sm);
+    }
+
+    .announcement-bar a {
+      color: var(--color-sage-light);
+      text-decoration: underline;
+    }
+
+    .announcement-bar a:hover {
+      color: var(--color-white);
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-cream-warm);
+      transition: box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .site-header.is-scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .site-header__wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-6);
+      padding: var(--space-4) 0;
+    }
+
+    .site-header__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--color-forest);
+    }
+
+    .site-header__logo-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--color-forest);
+    }
+
+    .site-header__logo-text {
+      font-family: var(--font-heading);
+      font-size: var(--text-xl);
+      font-weight: var(--weight-semibold);
+    }
+
+    .site-header__nav {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .site-header__nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-8);
+      }
+    }
+
+    .site-header__nav-link {
+      position: relative;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-bark);
+      text-decoration: none;
+      padding: var(--space-2) 0;
+      transition: color var(--duration-fast);
+    }
+
+    .site-header__nav-link:hover {
+      color: var(--color-forest);
+    }
+
+    .site-header__nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--color-earth);
+      transform: scaleX(0);
+      transition: transform var(--duration-fast) var(--ease-out);
+    }
+
+    .site-header__nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    .site-header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .site-header__zone-badge {
+      display: none;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-sage-light);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-forest);
+    }
+
+    .site-header__zone-badge.is-visible {
+      display: flex;
+    }
+
+    @media (min-width: 768px) {
+      .site-header__zone-badge {
+        display: flex;
+      }
+    }
+
+    .site-header__icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: none;
+      color: var(--color-bark);
+      cursor: pointer;
+      border-radius: var(--radius-lg);
+      transition: all var(--duration-fast);
+    }
+
+    .site-header__icon-btn:hover {
+      background: var(--color-cream);
+      color: var(--color-forest);
+    }
+
+    .site-header__cart-count {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      background: var(--color-earth);
+      color: var(--color-white);
+      font-size: 10px;
+      font-weight: var(--weight-bold);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-header__menu-btn {
+      display: flex;
+    }
+
+    @media (min-width: 1024px) {
+      .site-header__menu-btn {
+        display: none;
+      }
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--color-forest-dark);
+      color: var(--color-white);
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .site-footer__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    @media (min-width: 768px) {
+      .site-footer__grid {
+        grid-template-columns: 2fr repeat(3, 1fr);
+      }
+    }
+
+    .site-footer__brand {
+      grid-column: 1 / -1;
+    }
+
+    @media (min-width: 768px) {
+      .site-footer__brand {
+        grid-column: auto;
+      }
+    }
+
+    .site-footer__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      color: var(--color-white);
+      text-decoration: none;
+      margin-bottom: var(--space-4);
+    }
+
+    .site-footer__logo-text {
+      font-family: var(--font-heading);
+      font-size: var(--text-xl);
+      font-weight: var(--weight-semibold);
+    }
+
+    .site-footer__tagline {
+      font-size: var(--text-sm);
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 300px;
+      line-height: var(--leading-relaxed);
+    }
+
+    .site-footer__column-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--color-sage-light);
+      margin-bottom: var(--space-4);
+    }
+
+    .site-footer__links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .site-footer__links li {
+      margin-bottom: var(--space-2);
+    }
+
+    .site-footer__links a {
+      font-size: var(--text-sm);
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color var(--duration-fast);
+    }
+
+    .site-footer__links a:hover {
+      color: var(--color-white);
+    }
+
+    .site-footer__bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding-top: var(--space-8);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .site-footer__copyright {
+      font-size: var(--text-sm);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .site-footer__social {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .site-footer__social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      color: var(--color-white);
+      transition: all var(--duration-fast);
+    }
+
+    .site-footer__social-link:hover {
+      background: var(--color-sage);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="page-wrapper">
+    {%- comment -%} Announcement Bar {%- endcomment -%}
+    {%- if settings.show_announcement -%}
+      <div class="announcement-bar" role="banner">
+        {{ settings.announcement_text }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Header {%- endcomment -%}
+    <header class="site-header" role="banner">
+      <div class="container">
+        <div class="site-header__wrapper">
+          <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}">
+            <svg class="site-header__logo-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 44V28"/>
+              <path d="M24 28C24 28 24 8 40 4C40 24 28 28 24 28Z"/>
+              <path d="M24 28C24 28 24 8 8 4C8 24 20 28 24 28Z"/>
+              <path d="M16 40c-6-3-8-9-8-14"/>
+              <path d="M32 40c6-3 8-9 8-14"/>
+            </svg>
+            <span class="site-header__logo-text">{{ shop.name }}</span>
+          </a>
+
+          <nav class="site-header__nav" aria-label="Main navigation">
+            {%- for link in linklists.main-menu.links -%}
+              <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+            {%- endfor -%}
+          </nav>
+
+          <div class="site-header__actions">
+            <div class="site-header__zone-badge" data-zone-badge>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="10" r="3"/>
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8z"/>
+              </svg>
+              <span>Zone <span data-zone-value>--</span></span>
+            </div>
+
+            <a href="{{ routes.search_url }}" class="site-header__icon-btn" aria-label="Search">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </a>
+
+            <a href="{{ routes.account_url }}" class="site-header__icon-btn" aria-label="Account">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+              </svg>
+            </a>
+
+            <a href="{{ routes.cart_url }}" class="site-header__icon-btn" aria-label="Cart" style="position: relative;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6h15l-1.5 9h-12z"/>
+                <circle cx="9" cy="20" r="1"/>
+                <circle cx="18" cy="20" r="1"/>
+                <path d="M6 6L5 3H2"/>
+              </svg>
+              {%- if cart.item_count > 0 -%}
+                <span class="site-header__cart-count">{{ cart.item_count }}</span>
+              {%- endif -%}
+            </a>
+
+            <button type="button" class="site-header__icon-btn site-header__menu-btn" aria-label="Menu" aria-expanded="false">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {%- comment -%} Main Content {%- endcomment -%}
+    <main id="main-content" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {%- comment -%} Footer {%- endcomment -%}
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="{{ routes.root_url }}" class="site-footer__logo">
+              <svg width="32" height="32" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M24 44V28"/>
+                <path d="M24 28C24 28 24 8 40 4C40 24 28 28 24 28Z"/>
+                <path d="M24 28C24 28 24 8 8 4C8 24 20 28 24 28Z"/>
+              </svg>
+              <span class="site-footer__logo-text">{{ shop.name }}</span>
+            </a>
+            <p class="site-footer__tagline">
+              Premium trees and shrubs delivered to your door, guaranteed to thrive in your growing zone.
+            </p>
+          </div>
+
+          <div class="site-footer__column">
+            <h4 class="site-footer__column-title">Shop</h4>
+            <ul class="site-footer__links">
+              {%- for link in linklists.footer-shop.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- else -%}
+                <li><a href="/collections/all">All Trees</a></li>
+                <li><a href="/collections/shade-trees">Shade Trees</a></li>
+                <li><a href="/collections/flowering-trees">Flowering Trees</a></li>
+                <li><a href="/collections/evergreens">Evergreens</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+
+          <div class="site-footer__column">
+            <h4 class="site-footer__column-title">Help</h4>
+            <ul class="site-footer__links">
+              {%- for link in linklists.footer-help.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- else -%}
+                <li><a href="/pages/contact">Contact Us</a></li>
+                <li><a href="/pages/shipping">Shipping Info</a></li>
+                <li><a href="/pages/returns">Returns</a></li>
+                <li><a href="/pages/faq">FAQ</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+
+          <div class="site-footer__column">
+            <h4 class="site-footer__column-title">Learn</h4>
+            <ul class="site-footer__links">
+              {%- for link in linklists.footer-learn.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- else -%}
+                <li><a href="/pages/planting-guide">Planting Guide</a></li>
+                <li><a href="/pages/zone-finder">Growing Zones</a></li>
+                <li><a href="/blogs/tips">Gardening Tips</a></li>
+                <li><a href="/pages/about">Our Story</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__bottom">
+          <p class="site-footer__copyright">
+            &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+          </p>
+
+          <div class="site-footer__social">
+            {%- if settings.social_facebook_link != blank -%}
+              <a href="{{ settings.social_facebook_link }}" class="site-footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" class="site-footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="18" cy="6" r="1" fill="currentColor"/>
+                </svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_pinterest_link != blank -%}
+              <a href="{{ settings.social_pinterest_link }}" class="site-footer__social-link" aria-label="Pinterest" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.4 0 0 5.4 0 12c0 5 3.1 9.3 7.5 11-.1-.9-.2-2.4 0-3.4.2-.9 1.4-6 1.4-6s-.4-.7-.4-1.8c0-1.7 1-3 2.2-3 1 0 1.5.8 1.5 1.7 0 1-.7 2.6-1 4-.3 1.2.6 2.2 1.8 2.2 2.1 0 3.8-2.2 3.8-5.5 0-2.9-2.1-4.9-5-4.9-3.4 0-5.4 2.6-5.4 5.2 0 1 .4 2.1.9 2.7.1.1.1.2.1.3-.1.4-.3 1.2-.3 1.4-.1.3-.2.3-.4.2-1.5-.7-2.4-2.9-2.4-4.6 0-3.8 2.7-7.2 7.9-7.2 4.1 0 7.4 3 7.4 6.9 0 4.1-2.6 7.5-6.2 7.5-1.2 0-2.4-.6-2.8-1.4l-.8 3c-.3 1.1-.9 2.2-1.4 3.1 1.1.3 2.2.5 3.4.5 6.6 0 12-5.4 12-12S18.6 0 12 0z"/>
+                </svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <a href="{{ settings.social_youtube_link }}" class="site-footer__social-link" aria-label="YouTube" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.5 6.2s-.2-1.7-1-2.4c-.9-1-1.9-1-2.4-1-3.4-.2-8.4-.2-8.4-.2h0s-5 0-8.4.2c-.5.1-1.5.1-2.4 1-.7.7-1 2.4-1 2.4S0 8.1 0 10.1v1.8c0 1.9.2 3.9.2 3.9s.2 1.7 1 2.4c.9 1 2.1.9 2.6 1 1.9.2 8.2.2 8.2.2s5 0 8.4-.3c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.4 1-2.4s.2-1.9.2-3.9v-1.8c0-2-.2-3.9-.2-3.9zM9.5 15.1V8.4l6.5 3.4-6.5 3.3z"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Header scroll effect
+    (function() {
+      const header = document.querySelector('.site-header');
+      let lastScroll = 0;
+
+      window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+
+        lastScroll = currentScroll;
+      }, { passive: true });
+    })();
+
+    // Update zone badge from localStorage
+    (function() {
+      const zoneBadge = document.querySelector('[data-zone-badge]');
+      const zoneValue = document.querySelector('.site-header [data-zone-value]');
+      const savedZone = localStorage.getItem('customer_zone');
+
+      if (zoneBadge && zoneValue && savedZone) {
+        zoneValue.textContent = savedZone;
+        zoneBadge.classList.add('is-visible');
+      }
+    })();
+  </script>
+</body>
+</html>

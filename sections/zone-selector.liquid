@@ -1,0 +1,477 @@
+{% comment %}
+  Growing Zone Selector
+  Allows customers to find their USDA hardiness zone and filter products accordingly.
+  Features ZIP code lookup and geolocation.
+{% endcomment %}
+
+{{ 'zone-selector.js' | asset_url | script_tag }}
+
+<section
+  class="zone-selector section"
+  id="zone-selector"
+  aria-label="Find your growing zone"
+>
+  <div class="container">
+    <div class="zone-selector__wrapper">
+      {%- comment -%} Decorative leaf pattern {%- endcomment -%}
+      <div class="zone-selector__decor" aria-hidden="true">
+        <svg class="zone-selector__leaf zone-selector__leaf--1" viewBox="0 0 60 100" fill="currentColor">
+          <path d="M30 0C30 0 60 40 60 70C60 85 47 100 30 100C13 100 0 85 0 70C0 40 30 0 30 0Z"/>
+        </svg>
+        <svg class="zone-selector__leaf zone-selector__leaf--2" viewBox="0 0 60 100" fill="currentColor">
+          <path d="M30 0C30 0 60 40 60 70C60 85 47 100 30 100C13 100 0 85 0 70C0 40 30 0 30 0Z"/>
+        </svg>
+        <svg class="zone-selector__leaf zone-selector__leaf--3" viewBox="0 0 60 100" fill="currentColor">
+          <path d="M30 0C30 0 60 40 60 70C60 85 47 100 30 100C13 100 0 85 0 70C0 40 30 0 30 0Z"/>
+        </svg>
+      </div>
+
+      <div class="zone-selector__content">
+        <div class="zone-selector__header">
+          <span class="zone-selector__icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="10" r="3"/>
+              <path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8z"/>
+            </svg>
+          </span>
+          <h2 class="zone-selector__title">
+            {{ section.settings.heading | default: 'Find Plants Perfect for Your Zone' }}
+          </h2>
+          <p class="zone-selector__subtitle">
+            {{ section.settings.subheading | default: 'Enter your ZIP code to discover trees and shrubs that will thrive in your climate.' }}
+          </p>
+        </div>
+
+        <div class="zone-selector__form" data-zone-form>
+          <div class="zone-selector__input-group">
+            <div class="zone-selector__input-wrapper">
+              <input
+                type="text"
+                class="zone-selector__input input input--lg"
+                id="zip-code-input"
+                name="zip_code"
+                placeholder="Enter ZIP code"
+                maxlength="5"
+                pattern="[0-9]{5}"
+                inputmode="numeric"
+                autocomplete="postal-code"
+                aria-label="Enter your ZIP code"
+                data-zone-input
+              >
+              <button
+                type="button"
+                class="zone-selector__search-btn"
+                aria-label="Search by ZIP code"
+                data-zone-submit
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
+            </div>
+
+            <span class="zone-selector__divider">or</span>
+
+            <button
+              type="button"
+              class="zone-selector__geo-btn btn btn--secondary"
+              aria-label="Use my current location"
+              data-zone-geo
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="12" y1="2" x2="12" y2="6"/>
+                <line x1="12" y1="18" x2="12" y2="22"/>
+                <line x1="2" y1="12" x2="6" y2="12"/>
+                <line x1="18" y1="12" x2="22" y2="12"/>
+              </svg>
+              <span>Use My Location</span>
+            </button>
+          </div>
+
+          {%- comment -%} Error message {%- endcomment -%}
+          <p class="zone-selector__error" role="alert" aria-live="polite" data-zone-error hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span data-zone-error-message>Please enter a valid 5-digit ZIP code.</span>
+          </p>
+        </div>
+
+        {%- comment -%} Zone result display {%- endcomment -%}
+        <div class="zone-selector__result" data-zone-result hidden>
+          <div class="zone-selector__result-badge">
+            <span class="zone-selector__result-label">Your Growing Zone</span>
+            <span class="zone-selector__result-value" data-zone-value>7a</span>
+          </div>
+          <div class="zone-selector__result-info">
+            <p class="zone-selector__result-temp">
+              <span data-zone-temp-range>0°F to 5°F</span> average minimum temperature
+            </p>
+            <a href="{{ section.settings.shop_link | default: '/collections/all' }}" class="btn btn--primary zone-selector__result-cta">
+              <span>Shop Zone-Compatible Plants</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <button
+            type="button"
+            class="zone-selector__change"
+            data-zone-change
+          >
+            Not your zone? Change location
+          </button>
+        </div>
+
+        {%- comment -%} Zone map link {%- endcomment -%}
+        <div class="zone-selector__help">
+          <a href="{{ section.settings.zone_map_link }}" class="zone-selector__help-link" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>What is a growing zone?</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .zone-selector {
+    background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-warm) 100%);
+    overflow: hidden;
+  }
+
+  .zone-selector__wrapper {
+    position: relative;
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-12) var(--space-8);
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  /* Decorative leaves */
+  .zone-selector__decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .zone-selector__leaf {
+    position: absolute;
+    opacity: 0.05;
+    color: var(--color-forest);
+  }
+
+  .zone-selector__leaf--1 {
+    width: 120px;
+    top: -30px;
+    right: -20px;
+    transform: rotate(45deg);
+  }
+
+  .zone-selector__leaf--2 {
+    width: 80px;
+    bottom: -20px;
+    left: -15px;
+    transform: rotate(-30deg);
+  }
+
+  .zone-selector__leaf--3 {
+    width: 60px;
+    top: 50%;
+    right: 10%;
+    transform: rotate(15deg);
+    opacity: 0.03;
+  }
+
+  .zone-selector__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .zone-selector__header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .zone-selector__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-sage-light), var(--color-sage));
+    border-radius: var(--radius-full);
+    color: var(--color-forest);
+    margin-bottom: var(--space-4);
+    box-shadow: 0 4px 20px rgba(139, 168, 136, 0.3);
+  }
+
+  .zone-selector__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .zone-selector__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-bark-light);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Form */
+  .zone-selector__form {
+    margin-bottom: var(--space-6);
+  }
+
+  .zone-selector__input-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .zone-selector__input-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .zone-selector__input {
+    padding-right: var(--space-12);
+    text-align: center;
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .zone-selector__search-btn {
+    position: absolute;
+    right: var(--space-2);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--color-forest);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .zone-selector__search-btn:hover {
+    background: var(--color-earth);
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  .zone-selector__divider {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-sage);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .zone-selector__geo-btn {
+    white-space: nowrap;
+  }
+
+  /* Error state */
+  .zone-selector__error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(198, 40, 40, 0.1);
+    color: var(--color-error);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+  }
+
+  .zone-selector__error[hidden] {
+    display: none;
+  }
+
+  /* Result display */
+  .zone-selector__result {
+    text-align: center;
+    padding: var(--space-8);
+    background: linear-gradient(135deg, rgba(139, 168, 136, 0.1), rgba(27, 77, 62, 0.05));
+    border-radius: var(--radius-xl);
+    animation: scaleIn var(--duration-normal) var(--ease-spring);
+  }
+
+  .zone-selector__result[hidden] {
+    display: none;
+  }
+
+  .zone-selector__result-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .zone-selector__result-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-sage);
+  }
+
+  .zone-selector__result-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-white);
+    background: linear-gradient(135deg, var(--color-forest), var(--color-forest-dark));
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg), 0 8px 30px rgba(27, 77, 62, 0.3);
+  }
+
+  .zone-selector__result-info {
+    margin-bottom: var(--space-4);
+  }
+
+  .zone-selector__result-temp {
+    font-size: var(--text-base);
+    color: var(--color-bark-light);
+    margin-bottom: var(--space-5);
+  }
+
+  .zone-selector__result-cta {
+    min-width: 260px;
+  }
+
+  .zone-selector__change {
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color var(--duration-fast);
+  }
+
+  .zone-selector__change:hover {
+    color: var(--color-forest);
+  }
+
+  /* Help link */
+  .zone-selector__help {
+    text-align: center;
+  }
+
+  .zone-selector__help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    transition: color var(--duration-fast);
+  }
+
+  .zone-selector__help-link:hover {
+    color: var(--color-forest);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .zone-selector__wrapper {
+      padding: var(--space-8) var(--space-5);
+      border-radius: var(--radius-xl);
+    }
+
+    .zone-selector__title {
+      font-size: var(--text-2xl);
+    }
+
+    .zone-selector__input-group {
+      flex-direction: column;
+    }
+
+    .zone-selector__input-wrapper {
+      max-width: 100%;
+    }
+
+    .zone-selector__geo-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .zone-selector__result-value {
+      width: 80px;
+      height: 80px;
+      font-size: var(--text-3xl);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Zone Selector",
+  "tag": "section",
+  "class": "section-zone-selector",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Plants Perfect for Your Zone"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Enter your ZIP code to discover trees and shrubs that will thrive in your climate."
+    },
+    {
+      "type": "url",
+      "id": "shop_link",
+      "label": "Shop button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "url",
+      "id": "zone_map_link",
+      "label": "Zone map link",
+      "info": "Link to USDA zone map or educational page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Zone Selector",
+      "category": "Interactive"
+    }
+  ]
+}
+{% endschema %}
