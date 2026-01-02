@@ -35,19 +35,32 @@
     assign sold_out = true
   endunless
 
-  # Zone compatibility - check product tags for zone info
+  # Zone compatibility - read from USDA Hardiness Zone metafields
   assign zone_compatible = false
   assign zone_range = ''
-  for tag in product.tags
-    if tag contains 'zone-'
-      assign zone_compatible = true
-      assign zone_range = tag | remove: 'zone-' | upcase
-      break
+  assign zone_values = ''
+
+  # Try plural metafield first (list of zones), then singular
+  if product.metafields.custom.usda_hardiness_zones != blank
+    assign zone_compatible = true
+    assign zone_list = product.metafields.custom.usda_hardiness_zones.value
+    if zone_list.size > 1
+      assign zone_values = zone_list | join: ','
+      assign first_zone = zone_list | first
+      assign last_zone = zone_list | last
+      assign zone_range = first_zone | append: '-' | append: last_zone
+    else
+      assign zone_values = zone_list | first
+      assign zone_range = zone_list | first
     endif
-  endfor
+  elsif product.metafields.custom.usda_hardiness_zone != blank
+    assign zone_compatible = true
+    assign zone_values = product.metafields.custom.usda_hardiness_zone.value
+    assign zone_range = product.metafields.custom.usda_hardiness_zone.value
+  endif
 -%}
 
-<article class="product-card {{ card_class }}" data-product-id="{{ product.id }}">
+<article class="product-card {{ card_class }}" data-product-id="{{ product.id }}"{% if zone_values != blank %} data-product-zone="{{ zone_values }}"{% endif %}>
   <a href="{{ product.url }}" class="product-card__link" aria-label="{{ product.title }}">
 
     {%- comment -%} Image container with badges {%- endcomment -%}
