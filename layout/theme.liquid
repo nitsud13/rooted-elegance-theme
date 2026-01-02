@@ -909,7 +909,17 @@
     (function() {
       const zoneBadge = document.querySelector('[data-zone-badge]');
       const zoneValue = document.querySelector('.site-header [data-zone-value]');
-      const savedZone = localStorage.getItem('customer_zone');
+
+      // Try simple key first, then fall back to JSON key
+      let savedZone = localStorage.getItem('customer_zone');
+      if (!savedZone) {
+        try {
+          const zoneData = JSON.parse(localStorage.getItem('rooted_elegance_zone'));
+          if (zoneData && zoneData.zone) {
+            savedZone = zoneData.zone;
+          }
+        } catch (e) {}
+      }
 
       if (zoneBadge && zoneValue && savedZone) {
         zoneValue.textContent = savedZone;
