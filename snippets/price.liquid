@@ -1,0 +1,43 @@
+{% comment %}
+  Price display snippet with sale price support
+
+  Usage:
+    {% render 'price', product: product %}
+    {% render 'price', product: product, variant: variant %}
+{% endcomment %}
+
+{% liquid
+  assign target = variant | default: product.selected_or_first_available_variant | default: product
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price
+  assign available = target.available
+  assign money_price = price | money
+
+  if compare_at_price and compare_at_price > price
+    assign on_sale = true
+  else
+    assign on_sale = false
+  endif
+%}
+
+<div class="price-wrapper{% if on_sale %} price--on-sale{% endif %}{% unless available %} price--sold-out{% endunless %}">
+  {% if on_sale %}
+    <span class="price-sale">{{ money_price }}</span>
+    <span class="price-compare">{{ compare_at_price | money }}</span>
+    <span class="price-badge">
+      Save {{ compare_at_price | minus: price | money }}
+    </span>
+  {% else %}
+    <span class="price-regular">{{ money_price }}</span>
+  {% endif %}
+
+  {% if product.price_varies and product.variants.size > 1 %}
+    <span class="price-varies">
+      {% if on_sale %}
+        from
+      {% else %}
+        From {{ product.price_min | money }}
+      {% endif %}
+    </span>
+  {% endif %}
+</div>

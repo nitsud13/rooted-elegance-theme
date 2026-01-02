@@ -4,7 +4,7 @@
   <div class="container">
     {% if product %}
       <div class="product-layout">
-        <!-- Product Gallery -->
+        <!-- Product Gallery (not block-based) -->
         <div class="product-gallery">
           <div class="gallery-main">
             {% if product.featured_image %}
@@ -61,157 +61,156 @@
           {% endif %}
         </div>
 
-        <!-- Product Info -->
+        <!-- Product Info (block-based) -->
         <div class="product-info">
-          {% if product.vendor %}
-            <p class="product-vendor">{{ product.vendor }}</p>
-          {% endif %}
+          {% for block in section.blocks %}
+            {% case block.type %}
 
-          <h1 class="product-title">{{ product.title }}</h1>
+              {% when '@app' %}
+                {% render block %}
 
-          <!-- Rating -->
-          {% if product.metafields.reviews.rating.value %}
-            <div class="product-rating">
-              {% render 'star-rating', rating: product.metafields.reviews.rating.value %}
-              <span class="rating-count">({{ product.metafields.reviews.rating_count }} reviews)</span>
-            </div>
-          {% endif %}
+              {% when 'vendor' %}
+                {% if product.vendor %}
+                  <p class="product-vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
+                {% endif %}
 
-          <!-- Price -->
-          <div class="product-price">
-            {% if product.compare_at_price > product.price %}
-              <span class="price-sale">{{ product.price | money }}</span>
-              <span class="price-compare">{{ product.compare_at_price | money }}</span>
-              <span class="price-badge">
-                Save {{ product.compare_at_price | minus: product.price | money }}
-              </span>
-            {% else %}
-              <span class="price-regular">{{ product.price | money }}</span>
-            {% endif %}
-          </div>
+              {% when 'title' %}
+                <h1 class="product-title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
 
-          <!-- Growing Zone Badge -->
-          {% if product.metafields.custom.growing_zones %}
-            <div class="zone-badge">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-              <span>Grows in Zones {{ product.metafields.custom.growing_zones }}</span>
-            </div>
-          {% endif %}
-
-          <!-- Short Description -->
-          {% if product.metafields.custom.short_description %}
-            <p class="product-excerpt">{{ product.metafields.custom.short_description }}</p>
-          {% endif %}
-
-          <!-- Product Form -->
-          {% form 'product', product, id: 'product-form', class: 'product-form' %}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="variant-id">
-
-            {% unless product.has_only_default_variant %}
-              <div class="product-options">
-                {% for option in product.options_with_values %}
-                  <div class="option-group">
-                    <label class="option-label" for="option-{{ option.name | handleize }}">
-                      {{ option.name }}
-                    </label>
-                    <select
-                      name="options[{{ option.name }}]"
-                      id="option-{{ option.name | handleize }}"
-                      class="option-select"
-                      onchange="updateVariant()"
-                    >
-                      {% for value in option.values %}
-                        <option
-                          value="{{ value }}"
-                          {% if option.selected_value == value %}selected{% endif %}
-                        >
-                          {{ value }}
-                        </option>
-                      {% endfor %}
-                    </select>
+              {% when 'rating' %}
+                {% if product.metafields.reviews.rating.value %}
+                  <div class="product-rating" {{ block.shopify_attributes }}>
+                    {% render 'star-rating', rating: product.metafields.reviews.rating.value %}
+                    <span class="rating-count">({{ product.metafields.reviews.rating_count }} reviews)</span>
                   </div>
-                {% endfor %}
-              </div>
-            {% endunless %}
+                {% endif %}
 
-            <!-- Quantity -->
-            <div class="quantity-group">
-              <label class="quantity-label">Quantity</label>
-              <div class="quantity-selector">
-                <button type="button" class="quantity-btn" onclick="adjustQuantity(-1)" aria-label="Decrease quantity">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  class="quantity-input"
-                  id="quantity-input"
-                  aria-label="Quantity"
-                >
-                <button type="button" class="quantity-btn" onclick="adjustQuantity(1)" aria-label="Increase quantity">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
+              {% when 'price' %}
+                <div class="product-price-wrapper" {{ block.shopify_attributes }}>
+                  {% render 'price', product: product %}
+                </div>
 
-            <!-- Add to Cart -->
-            <button
-              type="submit"
-              class="btn btn--primary btn--lg add-to-cart-btn"
-              {% unless product.available %}disabled{% endunless %}
-              id="add-to-cart"
-            >
-              {% if product.available %}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-                Add to Cart
-              {% else %}
-                Sold Out
-              {% endif %}
-            </button>
-          {% endform %}
+              {% when 'zone_badge' %}
+                {% if product.metafields.custom.growing_zones or product.metafields.custom.usda_hardiness_zones %}
+                  {% liquid
+                    assign zones = product.metafields.custom.growing_zones | default: product.metafields.custom.usda_hardiness_zones
+                  %}
+                  <div class="zone-badge" {{ block.shopify_attributes }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5"/>
+                      <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>Grows in Zones {{ zones }}</span>
+                  </div>
+                {% endif %}
 
-          <!-- Trust Badges -->
-          <div class="product-trust">
-            <div class="trust-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <polyline points="9 12 11 14 15 10"/>
-              </svg>
-              <span>1-Year Guarantee</span>
-            </div>
-            <div class="trust-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="3" width="15" height="13"/>
-                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                <circle cx="5.5" cy="18.5" r="2.5"/>
-                <circle cx="18.5" cy="18.5" r="2.5"/>
-              </svg>
-              <span>Free Shipping $100+</span>
-            </div>
-            <div class="trust-item">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                <line x1="12" y1="22.08" x2="12" y2="12"/>
-              </svg>
-              <span>Expert Packaging</span>
-            </div>
-          </div>
+              {% when 'description' %}
+                {% if product.metafields.custom.short_description %}
+                  <p class="product-excerpt" {{ block.shopify_attributes }}>{{ product.metafields.custom.short_description }}</p>
+                {% elsif block.settings.show_full_description and product.description != blank %}
+                  <div class="product-excerpt" {{ block.shopify_attributes }}>{{ product.description | truncate: 200 }}</div>
+                {% endif %}
+
+              {% when 'variant_picker' %}
+                {% render 'variant-picker', product: product, block: block %}
+
+              {% when 'quantity_selector' %}
+                <div class="quantity-group" {{ block.shopify_attributes }}>
+                  <label class="quantity-label">Quantity</label>
+                  <div class="quantity-selector">
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-1)" aria-label="Decrease quantity">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value="1"
+                      min="1"
+                      class="quantity-input"
+                      id="quantity-input"
+                      form="product-form-{{ section.id }}"
+                      aria-label="Quantity"
+                    >
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(1)" aria-label="Increase quantity">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+              {% when 'buy_buttons' %}
+                <div class="buy-buttons-wrapper" {{ block.shopify_attributes }}>
+                  {% form 'product', product, id: 'product-form-' | append: section.id, class: 'product-form', novalidate: 'novalidate' %}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="variant-id">
+                    <input type="hidden" name="quantity" value="1" id="form-quantity">
+
+                    <button
+                      type="submit"
+                      class="btn btn--primary btn--lg add-to-cart-btn"
+                      {% unless product.available %}disabled{% endunless %}
+                      id="add-to-cart"
+                    >
+                      {% if product.available %}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="9" cy="21" r="1"/>
+                          <circle cx="20" cy="21" r="1"/>
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Add to Cart
+                      {% else %}
+                        Sold Out
+                      {% endif %}
+                    </button>
+
+                    {% if block.settings.show_dynamic_checkout %}
+                      {{ form | payment_button }}
+                    {% endif %}
+                  {% endform %}
+                </div>
+
+              {% when 'trust_badges' %}
+                <div class="product-trust" {{ block.shopify_attributes }}>
+                  <div class="trust-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <polyline points="9 12 11 14 15 10"/>
+                    </svg>
+                    <span>{{ block.settings.badge_1 | default: '1-Year Guarantee' }}</span>
+                  </div>
+                  <div class="trust-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="1" y="3" width="15" height="13"/>
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                      <circle cx="5.5" cy="18.5" r="2.5"/>
+                      <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                    <span>{{ block.settings.badge_2 | default: 'Free Shipping $100+' }}</span>
+                  </div>
+                  <div class="trust-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                      <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    <span>{{ block.settings.badge_3 | default: 'Expert Packaging' }}</span>
+                  </div>
+                </div>
+
+              {% when 'collapsible_row' %}
+                {% render 'collapsible-row', block: block %}
+
+              {% when 'custom_liquid' %}
+                <div class="custom-liquid" {{ block.shopify_attributes }}>
+                  {{ block.settings.custom_liquid }}
+                </div>
+
+            {% endcase %}
+          {% endfor %}
         </div>
       </div>
 
@@ -299,9 +298,22 @@
   // Quantity
   function adjustQuantity(change) {
     const input = document.getElementById('quantity-input');
+    const formQuantity = document.getElementById('form-quantity');
     const newValue = Math.max(1, parseInt(input.value) + change);
     input.value = newValue;
+    if (formQuantity) formQuantity.value = newValue;
   }
+
+  // Sync quantity input with form
+  document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('quantity-input');
+    const formQuantity = document.getElementById('form-quantity');
+    if (quantityInput && formQuantity) {
+      quantityInput.addEventListener('change', function() {
+        formQuantity.value = this.value;
+      });
+    }
+  });
 
   // Variant Selection
   const productVariants = {{ product.variants | json }};
@@ -312,6 +324,14 @@
       options.push(select.value);
     });
 
+    // Also check for button-style pickers
+    document.querySelectorAll('.option-buttons').forEach(group => {
+      const activeBtn = group.querySelector('.option-btn.active');
+      if (activeBtn) {
+        options.push(activeBtn.dataset.optionValue);
+      }
+    });
+
     const variant = productVariants.find(v => {
       return v.options.every((opt, i) => opt === options[i]);
     });
@@ -319,33 +339,40 @@
     if (variant) {
       document.getElementById('variant-id').value = variant.id;
 
-      // Update price
-      const priceContainer = document.querySelector('.product-price');
-      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
-        priceContainer.innerHTML = `
-          <span class="price-sale">${formatMoney(variant.price)}</span>
-          <span class="price-compare">${formatMoney(variant.compare_at_price)}</span>
-          <span class="price-badge">Save ${formatMoney(variant.compare_at_price - variant.price)}</span>
-        `;
-      } else {
-        priceContainer.innerHTML = `<span class="price-regular">${formatMoney(variant.price)}</span>`;
+      // Update price using the price snippet format
+      const priceWrapper = document.querySelector('.product-price-wrapper');
+      if (priceWrapper) {
+        const priceContainer = priceWrapper.querySelector('.price-wrapper') || priceWrapper;
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          priceContainer.innerHTML = `
+            <span class="price-sale">${formatMoney(variant.price)}</span>
+            <span class="price-compare">${formatMoney(variant.compare_at_price)}</span>
+            <span class="price-badge">Save ${formatMoney(variant.compare_at_price - variant.price)}</span>
+          `;
+          priceContainer.classList.add('price--on-sale');
+        } else {
+          priceContainer.innerHTML = `<span class="price-regular">${formatMoney(variant.price)}</span>`;
+          priceContainer.classList.remove('price--on-sale');
+        }
       }
 
       // Update button state
       const addBtn = document.getElementById('add-to-cart');
-      if (variant.available) {
-        addBtn.disabled = false;
-        addBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-          </svg>
-          Add to Cart
-        `;
-      } else {
-        addBtn.disabled = true;
-        addBtn.innerHTML = 'Sold Out';
+      if (addBtn) {
+        if (variant.available) {
+          addBtn.disabled = false;
+          addBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            Add to Cart
+          `;
+        } else {
+          addBtn.disabled = true;
+          addBtn.innerHTML = 'Sold Out';
+        }
       }
 
       // Update URL
@@ -354,6 +381,23 @@
       history.replaceState({}, '', url);
     }
   }
+
+  // Listen for option button clicks
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const group = this.closest('.option-buttons');
+        group.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        updateVariant();
+      });
+    });
+
+    // Listen for select changes
+    document.querySelectorAll('.option-select').forEach(select => {
+      select.addEventListener('change', updateVariant);
+    });
+  });
 
   function formatMoney(cents) {
     return '$' + (cents / 100).toFixed(2);
@@ -522,12 +566,15 @@
     color: var(--color-bark-light);
   }
 
-  .product-price {
+  .product-price-wrapper {
+    margin-bottom: var(--space-6);
+  }
+
+  .product-price-wrapper .price-wrapper {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
-    margin-bottom: var(--space-6);
   }
 
   .price-regular,
@@ -577,11 +624,7 @@
     margin-bottom: var(--space-8);
   }
 
-  /* Product Form */
-  .product-form {
-    margin-bottom: var(--space-8);
-  }
-
+  /* Product Options */
   .product-options {
     margin-bottom: var(--space-6);
   }
@@ -616,6 +659,7 @@
     outline: none;
   }
 
+  /* Quantity */
   .quantity-group {
     margin-bottom: var(--space-6);
   }
@@ -670,6 +714,17 @@
     -webkit-appearance: none;
   }
 
+  /* Buy Buttons */
+  .buy-buttons-wrapper {
+    margin-bottom: var(--space-8);
+  }
+
+  .buy-buttons-wrapper .product-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
   .add-to-cart-btn {
     width: 100%;
     display: flex;
@@ -690,6 +745,7 @@
     gap: var(--space-4);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-cream-warm);
+    margin-bottom: var(--space-6);
   }
 
   .trust-item {
@@ -768,9 +824,25 @@
     margin-bottom: var(--space-6);
   }
 
+  /* Custom Liquid Block */
+  .custom-liquid {
+    margin: var(--space-4) 0;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 
@@ -789,28 +861,190 @@
       "id": "enable_zoom",
       "label": "Enable image zoom",
       "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
     },
     {
-      "type": "header",
-      "content": "Content"
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
     },
     {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "label": "Show vendor",
-      "default": true
+      "type": "title",
+      "name": "Title",
+      "limit": 1
     },
     {
-      "type": "checkbox",
-      "id": "show_rating",
-      "label": "Show rating",
-      "default": true
+      "type": "rating",
+      "name": "Product rating",
+      "limit": 1
     },
     {
-      "type": "checkbox",
-      "id": "show_zone_badge",
-      "label": "Show growing zone badge",
-      "default": true
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "zone_badge",
+      "name": "Growing zone badge",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_full_description",
+          "label": "Show truncated description if no excerpt",
+          "default": false,
+          "info": "Shows first 200 characters of full description if no short description metafield exists"
+        }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "picker_type",
+          "label": "Picker type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "Dropdown"
+            },
+            {
+              "value": "button",
+              "label": "Buttons"
+            }
+          ],
+          "default": "dropdown"
+        }
+      ]
+    },
+    {
+      "type": "quantity_selector",
+      "name": "Quantity selector",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "label": "Show dynamic checkout button",
+          "info": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay.",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "badge_1",
+          "label": "Badge 1 text",
+          "default": "1-Year Guarantee"
+        },
+        {
+          "type": "text",
+          "id": "badge_2",
+          "label": "Badge 2 text",
+          "default": "Free Shipping $100+"
+        },
+        {
+          "type": "text",
+          "id": "badge_3",
+          "label": "Badge 3 text",
+          "default": "Expert Packaging"
+        }
+      ]
+    },
+    {
+      "type": "collapsible_row",
+      "name": "Collapsible row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Collapsible row"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "truck",
+              "label": "Truck (shipping)"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf (care)"
+            },
+            {
+              "value": "info",
+              "label": "Info circle"
+            },
+            {
+              "value": "care",
+              "label": "Shield check (guarantee)"
+            },
+            {
+              "value": "warranty",
+              "label": "Shield (warranty)"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "page_content",
+          "label": "Page content",
+          "info": "Use a page as content instead of the richtext above"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid",
+          "info": "Add custom Liquid code to render on the product page"
+        }
+      ]
     }
   ]
 }

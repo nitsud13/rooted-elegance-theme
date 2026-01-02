@@ -1,0 +1,106 @@
+{% comment %}
+  Variant picker snippet - supports dropdown and button styles
+
+  Usage:
+    {% render 'variant-picker', product: product, block: block %}
+
+  Block settings:
+    - picker_type: 'dropdown' (default) or 'button'
+{% endcomment %}
+
+{% liquid
+  assign picker_type = block.settings.picker_type | default: 'dropdown'
+%}
+
+{% unless product.has_only_default_variant %}
+  <div class="product-options" {{ block.shopify_attributes }}>
+    {% for option in product.options_with_values %}
+      <div class="option-group">
+        <label class="option-label" for="option-{{ section.id }}-{{ option.name | handleize }}">
+          {{ option.name }}
+        </label>
+
+        {% if picker_type == 'button' %}
+          <div class="option-buttons" role="radiogroup" aria-label="{{ option.name }}">
+            {% for value in option.values %}
+              {% liquid
+                assign option_disabled = true
+                for variant in product.variants
+                  if variant.available
+                    assign variant_option_name = 'option' | append: forloop.parentloop.index
+                    if variant[variant_option_name] == value
+                      assign option_disabled = false
+                      break
+                    endif
+                  endif
+                endfor
+              %}
+              <button
+                type="button"
+                class="option-btn{% if option.selected_value == value %} active{% endif %}{% if option_disabled %} disabled{% endif %}"
+                data-option-position="{{ option.position }}"
+                data-option-value="{{ value | escape }}"
+                {% if option_disabled %}disabled aria-disabled="true"{% endif %}
+                aria-pressed="{{ option.selected_value == value }}"
+              >
+                {{ value }}
+              </button>
+            {% endfor %}
+          </div>
+        {% else %}
+          <select
+            name="options[{{ option.name }}]"
+            id="option-{{ section.id }}-{{ option.name | handleize }}"
+            class="option-select"
+            data-option-position="{{ option.position }}"
+          >
+            {% for value in option.values %}
+              <option
+                value="{{ value }}"
+                {% if option.selected_value == value %}selected{% endif %}
+              >
+                {{ value }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endunless %}
+
+<style>
+  .option-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .option-btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    background: var(--color-white);
+    border: 1px solid var(--color-cream-warm);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .option-btn:hover:not(.disabled) {
+    border-color: var(--color-sage);
+  }
+
+  .option-btn.active {
+    background: var(--color-forest);
+    color: var(--color-white);
+    border-color: var(--color-forest);
+  }
+
+  .option-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+</style>

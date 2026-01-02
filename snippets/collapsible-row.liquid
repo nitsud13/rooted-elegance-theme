@@ -1,0 +1,256 @@
+{% comment %}
+  Collapsible row snippet - Expandable accordion content
+
+  Usage:
+    {% render 'collapsible-row', block: block %}
+
+  Block settings:
+    - heading: string (required)
+    - icon: select (none, truck, leaf, info, care, warranty)
+    - content: richtext
+    - page_content: page reference (alternative to content)
+    - open_by_default: boolean
+{% endcomment %}
+
+{% liquid
+  assign heading = block.settings.heading | default: 'Details'
+  assign icon = block.settings.icon | default: 'none'
+  assign content = block.settings.content
+  assign page_content = block.settings.page_content
+  assign open_by_default = block.settings.open_by_default | default: false
+  assign row_id = 'collapsible-' | append: block.id
+%}
+
+<div class="collapsible-row" {{ block.shopify_attributes }}>
+  <details {% if open_by_default %}open{% endif %}>
+    <summary class="collapsible-trigger" id="{{ row_id }}-trigger" aria-controls="{{ row_id }}-content">
+      <div class="collapsible-trigger__left">
+        {% if icon != 'none' %}
+          <span class="collapsible-icon" aria-hidden="true">
+            {% case icon %}
+              {% when 'truck' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="1"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+              {% when 'leaf' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                </svg>
+              {% when 'info' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+              {% when 'care' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              {% when 'warranty' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            {% endcase %}
+          </span>
+        {% endif %}
+        <span class="collapsible-heading">{{ heading }}</span>
+      </div>
+      <span class="collapsible-chevron" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </summary>
+    <div class="collapsible-content" id="{{ row_id }}-content" role="region" aria-labelledby="{{ row_id }}-trigger">
+      <div class="collapsible-content__inner">
+        {% if page_content != blank %}
+          {{ page_content.content }}
+        {% elsif content != blank %}
+          {{ content }}
+        {% else %}
+          <p>No content provided.</p>
+        {% endif %}
+      </div>
+    </div>
+  </details>
+</div>
+
+<style>
+  .collapsible-row {
+    border-bottom: 1px solid var(--color-cream-warm);
+  }
+
+  .collapsible-row:first-child {
+    border-top: 1px solid var(--color-cream-warm);
+  }
+
+  .collapsible-row details {
+    width: 100%;
+  }
+
+  .collapsible-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-4) 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .collapsible-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .collapsible-trigger__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .collapsible-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-sage);
+    flex-shrink: 0;
+  }
+
+  .collapsible-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--color-bark);
+  }
+
+  .collapsible-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-bark);
+    transition: transform var(--duration-normal) var(--ease-out);
+    flex-shrink: 0;
+  }
+
+  details[open] .collapsible-chevron {
+    transform: rotate(180deg);
+  }
+
+  .collapsible-content {
+    overflow: hidden;
+  }
+
+  .collapsible-content__inner {
+    padding: 0 0 var(--space-5) 0;
+    font-size: var(--text-sm);
+    color: var(--color-bark);
+    line-height: 1.7;
+  }
+
+  /* Content styling */
+  .collapsible-content__inner h1,
+  .collapsible-content__inner h2,
+  .collapsible-content__inner h3,
+  .collapsible-content__inner h4 {
+    font-family: var(--font-heading);
+    color: var(--color-bark);
+    margin-bottom: var(--space-3);
+  }
+
+  .collapsible-content__inner h3 {
+    font-size: var(--text-base);
+    margin-top: var(--space-4);
+  }
+
+  .collapsible-content__inner p {
+    margin-bottom: var(--space-3);
+  }
+
+  .collapsible-content__inner p:last-child {
+    margin-bottom: 0;
+  }
+
+  .collapsible-content__inner ul,
+  .collapsible-content__inner ol {
+    margin: 0 0 var(--space-3) var(--space-5);
+    padding: 0;
+  }
+
+  .collapsible-content__inner li {
+    margin-bottom: var(--space-2);
+  }
+
+  .collapsible-content__inner a {
+    color: var(--color-forest);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .collapsible-content__inner a:hover {
+    color: var(--color-earth);
+  }
+
+  .collapsible-content__inner strong {
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Animation for smooth open/close */
+  @media (prefers-reduced-motion: no-preference) {
+    .collapsible-content {
+      animation: collapse-close var(--duration-normal) var(--ease-out);
+    }
+
+    details[open] .collapsible-content {
+      animation: collapse-open var(--duration-normal) var(--ease-out);
+    }
+
+    @keyframes collapse-open {
+      from {
+        opacity: 0;
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+      }
+    }
+
+    @keyframes collapse-close {
+      from {
+        opacity: 1;
+        max-height: 500px;
+      }
+      to {
+        opacity: 0;
+        max-height: 0;
+      }
+    }
+  }
+
+  /* Hover state */
+  .collapsible-trigger:hover .collapsible-heading {
+    color: var(--color-forest);
+  }
+
+  .collapsible-trigger:hover .collapsible-chevron {
+    color: var(--color-forest);
+  }
+
+  /* Focus state */
+  .collapsible-trigger:focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* With icon padding adjustment */
+  .collapsible-row:has(.collapsible-icon) .collapsible-content__inner {
+    padding-left: calc(20px + var(--space-3));
+  }
+</style>

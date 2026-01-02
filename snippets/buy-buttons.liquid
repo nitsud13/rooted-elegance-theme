@@ -1,0 +1,367 @@
+{% comment %}
+  Buy buttons snippet - Add to cart form with dynamic checkout support
+
+  Usage:
+    {% render 'buy-buttons', product: product, block: block %}
+
+  Block settings:
+    - show_dynamic_checkout: true/false (default: true)
+    - show_quantity: true/false (default: true)
+{% endcomment %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign show_dynamic_checkout = block.settings.show_dynamic_checkout | default: true
+  assign show_quantity = block.settings.show_quantity | default: true
+%}
+
+<div class="buy-buttons" {{ block.shopify_attributes }}>
+  <product-form class="product-form" data-product-id="{{ product.id }}">
+    {%- form 'product', product, id: 'product-form-' | append: section.id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id">
+
+      {% if show_quantity %}
+        <div class="quantity-wrapper">
+          <label class="quantity-label" for="quantity-{{ section.id }}">Quantity</label>
+          <div class="quantity-selector">
+            <button
+              type="button"
+              class="quantity-btn quantity-minus"
+              aria-label="Decrease quantity"
+              data-action="decrease"
+            >
+              <svg width="12" height="2" viewBox="0 0 12 2" fill="none" aria-hidden="true">
+                <path d="M1 1H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input
+              type="number"
+              id="quantity-{{ section.id }}"
+              name="quantity"
+              class="quantity-input"
+              value="1"
+              min="1"
+              max="{{ current_variant.inventory_quantity | default: 99 }}"
+              aria-label="Quantity"
+            >
+            <button
+              type="button"
+              class="quantity-btn quantity-plus"
+              aria-label="Increase quantity"
+              data-action="increase"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="buy-buttons__buttons">
+        <button
+          type="submit"
+          name="add"
+          class="btn btn-primary add-to-cart-btn"
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          <span class="btn-text">
+            {%- if current_variant.available -%}
+              Add to Cart
+            {%- else -%}
+              Sold Out
+            {%- endif -%}
+          </span>
+          <span class="btn-loading" hidden>
+            <svg class="spinner" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+              <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2" opacity="0.25"/>
+              <path d="M10 2a8 8 0 0 1 8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Adding...
+          </span>
+        </button>
+
+        {% if show_dynamic_checkout %}
+          {{ form | payment_button }}
+        {% endif %}
+      </div>
+
+      <div class="form-status" role="status" aria-live="polite" hidden></div>
+    {%- endform -%}
+  </product-form>
+</div>
+
+<style>
+  .buy-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .product-form {
+    width: 100%;
+  }
+
+  .quantity-wrapper {
+    margin-bottom: var(--space-4);
+  }
+
+  .quantity-label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    margin-bottom: var(--space-2);
+  }
+
+  .quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-cream-warm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--color-white);
+    border: none;
+    color: var(--color-bark);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .quantity-btn:hover {
+    background: var(--color-cream);
+  }
+
+  .quantity-btn:active {
+    background: var(--color-cream-warm);
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 44px;
+    border: none;
+    border-left: 1px solid var(--color-cream-warm);
+    border-right: 1px solid var(--color-cream-warm);
+    text-align: center;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    -moz-appearance: textfield;
+  }
+
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .buy-buttons__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    min-height: 52px;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+  }
+
+  .add-to-cart-btn:disabled {
+    background: var(--color-cream-warm);
+    color: var(--color-bark);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-text,
+  .btn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .btn-loading {
+    gap: var(--space-2);
+  }
+
+  .add-to-cart-btn.is-loading .btn-text {
+    display: none;
+  }
+
+  .add-to-cart-btn.is-loading .btn-loading {
+    display: flex;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Shopify Payment Button Overrides */
+  .shopify-payment-button {
+    margin-top: 0;
+  }
+
+  .shopify-payment-button__button {
+    border-radius: var(--radius-md) !important;
+    min-height: 52px !important;
+  }
+
+  .shopify-payment-button__button--unbranded {
+    background: var(--color-bark) !important;
+    color: var(--color-white) !important;
+    font-family: var(--font-body) !important;
+    font-weight: var(--weight-semibold) !important;
+  }
+
+  .shopify-payment-button__button--unbranded:hover {
+    background: var(--color-forest) !important;
+  }
+
+  .shopify-payment-button__more-options {
+    font-family: var(--font-body) !important;
+    color: var(--color-bark) !important;
+    font-size: var(--text-sm) !important;
+  }
+
+  .form-status {
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+
+  .form-status.success {
+    background: var(--color-sage);
+    color: var(--color-forest);
+  }
+
+  .form-status.error {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+</style>
+
+<script>
+  // Quantity selector functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const quantitySelectors = document.querySelectorAll('.quantity-selector');
+
+    quantitySelectors.forEach(selector => {
+      const input = selector.querySelector('.quantity-input');
+      const minusBtn = selector.querySelector('.quantity-minus');
+      const plusBtn = selector.querySelector('.quantity-plus');
+
+      if (!input || !minusBtn || !plusBtn) return;
+
+      const min = parseInt(input.min) || 1;
+      const max = parseInt(input.max) || 99;
+
+      minusBtn.addEventListener('click', () => {
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue > min) {
+          input.value = currentValue - 1;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
+      plusBtn.addEventListener('click', () => {
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue < max) {
+          input.value = currentValue + 1;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
+      input.addEventListener('change', () => {
+        let value = parseInt(input.value) || 1;
+        value = Math.max(min, Math.min(max, value));
+        input.value = value;
+      });
+    });
+  });
+
+  // Product form custom element for add to cart
+  if (!customElements.get('product-form')) {
+    customElements.define('product-form', class ProductForm extends HTMLElement {
+      constructor() {
+        super();
+        this.form = this.querySelector('form');
+        this.submitButton = this.querySelector('[type="submit"]');
+        this.statusElement = this.querySelector('.form-status');
+
+        if (this.form) {
+          this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        }
+      }
+
+      async onSubmitHandler(event) {
+        event.preventDefault();
+
+        if (this.submitButton.disabled) return;
+
+        this.submitButton.classList.add('is-loading');
+        this.submitButton.disabled = true;
+        this.hideStatus();
+
+        const formData = new FormData(this.form);
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            this.showStatus('Added to cart!', 'success');
+            // Dispatch event for cart drawer/counter updates
+            document.dispatchEvent(new CustomEvent('cart:updated', {
+              detail: { item: result },
+              bubbles: true,
+            }));
+          } else {
+            throw new Error(result.description || 'Could not add to cart');
+          }
+        } catch (error) {
+          this.showStatus(error.message, 'error');
+        } finally {
+          this.submitButton.classList.remove('is-loading');
+          this.submitButton.disabled = false;
+        }
+      }
+
+      showStatus(message, type) {
+        if (!this.statusElement) return;
+        this.statusElement.textContent = message;
+        this.statusElement.className = `form-status ${type}`;
+        this.statusElement.hidden = false;
+
+        if (type === 'success') {
+          setTimeout(() => this.hideStatus(), 3000);
+        }
+      }
+
+      hideStatus() {
+        if (this.statusElement) {
+          this.statusElement.hidden = true;
+        }
+      }
+    });
+  }
+</script>
