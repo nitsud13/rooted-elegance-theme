@@ -1,22 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
       "blocks": {
         "vendor_block": {
-          "type": "vendor"
+          "type": "vendor",
+          "settings": {}
         },
         "title_block": {
-          "type": "title"
+          "type": "title",
+          "settings": {}
         },
         "rating_block": {
-          "type": "rating"
+          "type": "rating",
+          "settings": {}
         },
         "price_block": {
-          "type": "price"
+          "type": "price",
+          "settings": {}
         },
         "zone_badge_block": {
-          "type": "zone_badge"
+          "type": "zone_badge",
+          "settings": {}
         },
         "variant_picker_block": {
           "type": "variant_picker",
@@ -25,7 +39,8 @@
           }
         },
         "quantity_block": {
-          "type": "quantity_selector"
+          "type": "quantity_selector",
+          "settings": {}
         },
         "buy_buttons_block": {
           "type": "buy_buttons",
@@ -43,7 +58,7 @@
           "type": "trust_badges",
           "settings": {
             "badge_1": "1-Year Guarantee",
-            "badge_2": "Free Shipping $100+",
+            "badge_2": "Free Shipping $125+",
             "badge_3": "Expert Packaging"
           }
         },
@@ -53,6 +68,7 @@
             "heading": "Shipping & Returns",
             "icon": "truck",
             "content": "<p>We ship within 1-3 business days. Free shipping on orders over $100. Returns accepted within 30 days.</p>",
+            "page_content": "",
             "open_by_default": false
           }
         },
@@ -62,6 +78,7 @@
             "heading": "Care Instructions",
             "icon": "leaf",
             "content": "<p>Water regularly during the first growing season. Mulch around the base to retain moisture. Prune in late winter or early spring.</p>",
+            "page_content": "",
             "open_by_default": false
           }
         }
