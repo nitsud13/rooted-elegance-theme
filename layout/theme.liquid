@@ -159,9 +159,16 @@
     }
 
     .site-header__logo-text {
+      display: none;
       font-family: var(--font-heading);
       font-size: var(--text-xl);
       font-weight: var(--weight-semibold);
+    }
+
+    @media (min-width: 480px) {
+      .site-header__logo-text {
+        display: block;
+      }
     }
 
     .site-header__nav {
@@ -209,7 +216,20 @@
     .site-header__actions {
       display: flex;
       align-items: center;
-      gap: var(--space-4);
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 480px) {
+      .site-header__actions {
+        gap: var(--space-4);
+      }
+    }
+
+    .site-header__logo {
+      min-width: 0;
+      flex-shrink: 1;
+      overflow: hidden;
     }
 
     .site-header__zone-badge {

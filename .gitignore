@@ -1,0 +1,27 @@
+# Environment variables (contains secrets)
+.env
+scripts/.env
+
+# Node modules
+node_modules/
+
+# Generated reports
+scripts/zone-update-report.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-*
+
+# Shopify CLI
+.shopify/
+
+# Logs
+*.log
+npm-debug.log*

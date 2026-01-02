@@ -1,0 +1,547 @@
+{
+  "metadata": {
+    "description": "USDA Hardiness Zone database for common trees and shrubs",
+    "source": "Compiled from USDA, botanical gardens, and horticultural sources",
+    "lastUpdated": "2025-01-02",
+    "note": "Zones are arrays of strings for Shopify list metafield compatibility"
+  },
+  "plants": {
+    "red maple": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Acer rubrum" },
+    "sugar maple": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Acer saccharum" },
+    "japanese maple": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Acer palmatum" },
+    "silver maple": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Acer saccharinum" },
+    "norway maple": { "zones": ["4", "5", "6", "7"], "scientificName": "Acer platanoides" },
+    "paperbark maple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Acer griseum" },
+    "boxelder maple": { "zones": ["2", "3", "4", "5", "6", "7", "8", "9"], "scientificName": "Acer negundo" },
+
+    "white oak": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Quercus alba" },
+    "red oak": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Quercus rubra" },
+    "pin oak": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Quercus palustris" },
+    "live oak": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Quercus virginiana" },
+    "willow oak": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Quercus phellos" },
+    "bur oak": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Quercus macrocarpa" },
+    "swamp white oak": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Quercus bicolor" },
+    "scarlet oak": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Quercus coccinea" },
+    "english oak": { "zones": ["5", "6", "7", "8"], "scientificName": "Quercus robur" },
+
+    "eastern white pine": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Pinus strobus" },
+    "scotch pine": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Pinus sylvestris" },
+    "austrian pine": { "zones": ["4", "5", "6", "7"], "scientificName": "Pinus nigra" },
+    "ponderosa pine": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Pinus ponderosa" },
+    "japanese black pine": { "zones": ["5", "6", "7", "8"], "scientificName": "Pinus thunbergii" },
+    "mugo pine": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Pinus mugo" },
+    "loblolly pine": { "zones": ["6", "7", "8", "9"], "scientificName": "Pinus taeda" },
+    "longleaf pine": { "zones": ["7", "8", "9", "10"], "scientificName": "Pinus palustris" },
+
+    "colorado blue spruce": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Picea pungens" },
+    "norway spruce": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Picea abies" },
+    "white spruce": { "zones": ["2", "3", "4", "5", "6"], "scientificName": "Picea glauca" },
+    "serbian spruce": { "zones": ["4", "5", "6", "7"], "scientificName": "Picea omorika" },
+    "dwarf alberta spruce": { "zones": ["2", "3", "4", "5", "6", "7", "8"], "scientificName": "Picea glauca 'Conica'" },
+
+    "eastern red cedar": { "zones": ["2", "3", "4", "5", "6", "7", "8", "9"], "scientificName": "Juniperus virginiana" },
+    "western red cedar": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Thuja plicata" },
+    "atlas cedar": { "zones": ["6", "7", "8", "9"], "scientificName": "Cedrus atlantica" },
+    "deodar cedar": { "zones": ["7", "8", "9"], "scientificName": "Cedrus deodara" },
+    "cedar of lebanon": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Cedrus libani" },
+
+    "bald cypress": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Taxodium distichum" },
+    "leyland cypress": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "× Cuprocyparis leylandii" },
+    "italian cypress": { "zones": ["7", "8", "9", "10"], "scientificName": "Cupressus sempervirens" },
+    "monterey cypress": { "zones": ["7", "8", "9", "10"], "scientificName": "Hesperocyparis macrocarpa" },
+
+    "arborvitae": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Thuja occidentalis" },
+    "emerald green arborvitae": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Thuja occidentalis 'Smaragd'" },
+    "green giant arborvitae": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Thuja 'Green Giant'" },
+    "american arborvitae": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Thuja occidentalis" },
+
+    "dogwood": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Cornus florida" },
+    "flowering dogwood": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Cornus florida" },
+    "kousa dogwood": { "zones": ["5", "6", "7", "8"], "scientificName": "Cornus kousa" },
+    "pacific dogwood": { "zones": ["7", "8", "9"], "scientificName": "Cornus nuttallii" },
+    "cornelian cherry dogwood": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Cornus mas" },
+
+    "redbud": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Cercis canadensis" },
+    "eastern redbud": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Cercis canadensis" },
+    "forest pansy redbud": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Cercis canadensis 'Forest Pansy'" },
+    "oklahoma redbud": { "zones": ["6", "7", "8", "9"], "scientificName": "Cercis canadensis var. texensis" },
+
+    "magnolia": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Magnolia spp." },
+    "southern magnolia": { "zones": ["7", "8", "9", "10"], "scientificName": "Magnolia grandiflora" },
+    "star magnolia": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Magnolia stellata" },
+    "saucer magnolia": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Magnolia × soulangeana" },
+    "sweetbay magnolia": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Magnolia virginiana" },
+    "little gem magnolia": { "zones": ["7", "8", "9"], "scientificName": "Magnolia grandiflora 'Little Gem'" },
+    "jane magnolia": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Magnolia 'Jane'" },
+
+    "crabapple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Malus spp." },
+    "flowering crabapple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Malus spp." },
+    "prairifire crabapple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Malus 'Prairifire'" },
+    "sargent crabapple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Malus sargentii" },
+
+    "cherry blossom": { "zones": ["5", "6", "7", "8"], "scientificName": "Prunus serrulata" },
+    "yoshino cherry": { "zones": ["5", "6", "7", "8"], "scientificName": "Prunus × yedoensis" },
+    "kwanzan cherry": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Prunus serrulata 'Kwanzan'" },
+    "weeping cherry": { "zones": ["5", "6", "7", "8"], "scientificName": "Prunus subhirtella 'Pendula'" },
+    "okame cherry": { "zones": ["6", "7", "8", "9"], "scientificName": "Prunus 'Okame'" },
+    "autumn cherry": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Prunus subhirtella 'Autumnalis'" },
+
+    "crape myrtle": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Lagerstroemia indica" },
+    "crepe myrtle": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Lagerstroemia indica" },
+    "natchez crape myrtle": { "zones": ["6", "7", "8", "9"], "scientificName": "Lagerstroemia 'Natchez'" },
+    "muskogee crape myrtle": { "zones": ["6", "7", "8", "9"], "scientificName": "Lagerstroemia 'Muskogee'" },
+    "dynamite crape myrtle": { "zones": ["7", "8", "9"], "scientificName": "Lagerstroemia indica 'Whit II'" },
+
+    "apple tree": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Malus domestica" },
+    "honeycrisp apple": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Malus domestica 'Honeycrisp'" },
+    "fuji apple": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Malus domestica 'Fuji'" },
+    "gala apple": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Malus domestica 'Gala'" },
+    "granny smith apple": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Malus domestica 'Granny Smith'" },
+
+    "peach tree": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Prunus persica" },
+    "elberta peach": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Prunus persica 'Elberta'" },
+    "redhaven peach": { "zones": ["5", "6", "7", "8"], "scientificName": "Prunus persica 'Redhaven'" },
+
+    "pear tree": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Pyrus communis" },
+    "bartlett pear": { "zones": ["5", "6", "7", "8"], "scientificName": "Pyrus communis 'Bartlett'" },
+    "bradford pear": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Pyrus calleryana 'Bradford'" },
+    "cleveland pear": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Pyrus calleryana 'Cleveland Select'" },
+
+    "plum tree": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Prunus domestica" },
+    "santa rosa plum": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Prunus salicina 'Santa Rosa'" },
+
+    "fig tree": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Ficus carica" },
+    "chicago hardy fig": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Ficus carica 'Chicago Hardy'" },
+    "brown turkey fig": { "zones": ["7", "8", "9", "10"], "scientificName": "Ficus carica 'Brown Turkey'" },
+
+    "lemon tree": { "zones": ["9", "10", "11"], "scientificName": "Citrus limon" },
+    "meyer lemon": { "zones": ["8", "9", "10", "11"], "scientificName": "Citrus × meyeri" },
+    "orange tree": { "zones": ["9", "10", "11"], "scientificName": "Citrus × sinensis" },
+    "lime tree": { "zones": ["9", "10", "11"], "scientificName": "Citrus × aurantiifolia" },
+    "grapefruit tree": { "zones": ["9", "10", "11"], "scientificName": "Citrus × paradisi" },
+
+    "avocado tree": { "zones": ["9", "10", "11"], "scientificName": "Persea americana" },
+    "hass avocado": { "zones": ["9", "10", "11"], "scientificName": "Persea americana 'Hass'" },
+
+    "olive tree": { "zones": ["8", "9", "10", "11"], "scientificName": "Olea europaea" },
+
+    "birch": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Betula spp." },
+    "river birch": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Betula nigra" },
+    "paper birch": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Betula papyrifera" },
+    "european white birch": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Betula pendula" },
+    "heritage river birch": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Betula nigra 'Heritage'" },
+
+    "willow": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Salix spp." },
+    "weeping willow": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Salix babylonica" },
+    "pussy willow": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Salix caprea" },
+    "corkscrew willow": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Salix matsudana 'Tortuosa'" },
+
+    "elm": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Ulmus spp." },
+    "american elm": { "zones": ["2", "3", "4", "5", "6", "7", "8", "9"], "scientificName": "Ulmus americana" },
+    "chinese elm": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Ulmus parvifolia" },
+    "princeton elm": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Ulmus americana 'Princeton'" },
+
+    "ash": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Fraxinus spp." },
+    "green ash": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Fraxinus pennsylvanica" },
+    "white ash": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Fraxinus americana" },
+
+    "tulip tree": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Liriodendron tulipifera" },
+    "tulip poplar": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Liriodendron tulipifera" },
+
+    "ginkgo": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Ginkgo biloba" },
+    "maidenhair tree": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Ginkgo biloba" },
+
+    "sweetgum": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Liquidambar styraciflua" },
+
+    "sycamore": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Platanus occidentalis" },
+    "american sycamore": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Platanus occidentalis" },
+    "london plane tree": { "zones": ["5", "6", "7", "8"], "scientificName": "Platanus × acerifolia" },
+
+    "locust": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Robinia spp." },
+    "honey locust": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Gleditsia triacanthos" },
+    "black locust": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Robinia pseudoacacia" },
+    "thornless honey locust": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Gleditsia triacanthos var. inermis" },
+
+    "beech": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Fagus spp." },
+    "american beech": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Fagus grandifolia" },
+    "european beech": { "zones": ["4", "5", "6", "7"], "scientificName": "Fagus sylvatica" },
+    "copper beech": { "zones": ["4", "5", "6", "7"], "scientificName": "Fagus sylvatica 'Atropunicea'" },
+    "tricolor beech": { "zones": ["4", "5", "6", "7"], "scientificName": "Fagus sylvatica 'Roseomarginata'" },
+
+    "hickory": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Carya spp." },
+    "shagbark hickory": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Carya ovata" },
+    "pecan tree": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Carya illinoinensis" },
+
+    "walnut": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Juglans spp." },
+    "black walnut": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Juglans nigra" },
+    "english walnut": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Juglans regia" },
+
+    "chestnut": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Castanea spp." },
+    "chinese chestnut": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Castanea mollissima" },
+    "american chestnut": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Castanea dentata" },
+
+    "hazelnut": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Corylus avellana" },
+    "filbert": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Corylus avellana" },
+
+    "catalpa": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Catalpa bignonioides" },
+    "northern catalpa": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Catalpa speciosa" },
+
+    "boxwood": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buxus sempervirens" },
+    "american boxwood": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buxus sempervirens" },
+    "japanese boxwood": { "zones": ["6", "7", "8", "9"], "scientificName": "Buxus microphylla var. japonica" },
+    "korean boxwood": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Buxus sinica var. insularis" },
+    "winter gem boxwood": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buxus microphylla 'Winter Gem'" },
+
+    "holly": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Ilex spp." },
+    "american holly": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Ilex opaca" },
+    "japanese holly": { "zones": ["5", "6", "7", "8"], "scientificName": "Ilex crenata" },
+    "nellie stevens holly": { "zones": ["6", "7", "8", "9"], "scientificName": "Ilex × 'Nellie R. Stevens'" },
+    "sky pencil holly": { "zones": ["5", "6", "7", "8"], "scientificName": "Ilex crenata 'Sky Pencil'" },
+    "winterberry holly": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Ilex verticillata" },
+
+    "privet": { "zones": ["5", "6", "7", "8"], "scientificName": "Ligustrum spp." },
+    "japanese privet": { "zones": ["7", "8", "9", "10"], "scientificName": "Ligustrum japonicum" },
+    "wax leaf privet": { "zones": ["7", "8", "9", "10"], "scientificName": "Ligustrum japonicum 'Texanum'" },
+
+    "hydrangea": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Hydrangea macrophylla" },
+    "endless summer hydrangea": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Hydrangea macrophylla 'Endless Summer'" },
+    "limelight hydrangea": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Hydrangea paniculata 'Limelight'" },
+    "panicle hydrangea": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Hydrangea paniculata" },
+    "oakleaf hydrangea": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Hydrangea quercifolia" },
+    "annabelle hydrangea": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Hydrangea arborescens 'Annabelle'" },
+    "incrediball hydrangea": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Hydrangea arborescens 'Incrediball'" },
+
+    "lilac": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Syringa vulgaris" },
+    "common lilac": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Syringa vulgaris" },
+    "japanese tree lilac": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Syringa reticulata" },
+    "miss kim lilac": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Syringa patula 'Miss Kim'" },
+    "bloomerang lilac": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Syringa × 'Bloomerang'" },
+    "dwarf korean lilac": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Syringa meyeri 'Palibin'" },
+
+    "azalea": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Rhododendron spp." },
+    "encore azalea": { "zones": ["6", "7", "8", "9"], "scientificName": "Rhododendron × 'Encore'" },
+    "flame azalea": { "zones": ["5", "6", "7", "8"], "scientificName": "Rhododendron calendulaceum" },
+    "southern indica azalea": { "zones": ["8", "9", "10"], "scientificName": "Rhododendron indicum" },
+
+    "rhododendron": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Rhododendron spp." },
+    "catawba rhododendron": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Rhododendron catawbiense" },
+    "pjm rhododendron": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Rhododendron 'P.J.M.'" },
+
+    "camellia": { "zones": ["7", "8", "9", "10"], "scientificName": "Camellia japonica" },
+    "japanese camellia": { "zones": ["7", "8", "9", "10"], "scientificName": "Camellia japonica" },
+    "sasanqua camellia": { "zones": ["7", "8", "9", "10"], "scientificName": "Camellia sasanqua" },
+
+    "gardenia": { "zones": ["8", "9", "10", "11"], "scientificName": "Gardenia jasminoides" },
+    "frost proof gardenia": { "zones": ["7", "8", "9", "10"], "scientificName": "Gardenia jasminoides 'Frost Proof'" },
+
+    "forsythia": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Forsythia × intermedia" },
+    "border forsythia": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Forsythia × intermedia" },
+
+    "rose of sharon": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Hibiscus syriacus" },
+    "hibiscus": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Hibiscus syriacus" },
+
+    "butterfly bush": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Buddleja davidii" },
+    "buddleia": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Buddleja davidii" },
+
+    "spirea": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Spiraea spp." },
+    "bridal wreath spirea": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Spiraea prunifolia" },
+    "goldflame spirea": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Spiraea japonica 'Goldflame'" },
+    "little princess spirea": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Spiraea japonica 'Little Princess'" },
+
+    "viburnum": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Viburnum spp." },
+    "snowball viburnum": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Viburnum opulus 'Roseum'" },
+    "arrowwood viburnum": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Viburnum dentatum" },
+    "korean spice viburnum": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Viburnum carlesii" },
+    "doublefile viburnum": { "zones": ["5", "6", "7", "8"], "scientificName": "Viburnum plicatum f. tomentosum" },
+
+    "burning bush": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Euonymus alatus" },
+    "winged euonymus": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Euonymus alatus" },
+
+    "barberry": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Berberis thunbergii" },
+    "japanese barberry": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Berberis thunbergii" },
+    "crimson pygmy barberry": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Berberis thunbergii 'Crimson Pygmy'" },
+
+    "weigela": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Weigela florida" },
+    "wine and roses weigela": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Weigela florida 'Wine and Roses'" },
+
+    "ninebark": { "zones": ["2", "3", "4", "5", "6", "7", "8"], "scientificName": "Physocarpus opulifolius" },
+    "diabolo ninebark": { "zones": ["2", "3", "4", "5", "6", "7", "8"], "scientificName": "Physocarpus opulifolius 'Diabolo'" },
+    "summer wine ninebark": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Physocarpus opulifolius 'Seward'" },
+
+    "juniper": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Juniperus spp." },
+    "blue star juniper": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Juniperus squamata 'Blue Star'" },
+    "blue rug juniper": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Juniperus horizontalis 'Wiltonii'" },
+    "spartan juniper": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Juniperus chinensis 'Spartan'" },
+    "skyrocket juniper": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Juniperus scopulorum 'Skyrocket'" },
+
+    "yew": { "zones": ["4", "5", "6", "7"], "scientificName": "Taxus spp." },
+    "japanese yew": { "zones": ["4", "5", "6", "7"], "scientificName": "Taxus cuspidata" },
+    "hicks yew": { "zones": ["4", "5", "6", "7"], "scientificName": "Taxus × media 'Hicksii'" },
+
+    "hemlock": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Tsuga canadensis" },
+    "canadian hemlock": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Tsuga canadensis" },
+    "carolina hemlock": { "zones": ["4", "5", "6", "7"], "scientificName": "Tsuga caroliniana" },
+
+    "fir": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Abies spp." },
+    "fraser fir": { "zones": ["4", "5", "6", "7"], "scientificName": "Abies fraseri" },
+    "balsam fir": { "zones": ["3", "4", "5", "6"], "scientificName": "Abies balsamea" },
+    "white fir": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Abies concolor" },
+    "douglas fir": { "zones": ["4", "5", "6"], "scientificName": "Pseudotsuga menziesii" },
+    "nordmann fir": { "zones": ["4", "5", "6", "7"], "scientificName": "Abies nordmanniana" },
+
+    "palm tree": { "zones": ["8", "9", "10", "11"], "scientificName": "Various" },
+    "windmill palm": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Trachycarpus fortunei" },
+    "sago palm": { "zones": ["8", "9", "10", "11"], "scientificName": "Cycas revoluta" },
+    "mediterranean fan palm": { "zones": ["8", "9", "10", "11"], "scientificName": "Chamaerops humilis" },
+    "queen palm": { "zones": ["9", "10", "11"], "scientificName": "Syagrus romanzoffiana" },
+    "pygmy date palm": { "zones": ["9", "10", "11"], "scientificName": "Phoenix roebelenii" },
+    "european fan palm": { "zones": ["8", "9", "10", "11"], "scientificName": "Chamaerops humilis" },
+    "pindo palm": { "zones": ["8", "9", "10", "11"], "scientificName": "Butia capitata" },
+    "needle palm": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Rhapidophyllum hystrix" },
+
+    "smoke tree": { "zones": ["5", "6", "7", "8"], "scientificName": "Cotinus coggygria" },
+    "smoke bush": { "zones": ["5", "6", "7", "8"], "scientificName": "Cotinus coggygria" },
+    "royal purple smoke tree": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Cotinus coggygria 'Royal Purple'" },
+
+    "serviceberry": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Amelanchier spp." },
+    "shadblow serviceberry": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Amelanchier canadensis" },
+    "autumn brilliance serviceberry": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Amelanchier × grandiflora 'Autumn Brilliance'" },
+
+    "fringe tree": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Chionanthus virginicus" },
+    "white fringe tree": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Chionanthus virginicus" },
+    "chinese fringe tree": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Chionanthus retusus" },
+
+    "witch hazel": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Hamamelis spp." },
+    "arnold promise witch hazel": { "zones": ["5", "6", "7", "8"], "scientificName": "Hamamelis × intermedia 'Arnold Promise'" },
+
+    "bottlebrush": { "zones": ["8", "9", "10", "11"], "scientificName": "Callistemon spp." },
+    "crimson bottlebrush": { "zones": ["9", "10", "11"], "scientificName": "Callistemon citrinus" },
+
+    "blueberry bush": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Vaccinium corymbosum" },
+    "highbush blueberry": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Vaccinium corymbosum" },
+    "southern highbush blueberry": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Vaccinium corymbosum hybrids" },
+
+    "elderberry": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Sambucus nigra" },
+    "black lace elderberry": { "zones": ["4", "5", "6", "7"], "scientificName": "Sambucus nigra 'Black Lace'" },
+
+    "beautyberry": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Callicarpa americana" },
+    "american beautyberry": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Callicarpa americana" },
+
+    "clethra": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Clethra alnifolia" },
+    "summersweet": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Clethra alnifolia" },
+
+    "photinia": { "zones": ["7", "8", "9"], "scientificName": "Photinia × fraseri" },
+    "red tip photinia": { "zones": ["7", "8", "9"], "scientificName": "Photinia × fraseri" },
+
+    "nandina": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Nandina domestica" },
+    "heavenly bamboo": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Nandina domestica" },
+    "firepower nandina": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Nandina domestica 'Firepower'" },
+
+    "loropetalum": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense" },
+    "chinese fringe flower": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense" },
+
+    "mountain laurel": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Kalmia latifolia" },
+
+    "pieris": { "zones": ["5", "6", "7", "8"], "scientificName": "Pieris japonica" },
+    "japanese pieris": { "zones": ["5", "6", "7", "8"], "scientificName": "Pieris japonica" },
+    "andromeda": { "zones": ["5", "6", "7", "8"], "scientificName": "Pieris japonica" },
+
+    "leucothoe": { "zones": ["5", "6", "7", "8"], "scientificName": "Leucothoe fontanesiana" },
+    "drooping leucothoe": { "zones": ["5", "6", "7", "8"], "scientificName": "Leucothoe fontanesiana" },
+
+    "aucuba": { "zones": ["7", "8", "9", "10"], "scientificName": "Aucuba japonica" },
+    "japanese aucuba": { "zones": ["7", "8", "9", "10"], "scientificName": "Aucuba japonica" },
+    "gold dust plant": { "zones": ["7", "8", "9", "10"], "scientificName": "Aucuba japonica 'Variegata'" },
+
+    "tea olive": { "zones": ["7", "8", "9", "10"], "scientificName": "Osmanthus fragrans" },
+    "sweet olive": { "zones": ["7", "8", "9", "10"], "scientificName": "Osmanthus fragrans" },
+    "osmanthus": { "zones": ["7", "8", "9", "10"], "scientificName": "Osmanthus fragrans" },
+
+    "fatsia": { "zones": ["8", "9", "10"], "scientificName": "Fatsia japonica" },
+    "japanese aralia": { "zones": ["8", "9", "10"], "scientificName": "Fatsia japonica" },
+
+    "podocarpus": { "zones": ["8", "9", "10", "11"], "scientificName": "Podocarpus macrophyllus" },
+    "yew pine": { "zones": ["8", "9", "10", "11"], "scientificName": "Podocarpus macrophyllus" },
+
+    "mock orange": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Philadelphus coronarius" },
+    "sweet mock orange": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Philadelphus coronarius" },
+
+    "deutzia": { "zones": ["5", "6", "7", "8"], "scientificName": "Deutzia spp." },
+    "slender deutzia": { "zones": ["5", "6", "7", "8"], "scientificName": "Deutzia gracilis" },
+
+    "kerria": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Kerria japonica" },
+    "japanese kerria": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Kerria japonica" },
+
+    "potentilla": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Potentilla fruticosa" },
+    "shrubby cinquefoil": { "zones": ["2", "3", "4", "5", "6", "7"], "scientificName": "Potentilla fruticosa" },
+
+    "red twig dogwood": { "zones": ["2", "3", "4", "5", "6", "7", "8"], "scientificName": "Cornus sericea" },
+    "yellow twig dogwood": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Cornus sericea 'Flaviramea'" },
+
+    "cotoneaster": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Cotoneaster spp." },
+    "rockspray cotoneaster": { "zones": ["5", "6", "7", "8"], "scientificName": "Cotoneaster horizontalis" },
+
+    "abelia": { "zones": ["6", "7", "8", "9"], "scientificName": "Abelia × grandiflora" },
+    "glossy abelia": { "zones": ["6", "7", "8", "9"], "scientificName": "Abelia × grandiflora" },
+
+    "sweetspire": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Itea virginica" },
+    "virginia sweetspire": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Itea virginica" },
+    "little henry sweetspire": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Itea virginica 'Little Henry'" },
+
+    "fothergilla": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Fothergilla gardenii" },
+    "dwarf fothergilla": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Fothergilla gardenii" },
+
+    "snowberry": { "zones": ["3", "4", "5", "6", "7"], "scientificName": "Symphoricarpos albus" },
+    "coralberry": { "zones": ["4", "5", "6", "7"], "scientificName": "Symphoricarpos orbiculatus" },
+
+    "drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Drift'" },
+    "red drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Red Drift'" },
+    "pink drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Pink Drift'" },
+    "coral drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Coral Drift'" },
+    "peach drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Peach Drift'" },
+    "white drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'White Drift'" },
+    "apricot drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Apricot Drift'" },
+    "popcorn drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Popcorn Drift'" },
+    "sweet drift rose": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Rosa 'Sweet Drift'" },
+    "knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Knock Out'" },
+    "double knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Double Knock Out'" },
+
+    "star jasmine": { "zones": ["8", "9", "10", "11"], "scientificName": "Trachelospermum jasminoides" },
+    "confederate jasmine": { "zones": ["8", "9", "10", "11"], "scientificName": "Trachelospermum jasminoides" },
+    "asian jasmine": { "zones": ["7", "8", "9", "10"], "scientificName": "Trachelospermum asiaticum" },
+
+    "lantana": { "zones": ["8", "9", "10", "11"], "scientificName": "Lantana camara" },
+    "trailing lantana": { "zones": ["8", "9", "10", "11"], "scientificName": "Lantana montevidensis" },
+
+    "muhly grass": { "zones": ["6", "7", "8", "9", "10", "11"], "scientificName": "Muhlenbergia capillaris" },
+    "pink muhly grass": { "zones": ["6", "7", "8", "9", "10", "11"], "scientificName": "Muhlenbergia capillaris" },
+    "gulf muhly grass": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Muhlenbergia capillaris 'Gulf'" },
+
+    "mondo grass": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Ophiopogon japonicus" },
+    "dwarf mondo grass": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Ophiopogon japonicus 'Nana'" },
+    "black mondo grass": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Ophiopogon planiscapus 'Nigrescens'" },
+
+    "daylily": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Hemerocallis spp." },
+    "stella de oro daylily": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Hemerocallis 'Stella de Oro'" },
+    "happy returns daylily": { "zones": ["3", "4", "5", "6", "7", "8", "9"], "scientificName": "Hemerocallis 'Happy Returns'" },
+
+    "liriope": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Liriope muscari" },
+    "variegated liriope": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Liriope muscari 'Variegata'" },
+    "big blue liriope": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Liriope muscari 'Big Blue'" },
+
+    "ligustrum": { "zones": ["7", "8", "9", "10"], "scientificName": "Ligustrum spp." },
+    "sunshine ligustrum": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Ligustrum sinense 'Sunshine'" },
+    "japanese ligustrum": { "zones": ["7", "8", "9", "10"], "scientificName": "Ligustrum japonicum" },
+
+    "oleander": { "zones": ["8", "9", "10", "11"], "scientificName": "Nerium oleander" },
+    "pink oleander": { "zones": ["8", "9", "10", "11"], "scientificName": "Nerium oleander" },
+    "white oleander": { "zones": ["8", "9", "10", "11"], "scientificName": "Nerium oleander 'Alba'" },
+    "dwarf oleander": { "zones": ["8", "9", "10", "11"], "scientificName": "Nerium oleander 'Petite'" },
+
+    "mahonia": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Mahonia spp." },
+    "soft caress mahonia": { "zones": ["7", "8", "9", "10"], "scientificName": "Mahonia eurybracteata 'Soft Caress'" },
+    "leatherleaf mahonia": { "zones": ["6", "7", "8", "9"], "scientificName": "Mahonia bealei" },
+    "oregon grape": { "zones": ["5", "6", "7", "8"], "scientificName": "Mahonia aquifolium" },
+
+    "pittosporum": { "zones": ["8", "9", "10", "11"], "scientificName": "Pittosporum tobira" },
+    "variegated pittosporum": { "zones": ["8", "9", "10", "11"], "scientificName": "Pittosporum tobira 'Variegatum'" },
+    "dwarf pittosporum": { "zones": ["8", "9", "10", "11"], "scientificName": "Pittosporum tobira 'Wheeler's Dwarf'" },
+
+    "distylium": { "zones": ["7", "8", "9", "10"], "scientificName": "Distylium spp." },
+    "blue cascade distylium": { "zones": ["7", "8", "9", "10"], "scientificName": "Distylium 'Blue Cascade'" },
+    "swing low distylium": { "zones": ["7", "8", "9", "10"], "scientificName": "Distylium 'Swing Low'" },
+
+    "pineapple guava": { "zones": ["8", "9", "10", "11"], "scientificName": "Feijoa sellowiana" },
+    "feijoa": { "zones": ["8", "9", "10", "11"], "scientificName": "Feijoa sellowiana" },
+
+    "yucca": { "zones": ["4", "5", "6", "7", "8", "9", "10", "11"], "scientificName": "Yucca spp." },
+    "red yucca": { "zones": ["5", "6", "7", "8", "9", "10", "11"], "scientificName": "Hesperaloe parviflora" },
+    "color guard yucca": { "zones": ["4", "5", "6", "7", "8", "9", "10"], "scientificName": "Yucca filamentosa 'Color Guard'" },
+    "adam's needle yucca": { "zones": ["4", "5", "6", "7", "8", "9", "10"], "scientificName": "Yucca filamentosa" },
+    "soft leaf yucca": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Yucca recurvifolia" },
+
+    "texas sage": { "zones": ["8", "9", "10", "11"], "scientificName": "Leucophyllum frutescens" },
+    "cenizo": { "zones": ["8", "9", "10", "11"], "scientificName": "Leucophyllum frutescens" },
+
+    "society garlic": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Tulbaghia violacea" },
+
+    "dianella": { "zones": ["8", "9", "10", "11"], "scientificName": "Dianella spp." },
+    "variegated dianella": { "zones": ["8", "9", "10", "11"], "scientificName": "Dianella tasmanica 'Variegata'" },
+    "flax lily": { "zones": ["8", "9", "10", "11"], "scientificName": "Dianella spp." },
+
+    "agapanthus": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Agapanthus africanus" },
+    "lily of the nile": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Agapanthus africanus" },
+
+    "ginger": { "zones": ["8", "9", "10", "11"], "scientificName": "Hedychium spp." },
+    "variegated ginger": { "zones": ["8", "9", "10", "11"], "scientificName": "Alpinia zerumbet 'Variegata'" },
+    "shell ginger": { "zones": ["8", "9", "10", "11"], "scientificName": "Alpinia zerumbet" },
+
+    "indian hawthorn": { "zones": ["7", "8", "9", "10"], "scientificName": "Rhaphiolepis indica" },
+    "dwarf indian hawthorn": { "zones": ["7", "8", "9", "10"], "scientificName": "Rhaphiolepis indica" },
+
+    "cleyera": { "zones": ["7", "8", "9", "10"], "scientificName": "Ternstroemia gymnanthera" },
+    "japanese cleyera": { "zones": ["7", "8", "9", "10"], "scientificName": "Ternstroemia gymnanthera" },
+
+    "ornamental grass": { "zones": ["4", "5", "6", "7", "8", "9"], "scientificName": "Various" },
+    "fountain grass": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Pennisetum alopecuroides" },
+    "maiden grass": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Miscanthus sinensis" },
+    "pampas grass": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Cortaderia selloana" },
+    "zebra grass": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Miscanthus sinensis 'Zebrinus'" },
+
+    "plumbago": { "zones": ["8", "9", "10", "11"], "scientificName": "Plumbago auriculata" },
+    "cape leadwort": { "zones": ["8", "9", "10", "11"], "scientificName": "Plumbago auriculata" },
+
+    "salvia": { "zones": ["5", "6", "7", "8", "9", "10"], "scientificName": "Salvia spp." },
+    "autumn sage": { "zones": ["6", "7", "8", "9", "10"], "scientificName": "Salvia greggii" },
+    "mexican sage": { "zones": ["7", "8", "9", "10"], "scientificName": "Salvia leucantha" },
+
+    "yaupon holly": { "zones": ["7", "8", "9", "10"], "scientificName": "Ilex vomitoria" },
+    "dwarf yaupon": { "zones": ["7", "8", "9", "10"], "scientificName": "Ilex vomitoria 'Nana'" },
+    "dwarf yaupon holly": { "zones": ["7", "8", "9", "10"], "scientificName": "Ilex vomitoria 'Nana'" },
+
+    "hameln grass": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Pennisetum alopecuroides 'Hameln'" },
+    "dwarf hameln": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Pennisetum alopecuroides 'Hameln'" },
+
+    "white knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'White Knock Out'" },
+    "pink knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Pink Knock Out'" },
+    "pink double knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Pink Double Knock Out'" },
+    "petite knockout rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Petite Knock Out'" },
+
+    "rosemary": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Salvia rosmarinus" },
+    "tuscan blue rosemary": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Salvia rosmarinus 'Tuscan Blue'" },
+    "upright rosemary": { "zones": ["7", "8", "9", "10", "11"], "scientificName": "Salvia rosmarinus" },
+
+    "carex": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Carex spp." },
+    "sedge grass": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Carex spp." },
+    "evercolor carex": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Carex oshimensis 'Everillo'" },
+
+    "autumn fern": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Dryopteris erythrosora" },
+    "japanese autumn fern": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Dryopteris erythrosora" },
+
+    "thuja": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Thuja occidentalis" },
+    "dark green thuja": { "zones": ["3", "4", "5", "6", "7", "8"], "scientificName": "Thuja occidentalis 'Nigra'" },
+
+    "pugster butterfly bush": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buddleja 'Pugster'" },
+
+    "chinese fringe flower": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense" },
+    "jazz hands loropetalum": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense 'Jazz Hands'" },
+    "jazz hands": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense 'Jazz Hands'" },
+    "jazz hands pink": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense 'Jazz Hands Pink'" },
+    "jazz hands mini": { "zones": ["7", "8", "9", "10"], "scientificName": "Loropetalum chinense 'Jazz Hands Mini'" },
+
+    "white knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'White Knock Out'" },
+    "pink knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Pink Knock Out'" },
+    "pink double knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Pink Double Knock Out'" },
+    "petite knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Petite Knock Out'" },
+    "knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Knock Out'" },
+    "double knock out rose": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Rosa 'Double Knock Out'" },
+
+    "pugster amethyst": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buddleja 'Pugster Amethyst'" },
+    "pugster": { "zones": ["5", "6", "7", "8", "9"], "scientificName": "Buddleja 'Pugster'" },
+
+    "candy corn spiraea": { "zones": ["4", "5", "6", "7", "8"], "scientificName": "Spiraea japonica 'Candy Corn'" },
+
+    "thin man arborvitae": { "zones": ["5", "6", "7", "8"], "scientificName": "Thuja occidentalis 'Thin Man'" },
+    "full speed a hedge": { "zones": ["5", "6", "7", "8"], "scientificName": "Thuja occidentalis 'Thin Man'" }
+  }
+}

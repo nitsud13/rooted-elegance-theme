@@ -1,0 +1,737 @@
+{% comment %}
+  Blog Posts - Main Blog Section
+
+  A styled blog template with:
+  - Hero with blog title
+  - Featured article (optional)
+  - Article grid
+  - Pagination
+{% endcomment %}
+
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<div class="blog-page">
+  {%- comment -%} Hero Section {%- endcomment -%}
+  <section class="bp-hero">
+    <div class="bp-hero__bg">
+      <svg class="bp-hero__pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <pattern id="blog-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="1.5" fill="currentColor" opacity="0.08"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#blog-pattern)"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="bp-hero__content">
+        <span class="bp-hero__badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          Expert Advice
+        </span>
+
+        <h1 class="bp-hero__title">{{ blog.title | default: section.settings.heading }}</h1>
+
+        <p class="bp-hero__description">
+          {{ section.settings.subheading | default: 'Expert tips, guides, and insights to help your garden thrive. Learn from our 40+ years of growing experience.' }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Articles Section {%- endcomment -%}
+  <section class="bp-articles">
+    <div class="container">
+      {%- if blog.articles.size > 0 -%}
+        {%- comment -%} Featured Article {%- endcomment -%}
+        {%- if section.settings.show_featured and blog.articles.size > 0 -%}
+          {%- assign featured = blog.articles.first -%}
+          <article class="bp-featured">
+            {%- if featured.image -%}
+              <div class="bp-featured__image">
+                {{ featured.image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: featured.title }}
+              </div>
+            {%- endif -%}
+            <div class="bp-featured__content">
+              <div class="bp-featured__meta">
+                <time datetime="{{ featured.published_at | date: '%Y-%m-%d' }}">
+                  {{ featured.published_at | date: '%B %d, %Y' }}
+                </time>
+                {%- if featured.tags.size > 0 -%}
+                  <span class="bp-featured__tag">{{ featured.tags.first }}</span>
+                {%- endif -%}
+              </div>
+              <h2 class="bp-featured__title">
+                <a href="{{ featured.url }}">{{ featured.title }}</a>
+              </h2>
+              <p class="bp-featured__excerpt">{{ featured.excerpt_or_content | strip_html | truncate: 200 }}</p>
+              <a href="{{ featured.url }}" class="bp-featured__link">
+                Read Article
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+        {%- endif -%}
+
+        {%- comment -%} Article Grid {%- endcomment -%}
+        <div class="bp-grid">
+          {%- assign skip_first = false -%}
+          {%- if section.settings.show_featured and blog.articles.size > 1 -%}
+            {%- assign skip_first = true -%}
+          {%- endif -%}
+
+          {%- for article in blog.articles -%}
+            {%- if skip_first and forloop.first -%}
+              {%- continue -%}
+            {%- endif -%}
+
+            <article class="bp-card">
+              {%- if article.image -%}
+                <a href="{{ article.url }}" class="bp-card__image">
+                  {{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: article.title }}
+                </a>
+              {%- else -%}
+                <a href="{{ article.url }}" class="bp-card__image bp-card__image--placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+
+              <div class="bp-card__content">
+                <div class="bp-card__meta">
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: '%b %d, %Y' }}
+                  </time>
+                  {%- if article.tags.size > 0 -%}
+                    <span class="bp-card__tag">{{ article.tags.first }}</span>
+                  {%- endif -%}
+                </div>
+
+                <h3 class="bp-card__title">
+                  <a href="{{ article.url }}">{{ article.title }}</a>
+                </h3>
+
+                <p class="bp-card__excerpt">{{ article.excerpt_or_content | strip_html | truncate: 120 }}</p>
+
+                <a href="{{ article.url }}" class="bp-card__link">
+                  Read More
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Pagination {%- endcomment -%}
+        {%- if paginate.pages > 1 -%}
+          <nav class="bp-pagination" aria-label="Blog pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="bp-pagination__btn bp-pagination__btn--prev">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Previous
+              </a>
+            {%- endif -%}
+
+            <div class="bp-pagination__pages">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="bp-pagination__page">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="bp-pagination__page bp-pagination__page--current">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="bp-pagination__page bp-pagination__page--gap">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="bp-pagination__btn bp-pagination__btn--next">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+
+      {%- else -%}
+        {%- comment -%} Empty State {%- endcomment -%}
+        <div class="bp-empty">
+          <div class="bp-empty__icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h2 class="bp-empty__title">Coming Soon</h2>
+          <p class="bp-empty__text">We're working on expert gardening content for you. Check back soon for tips, guides, and growing advice.</p>
+          <a href="/pages/planting-guide" class="bp-empty__link">
+            View Our Planting Guide
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} CTA Section {%- endcomment -%}
+  <section class="bp-cta">
+    <div class="container">
+      <div class="bp-cta__content">
+        <h2 class="bp-cta__title">Ready to Start Planting?</h2>
+        <p class="bp-cta__text">Browse our selection of trees and shrubs, perfect for your growing zone.</p>
+        <a href="/pages/shop-by-zone" class="bp-cta__btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Shop by Growing Zone
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+/* ============================================
+   BLOG PAGE STYLES
+   ============================================ */
+
+.blog-page {
+  background: var(--color-cream);
+}
+
+/* Hero Section */
+.bp-hero {
+  position: relative;
+  padding: var(--space-20) 0 var(--space-16);
+  background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark) 100%);
+  color: var(--color-white);
+  overflow: hidden;
+}
+
+.bp-hero__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bp-hero__pattern {
+  width: 100%;
+  height: 100%;
+  color: var(--color-sage);
+}
+
+.bp-hero__content {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bp-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+}
+
+.bp-hero__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-6);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) 100ms both;
+}
+
+.bp-hero__description {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  opacity: 0.9;
+  animation: fadeInUp var(--duration-slow) var(--ease-out) 200ms both;
+}
+
+/* Articles Section */
+.bp-articles {
+  padding: var(--space-16) 0 var(--space-24);
+}
+
+/* Featured Article */
+.bp-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  align-items: center;
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--space-16);
+}
+
+@media (max-width: 900px) {
+  .bp-featured {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bp-featured__image {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.bp-featured__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bp-featured__content {
+  padding: var(--space-8);
+}
+
+@media (max-width: 900px) {
+  .bp-featured__content {
+    padding: var(--space-6);
+  }
+}
+
+.bp-featured__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.bp-featured__meta time {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+}
+
+.bp-featured__tag {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-sage);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.bp-featured__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-4);
+}
+
+.bp-featured__title a {
+  color: var(--color-forest);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.bp-featured__title a:hover {
+  color: var(--color-earth);
+}
+
+.bp-featured__excerpt {
+  font-size: var(--text-base);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.bp-featured__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-earth);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: gap var(--duration-fast) var(--ease-out);
+}
+
+.bp-featured__link:hover {
+  gap: var(--space-3);
+}
+
+/* Article Grid */
+.bp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+}
+
+@media (max-width: 1024px) {
+  .bp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Article Card */
+.bp-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.bp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.bp-card__image {
+  display: block;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.bp-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.bp-card:hover .bp-card__image img {
+  transform: scale(1.05);
+}
+
+.bp-card__image--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream-warm);
+  color: var(--color-sage);
+}
+
+.bp-card__content {
+  padding: var(--space-6);
+}
+
+.bp-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.bp-card__meta time {
+  font-size: var(--text-xs);
+  color: var(--color-bark-light);
+}
+
+.bp-card__tag {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-cream-warm);
+  color: var(--color-forest);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.bp-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-3);
+}
+
+.bp-card__title a {
+  color: var(--color-forest);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.bp-card__title a:hover {
+  color: var(--color-earth);
+}
+
+.bp-card__excerpt {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.bp-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-earth);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: gap var(--duration-fast) var(--ease-out);
+}
+
+.bp-card__link:hover {
+  gap: var(--space-2);
+}
+
+/* Pagination */
+.bp-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-16);
+}
+
+.bp-pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-white);
+  border: 1px solid var(--color-cream-warm);
+  border-radius: var(--radius-lg);
+  color: var(--color-forest);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.bp-pagination__btn:hover {
+  background: var(--color-forest);
+  border-color: var(--color-forest);
+  color: var(--color-white);
+}
+
+.bp-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.bp-pagination__page {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--color-bark);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.bp-pagination__page:hover {
+  background: var(--color-cream-warm);
+  color: var(--color-forest);
+}
+
+.bp-pagination__page--current {
+  background: var(--color-forest);
+  color: var(--color-white);
+}
+
+.bp-pagination__page--gap {
+  color: var(--color-bark-light);
+}
+
+/* Empty State */
+.bp-empty {
+  text-align: center;
+  padding: var(--space-24) var(--space-8);
+}
+
+.bp-empty__icon {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-8);
+  color: var(--color-sage);
+}
+
+.bp-empty__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.bp-empty__text {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+  max-width: 500px;
+  margin: 0 auto var(--space-8);
+  line-height: var(--leading-relaxed);
+}
+
+.bp-empty__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  background: var(--color-earth);
+  color: var(--color-white);
+  border-radius: var(--radius-lg);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.bp-empty__link:hover {
+  background: var(--color-earth-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* CTA Section */
+.bp-cta {
+  padding: var(--space-16) 0;
+  background: var(--color-white);
+}
+
+.bp-cta__content {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bp-cta__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-3);
+}
+
+.bp-cta__text {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+  margin-bottom: var(--space-6);
+}
+
+.bp-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  background: var(--color-earth);
+  color: var(--color-white);
+  border-radius: var(--radius-lg);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.bp-cta__btn:hover {
+  background: var(--color-earth-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Container */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "tag": "section",
+  "class": "blog-posts-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Gardening Tips"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Expert tips, guides, and insights to help your garden thrive. Learn from our 40+ years of growing experience."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured",
+      "label": "Show featured article",
+      "default": true,
+      "info": "Display the most recent article in a larger featured format"
+    },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Articles per page",
+      "min": 6,
+      "max": 24,
+      "step": 3,
+      "default": 9
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Posts"
+    }
+  ]
+}
+{% endschema %}

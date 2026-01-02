@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "planting-guide",
+      "settings": {
+        "heading": "Complete Tree Planting Guide",
+        "subheading": "Everything you need to know to plant trees and shrubs that thrive for decades. Follow our expert guidance for planting success."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

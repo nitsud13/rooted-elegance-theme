@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "about-page",
+      "settings": {
+        "heading": "Our Story",
+        "subheading": "What started as a small backyard operation in 1984 has grown into one of Central Louisiana's premier nurseries, serving gardeners and landscape professionals nationwide."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

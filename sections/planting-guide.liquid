@@ -1,0 +1,1126 @@
+{% comment %}
+  Planting Guide - Educational Resource Page Section
+
+  A comprehensive guide to planting trees and shrubs with:
+  - Hero section with page title
+  - Step-by-step planting instructions
+  - Seasonal planting timeline
+  - Care tips grid
+  - FAQ accordion
+  - CTA to shop
+{% endcomment %}
+
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<div class="planting-guide">
+  {%- comment -%} Hero Section {%- endcomment -%}
+  <section class="pg-hero">
+    <div class="pg-hero__bg">
+      <svg class="pg-hero__pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <pattern id="leaf-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M25 5 Q30 15 25 25 Q20 15 25 5" fill="currentColor" opacity="0.08"/>
+            <path d="M10 30 Q15 40 10 50 Q5 40 10 30" fill="currentColor" opacity="0.05"/>
+            <path d="M40 35 Q45 45 40 55 Q35 45 40 35" fill="currentColor" opacity="0.06"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#leaf-pattern)"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="pg-hero__content">
+        <span class="pg-hero__badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22V8"/>
+            <path d="M5 12H2a10 10 0 0020 0h-3"/>
+            <path d="M8 8.5a2.5 2.5 0 015 0v1.7l4 4"/>
+            <path d="M12 2a4 4 0 014 4v2"/>
+            <path d="M8 6V4a4 4 0 014-2"/>
+          </svg>
+          Expert Growing Guide
+        </span>
+
+        <h1 class="pg-hero__title">{{ section.settings.heading | default: 'Complete Tree Planting Guide' }}</h1>
+
+        <p class="pg-hero__description">
+          {{ section.settings.subheading | default: 'Everything you need to know to plant trees and shrubs that thrive for decades. Follow our expert guidance for planting success.' }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Quick Stats Bar {%- endcomment -%}
+  <section class="pg-stats">
+    <div class="container">
+      <div class="pg-stats__grid">
+        <div class="pg-stats__item">
+          <span class="pg-stats__number">40+</span>
+          <span class="pg-stats__label">Years of Experience</span>
+        </div>
+        <div class="pg-stats__item">
+          <span class="pg-stats__number">30</span>
+          <span class="pg-stats__label">Acres of Nursery</span>
+        </div>
+        <div class="pg-stats__item">
+          <span class="pg-stats__number">98%</span>
+          <span class="pg-stats__label">Success Rate</span>
+        </div>
+        <div class="pg-stats__item">
+          <span class="pg-stats__number">1984</span>
+          <span class="pg-stats__label">Founded</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Step by Step Section {%- endcomment -%}
+  <section class="pg-steps">
+    <div class="container">
+      <div class="pg-steps__header">
+        <h2 class="pg-steps__title">How to Plant a Tree in 7 Steps</h2>
+        <p class="pg-steps__subtitle">Follow these steps for the best chance of success. Proper planting is the foundation for decades of healthy growth.</p>
+      </div>
+
+      <div class="pg-steps__grid">
+        {%- comment -%} Step 1 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 0ms">
+          <div class="pg-step__number">1</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Choose the Right Time</h3>
+          <p class="pg-step__text">The best time to plant is during dormancy—late fall after leaf drop or early spring before bud break. Avoid planting during extreme heat or when the ground is frozen.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Fall planting allows roots to establish before spring growth.
+          </div>
+        </div>
+
+        {%- comment -%} Step 2 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 50ms">
+          <div class="pg-step__number">2</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="11" r="3"/>
+              <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Select the Perfect Location</h3>
+          <p class="pg-step__text">Consider the tree's mature size, sunlight needs, and proximity to structures. Ensure adequate space for both above-ground growth and root expansion.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Keep large trees 15-20 feet from buildings and power lines.
+          </div>
+        </div>
+
+        {%- comment -%} Step 3 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 100ms">
+          <div class="pg-step__number">3</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 12h2"/>
+              <path d="M20 12h2"/>
+              <path d="M12 2v2"/>
+              <path d="M12 20v2"/>
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M4.93 4.93l1.41 1.41"/>
+              <path d="M17.66 17.66l1.41 1.41"/>
+              <path d="M4.93 19.07l1.41-1.41"/>
+              <path d="M17.66 6.34l1.41-1.41"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Dig the Right Hole</h3>
+          <p class="pg-step__text">Dig a hole 2-3 times wider than the root ball but only as deep as the root ball height. The root flare should be at or slightly above ground level.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Roughen the sides of the hole to help roots penetrate.
+          </div>
+        </div>
+
+        {%- comment -%} Step 4 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 150ms">
+          <div class="pg-step__number">4</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 3v18"/>
+              <path d="M17 8l-5-5-5 5"/>
+              <path d="M8 21h8"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Prepare the Tree</h3>
+          <p class="pg-step__text">Remove all containers, burlap, and wire baskets. Gently loosen circling roots. If roots are severely root-bound, score the root ball with a knife in 3-4 places.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Keep roots moist during the entire planting process.
+          </div>
+        </div>
+
+        {%- comment -%} Step 5 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 200ms">
+          <div class="pg-step__number">5</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 22V8"/>
+              <path d="M5 12H2a10 10 0 0020 0h-3"/>
+              <path d="M12 2a4 4 0 014 4v2"/>
+              <path d="M8 6V4a4 4 0 014-2"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Position & Backfill</h3>
+          <p class="pg-step__text">Place the tree in the hole with the root flare at ground level. Backfill with the original soil, gently tamping to eliminate air pockets. Don't add amendments to the backfill.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Step lightly around the tree to firm soil, but don't compact.
+          </div>
+        </div>
+
+        {%- comment -%} Step 6 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 250ms">
+          <div class="pg-step__number">6</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v6"/>
+              <path d="M8 4h8"/>
+              <ellipse cx="12" cy="14" rx="8" ry="6"/>
+              <path d="M12 20v2"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Water Thoroughly</h3>
+          <p class="pg-step__text">Create a water ring around the tree and fill it 2-3 times to saturate the root zone. This removes air pockets and helps roots make contact with soil.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> Water slowly and deeply—10 gallons per inch of trunk diameter.
+          </div>
+        </div>
+
+        {%- comment -%} Step 7 {%- endcomment -%}
+        <div class="pg-step" style="--step-delay: 300ms">
+          <div class="pg-step__number">7</div>
+          <div class="pg-step__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+              <path d="M2 12h4"/>
+              <path d="M18 12h4"/>
+              <path d="M12 6v12"/>
+            </svg>
+          </div>
+          <h3 class="pg-step__title">Mulch & Maintain</h3>
+          <p class="pg-step__text">Apply 2-4 inches of mulch in a 3-foot radius, keeping it away from the trunk. Water regularly for the first two years—deeply once or twice weekly during dry periods.</p>
+          <div class="pg-step__tip">
+            <strong>Pro Tip:</strong> "Volcano mulching" against the trunk causes rot—keep a 3-inch gap.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Seasonal Timeline {%- endcomment -%}
+  <section class="pg-seasons">
+    <div class="container">
+      <div class="pg-seasons__header">
+        <h2 class="pg-seasons__title">When to Plant by Season</h2>
+        <p class="pg-seasons__subtitle">Understanding seasonal planting windows helps ensure your trees get the best start.</p>
+      </div>
+
+      <div class="pg-seasons__grid">
+        <div class="pg-season pg-season--spring">
+          <div class="pg-season__icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </div>
+          <h3 class="pg-season__title">Spring</h3>
+          <span class="pg-season__months">March - May</span>
+          <p class="pg-season__text">Ideal for most deciduous trees and shrubs. Plant after the ground thaws but before leaves fully emerge. Trees planted in spring have the entire growing season to establish.</p>
+          <ul class="pg-season__tips">
+            <li>Wait until soil is workable</li>
+            <li>Plant before hot weather arrives</li>
+            <li>Excellent for container-grown stock</li>
+          </ul>
+          <span class="pg-season__rating pg-season__rating--excellent">Excellent</span>
+        </div>
+
+        <div class="pg-season pg-season--summer">
+          <div class="pg-season__icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+          </div>
+          <h3 class="pg-season__title">Summer</h3>
+          <span class="pg-season__months">June - August</span>
+          <p class="pg-season__text">Challenging but possible with extra care. Container-grown trees can be planted if you commit to consistent watering. Avoid planting during heat waves above 90°F.</p>
+          <ul class="pg-season__tips">
+            <li>Requires diligent watering</li>
+            <li>Plant on cloudy days when possible</li>
+            <li>Provide temporary shade</li>
+          </ul>
+          <span class="pg-season__rating pg-season__rating--fair">Challenging</span>
+        </div>
+
+        <div class="pg-season pg-season--fall">
+          <div class="pg-season__icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M11 19a6 6 0 01-6-6c0-4 4-8 6-10 2 2 6 6 6 10a6 6 0 01-6 6z"/>
+              <path d="M11 19v3"/>
+            </svg>
+          </div>
+          <h3 class="pg-season__title">Fall</h3>
+          <span class="pg-season__months">September - November</span>
+          <p class="pg-season__text">The best time to plant! Cooler temperatures reduce transplant stress while warm soil promotes root growth. Trees establish root systems all winter long.</p>
+          <ul class="pg-season__tips">
+            <li>Roots grow until soil freezes</li>
+            <li>Less watering needed</li>
+            <li>Best selection at nurseries</li>
+          </ul>
+          <span class="pg-season__rating pg-season__rating--excellent">Best</span>
+        </div>
+
+        <div class="pg-season pg-season--winter">
+          <div class="pg-season__icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v20M2 12h20"/>
+              <path d="M20 16l-4-4 4-4M4 8l4 4-4 4M16 4l-4 4-4-4M8 20l4-4 4 4"/>
+            </svg>
+          </div>
+          <h3 class="pg-season__title">Winter</h3>
+          <span class="pg-season__months">December - February</span>
+          <p class="pg-season__text">Planting is possible in mild climates where the ground doesn't freeze. Bare-root trees are often shipped in late winter for early spring planting.</p>
+          <ul class="pg-season__tips">
+            <li>Wait for mild spells</li>
+            <li>Ideal for bare-root stock</li>
+            <li>Don't plant in frozen ground</li>
+          </ul>
+          <span class="pg-season__rating pg-season__rating--good">Variable</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Care Tips Grid {%- endcomment -%}
+  <section class="pg-care">
+    <div class="container">
+      <div class="pg-care__header">
+        <h2 class="pg-care__title">First-Year Care Essentials</h2>
+        <p class="pg-care__subtitle">The first year after planting is critical. Follow these care guidelines to help your trees thrive.</p>
+      </div>
+
+      <div class="pg-care__grid">
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v6M8 4h8"/>
+              <ellipse cx="12" cy="14" rx="8" ry="6"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Watering Schedule</h3>
+          <p class="pg-care__card-text">Water deeply 1-2 times per week during dry periods. Young trees need 10-15 gallons per week. Water slowly to ensure deep penetration.</p>
+        </div>
+
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Wait to Fertilize</h3>
+          <p class="pg-care__card-text">Don't fertilize for the first year. Let roots establish naturally. Over-fertilizing can burn new roots and push excessive top growth.</p>
+        </div>
+
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Minimal Pruning</h3>
+          <p class="pg-care__card-text">Only remove dead, damaged, or crossing branches the first year. Avoid heavy pruning until the tree is established—leaves feed root growth.</p>
+        </div>
+
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Monitor for Stress</h3>
+          <p class="pg-care__card-text">Watch for wilting, yellowing leaves, or leaf scorch. These can indicate water stress, root problems, or environmental issues. Act quickly.</p>
+        </div>
+
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Protect the Trunk</h3>
+          <p class="pg-care__card-text">Use tree guards to protect from mower damage and rodents. Wrap young thin-barked trees in winter to prevent sunscald and frost cracks.</p>
+        </div>
+
+        <div class="pg-care__card">
+          <div class="pg-care__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="pg-care__card-title">Maintain Mulch</h3>
+          <p class="pg-care__card-text">Refresh mulch as needed to maintain 2-4 inch depth. Keep mulch pulled back 3 inches from the trunk to prevent rot and pest issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} FAQ Section {%- endcomment -%}
+  <section class="pg-faq">
+    <div class="container">
+      <div class="pg-faq__header">
+        <h2 class="pg-faq__title">Frequently Asked Questions</h2>
+        <p class="pg-faq__subtitle">Answers to common planting questions from our expert team.</p>
+      </div>
+
+      <div class="pg-faq__list">
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>How deep should I plant my tree?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>Plant so the root flare (where trunk meets roots) is at or slightly above ground level. Planting too deep is one of the most common mistakes and can lead to trunk rot and poor root development. If you can't see the root flare, carefully remove soil from the top of the root ball until you find it.</p>
+          </div>
+        </details>
+
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>Should I stake my newly planted tree?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>Only stake if absolutely necessary—trees develop stronger trunks when allowed to move naturally. If the tree can't stand on its own due to wind or root ball size, stake loosely for one year maximum. Use wide, flexible straps that won't damage bark.</p>
+          </div>
+        </details>
+
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>Can I plant a tree where one died?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>It depends on why the previous tree died. If it was disease-related, avoid planting the same species. Remove as many old roots as possible and consider amending the soil or choosing a different location. Always diagnose the cause of death first.</p>
+          </div>
+        </details>
+
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>How long until my tree looks established?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>The general rule is one year of establishment for every inch of trunk diameter at planting. A 2-inch caliper tree takes about 2 years to fully establish. Don't expect significant top growth the first year—the tree is focusing energy on root development.</p>
+          </div>
+        </details>
+
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>Should I amend the soil when planting?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>Generally, no. Use the native soil for backfill. Creating a pocket of amended soil can discourage roots from spreading into surrounding native soil. Exceptions: very poor soil may benefit from compost mixed into a larger area, not just the planting hole.</p>
+          </div>
+        </details>
+
+        <details class="pg-faq__item">
+          <summary class="pg-faq__question">
+            <span>How do I know if I'm overwatering or underwatering?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </summary>
+          <div class="pg-faq__answer">
+            <p>Both cause wilting, so check the soil. Insert a screwdriver 6 inches into the root zone—if it's difficult, soil is too dry. If it comes out with muddy soil clinging to it, you're overwatering. The goal is consistently moist (not wet) soil.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} CTA Section {%- endcomment -%}
+  <section class="pg-cta">
+    <div class="container">
+      <div class="pg-cta__content">
+        <h2 class="pg-cta__title">Ready to Plant?</h2>
+        <p class="pg-cta__text">Browse our selection of trees and shrubs, all grown right here on our 30-acre nursery in Central Louisiana. We ship nationwide with our one-year guarantee.</p>
+        <div class="pg-cta__buttons">
+          <a href="/pages/shop-by-zone" class="pg-cta__btn pg-cta__btn--primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Shop by Growing Zone
+          </a>
+          <a href="/collections/all" class="pg-cta__btn pg-cta__btn--secondary">
+            Browse All Trees
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+/* ============================================
+   PLANTING GUIDE STYLES
+   ============================================ */
+
+.planting-guide {
+  background: var(--color-cream);
+}
+
+/* Hero Section */
+.pg-hero {
+  position: relative;
+  padding: var(--space-20) 0 var(--space-16);
+  background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark) 100%);
+  color: var(--color-white);
+  overflow: hidden;
+}
+
+.pg-hero__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pg-hero__pattern {
+  width: 100%;
+  height: 100%;
+  color: var(--color-sage);
+}
+
+.pg-hero__content {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pg-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+}
+
+.pg-hero__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-6);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) 100ms both;
+}
+
+.pg-hero__description {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  opacity: 0.9;
+  animation: fadeInUp var(--duration-slow) var(--ease-out) 200ms both;
+}
+
+/* Stats Bar */
+.pg-stats {
+  background: var(--color-white);
+  padding: var(--space-10) 0;
+  border-bottom: 1px solid var(--color-cream-warm);
+}
+
+.pg-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-8);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .pg-stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+.pg-stats__item {
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+}
+
+.pg-stats__item:nth-child(1) { animation-delay: 0ms; }
+.pg-stats__item:nth-child(2) { animation-delay: 50ms; }
+.pg-stats__item:nth-child(3) { animation-delay: 100ms; }
+.pg-stats__item:nth-child(4) { animation-delay: 150ms; }
+
+.pg-stats__number {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-forest);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.pg-stats__label {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Steps Section */
+.pg-steps {
+  padding: var(--space-24) 0;
+}
+
+.pg-steps__header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-16);
+}
+
+.pg-steps__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.pg-steps__subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+}
+
+.pg-steps__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-8);
+}
+
+.pg-step {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+  animation: fadeInUp var(--duration-slow) var(--ease-out) var(--step-delay, 0ms) both;
+}
+
+.pg-step:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pg-step__number {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-sage);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.pg-step__icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream-warm);
+  border-radius: var(--radius-lg);
+  color: var(--color-forest);
+  margin-bottom: var(--space-5);
+}
+
+.pg-step__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-3);
+}
+
+.pg-step__text {
+  font-size: var(--text-base);
+  color: var(--color-bark);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.pg-step__tip {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-cream-warm);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-earth);
+}
+
+.pg-step__tip strong {
+  color: var(--color-earth);
+}
+
+/* Seasons Section */
+.pg-seasons {
+  padding: var(--space-24) 0;
+  background: var(--color-white);
+}
+
+.pg-seasons__header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-16);
+}
+
+.pg-seasons__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.pg-seasons__subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+}
+
+.pg-seasons__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+  .pg-seasons__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-seasons__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pg-season {
+  background: var(--color-cream);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  text-align: center;
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.pg-season:hover {
+  transform: translateY(-4px);
+}
+
+.pg-season--spring {
+  border-top: 4px solid #7CB342;
+}
+
+.pg-season--summer {
+  border-top: 4px solid #FDD835;
+}
+
+.pg-season--fall {
+  border-top: 4px solid var(--color-earth);
+}
+
+.pg-season--winter {
+  border-top: 4px solid #64B5F6;
+}
+
+.pg-season__icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-4);
+  color: var(--color-forest);
+}
+
+.pg-season__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-1);
+}
+
+.pg-season__months {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.pg-season__text {
+  font-size: var(--text-base);
+  color: var(--color-bark);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+
+.pg-season__tips {
+  list-style: none;
+  text-align: left;
+  margin-bottom: var(--space-4);
+}
+
+.pg-season__tips li {
+  position: relative;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  margin-bottom: var(--space-2);
+}
+
+.pg-season__tips li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-sage);
+  font-weight: var(--weight-bold);
+}
+
+.pg-season__rating {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.pg-season__rating--excellent {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--color-success);
+}
+
+.pg-season__rating--good {
+  background: rgba(139, 168, 136, 0.2);
+  color: var(--color-forest);
+}
+
+.pg-season__rating--fair {
+  background: rgba(245, 124, 0, 0.1);
+  color: var(--color-warning);
+}
+
+/* Care Section */
+.pg-care {
+  padding: var(--space-24) 0;
+}
+
+.pg-care__header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-16);
+}
+
+.pg-care__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.pg-care__subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+}
+
+.pg-care__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+  .pg-care__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pg-care__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pg-care__card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.pg-care__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.pg-care__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream-warm);
+  border-radius: var(--radius-md);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.pg-care__card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--color-forest);
+  margin-bottom: var(--space-2);
+}
+
+.pg-care__card-text {
+  font-size: var(--text-sm);
+  color: var(--color-bark-light);
+  line-height: var(--leading-relaxed);
+}
+
+/* FAQ Section */
+.pg-faq {
+  padding: var(--space-24) 0;
+  background: var(--color-white);
+}
+
+.pg-faq__header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-12);
+}
+
+.pg-faq__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  color: var(--color-forest);
+  margin-bottom: var(--space-4);
+}
+
+.pg-faq__subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-bark-light);
+}
+
+.pg-faq__list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pg-faq__item {
+  border-bottom: 1px solid var(--color-cream-warm);
+}
+
+.pg-faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pg-faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.pg-faq__question span {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--color-forest);
+  font-weight: var(--weight-medium);
+}
+
+.pg-faq__question svg {
+  flex-shrink: 0;
+  color: var(--color-bark-light);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.pg-faq__item[open] .pg-faq__question svg {
+  transform: rotate(180deg);
+}
+
+.pg-faq__answer {
+  padding-bottom: var(--space-6);
+}
+
+.pg-faq__answer p {
+  font-size: var(--text-base);
+  color: var(--color-bark);
+  line-height: var(--leading-relaxed);
+}
+
+/* CTA Section */
+.pg-cta {
+  padding: var(--space-24) 0;
+  background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark) 100%);
+}
+
+.pg-cta__content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--color-white);
+}
+
+.pg-cta__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-4);
+}
+
+.pg-cta__text {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  opacity: 0.9;
+  margin-bottom: var(--space-8);
+}
+
+.pg-cta__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.pg-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.pg-cta__btn--primary {
+  background: var(--color-earth);
+  color: var(--color-white);
+}
+
+.pg-cta__btn--primary:hover {
+  background: var(--color-earth-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pg-cta__btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.pg-cta__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Container */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Planting Guide",
+  "tag": "section",
+  "class": "planting-guide-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Complete Tree Planting Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Everything you need to know to plant trees and shrubs that thrive for decades. Follow our expert guidance for planting success."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Planting Guide"
+    }
+  ]
+}
+{% endschema %}
