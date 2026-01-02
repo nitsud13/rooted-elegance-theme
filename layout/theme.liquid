@@ -262,6 +262,19 @@
       }
     }
 
+    /* Hide zone badge at awkward middle width when nav is visible but space is tight */
+    @media (min-width: 1024px) and (max-width: 1399px) {
+      .site-header__zone-badge {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .site-header__zone-badge {
+        display: flex;
+      }
+    }
+
     .site-header__icon-btn {
       position: relative;
       display: flex;
