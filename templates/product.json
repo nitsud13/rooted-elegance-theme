@@ -3,51 +3,51 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
+        "vendor_block": {
           "type": "vendor"
         },
-        "title": {
+        "title_block": {
           "type": "title"
         },
-        "rating": {
+        "rating_block": {
           "type": "rating"
         },
-        "price": {
+        "price_block": {
           "type": "price"
         },
-        "zone_badge": {
+        "zone_badge_block": {
           "type": "zone_badge"
         },
-        "variant_picker": {
+        "variant_picker_block": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button"
           }
         },
-        "quantity": {
+        "quantity_block": {
           "type": "quantity_selector"
         },
-        "buy_buttons": {
+        "buy_buttons_block": {
           "type": "buy_buttons",
           "settings": {
             "show_dynamic_checkout": true
           }
         },
-        "description": {
+        "description_block": {
           "type": "description",
           "settings": {
-            "collapse_on_mobile": false
+            "show_full_description": false
           }
         },
-        "trust_badges": {
+        "trust_badges_block": {
           "type": "trust_badges",
           "settings": {
             "badge_1": "1-Year Guarantee",
-            "badge_2": "Expert Support",
-            "badge_3": "Secure Checkout"
+            "badge_2": "Free Shipping $100+",
+            "badge_3": "Expert Packaging"
           }
         },
-        "shipping_info": {
+        "shipping_info_block": {
           "type": "collapsible_row",
           "settings": {
             "heading": "Shipping & Returns",
@@ -56,32 +56,36 @@
             "open_by_default": false
           }
         },
-        "care_info": {
+        "care_info_block": {
           "type": "collapsible_row",
           "settings": {
             "heading": "Care Instructions",
-            "icon": "care",
+            "icon": "leaf",
             "content": "<p>Water regularly during the first growing season. Mulch around the base to retain moisture. Prune in late winter or early spring.</p>",
             "open_by_default": false
           }
         }
       },
       "block_order": [
-        "vendor",
-        "title",
-        "rating",
-        "price",
-        "zone_badge",
-        "variant_picker",
-        "quantity",
-        "buy_buttons",
-        "description",
-        "trust_badges",
-        "shipping_info",
-        "care_info"
+        "vendor_block",
+        "title_block",
+        "rating_block",
+        "price_block",
+        "zone_badge_block",
+        "variant_picker_block",
+        "quantity_block",
+        "buy_buttons_block",
+        "description_block",
+        "trust_badges_block",
+        "shipping_info_block",
+        "care_info_block"
       ],
-      "settings": {}
+      "settings": {
+        "enable_zoom": true
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
