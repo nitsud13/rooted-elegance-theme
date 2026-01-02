@@ -109,8 +109,9 @@
     if (zipDataPromise) return zipDataPromise;
 
     zipDataPromise = new Promise((resolve, reject) => {
+      const src = (window.ZIP_TO_ZONE_URL) ? window.ZIP_TO_ZONE_URL : '/assets/zip_to_zone_output.js';
       const script = document.createElement('script');
-      script.src = '/assets/zip_to_zone_output.js';
+      script.src = src;
       script.async = true;
 
       script.onload = () => {

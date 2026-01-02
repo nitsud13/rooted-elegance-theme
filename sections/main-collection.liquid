@@ -118,6 +118,7 @@
                   Find Zone
                 </button>
               </div>
+              <p class="zone-filter-panel__error" id="filter-zip-error" hidden></p>
             </div>
 
             <!-- Quick Zone Buttons -->
@@ -376,13 +377,19 @@
     async lookupZone() {
       const zipInput = document.getElementById('filter-zip-input');
       const zip = zipInput.value.trim();
+      const errorEl = document.getElementById('filter-zip-error');
 
       if (!/^\d{5}$/.test(zip)) {
         zipInput.classList.add('error');
+        if (errorEl) {
+          errorEl.hidden = false;
+          errorEl.textContent = 'Please enter a valid 5-digit ZIP code.';
+        }
         return;
       }
 
       zipInput.classList.remove('error');
+      if (errorEl) errorEl.hidden = true;
 
       // Use the ZoneSelector API if available
       if (window.ZoneSelector && window.ZoneSelector.getZoneFromZip) {
@@ -400,7 +407,13 @@
           }));
 
           this.updateSavedZoneDisplay({ zone: result.zone });
+        } else if (errorEl) {
+          errorEl.hidden = false;
+          errorEl.textContent = 'Could not determine zone for this ZIP code.';
         }
+      } else if (errorEl) {
+        errorEl.hidden = false;
+        errorEl.textContent = 'Zone lookup unavailable right now.';
       }
     },
 

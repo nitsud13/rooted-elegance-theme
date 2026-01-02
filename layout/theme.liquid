@@ -64,6 +64,9 @@
         cartChange: '{{ routes.cart_change_url }}'
       }
     };
+
+    // Zone data bundle path for lazy-loaded ZIP lookup
+    window.ZIP_TO_ZONE_URL = "{{ 'zip_to_zone_output.js' | asset_url }}";
   </script>
 
   <style>
