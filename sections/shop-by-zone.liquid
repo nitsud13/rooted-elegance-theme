@@ -1,0 +1,892 @@
+{% comment %}
+  Shop by Growing Zone - Dedicated Landing Page Section
+
+  A full-featured zone-based shopping experience with educational content,
+  interactive zone picker, and filtered product grid.
+
+  Usage:
+  Create a page in Shopify admin and assign the "page.shop-by-zone" template.
+{% endcomment %}
+
+{%- liquid
+  assign zone_temp_ranges = '3:-40 to -30,4:-30 to -20,5:-20 to -10,6:-10 to 0,7:0 to 10,8:10 to 20,9:20 to 30,10:30 to 40,11:40 to 50' | split: ','
+-%}
+
+<div class="shop-by-zone">
+  {%- comment -%} Hero Section {%- endcomment -%}
+  <section class="sbz-hero">
+    <div class="sbz-hero__bg">
+      <svg class="sbz-hero__pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <pattern id="zone-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="1.5" fill="currentColor" opacity="0.1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#zone-pattern)"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="sbz-hero__content">
+        <span class="sbz-hero__badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+          USDA Plant Hardiness Zones
+        </span>
+
+        <h1 class="sbz-hero__title">{{ section.settings.heading | default: 'Shop by Growing Zone' }}</h1>
+
+        <p class="sbz-hero__description">
+          {{ section.settings.subheading | default: 'Find trees and shrubs that thrive in your climate. Select your USDA hardiness zone or enter your ZIP code to see plants perfectly suited for your garden.' }}
+        </p>
+
+        {%- comment -%} Zone Info Card {%- endcomment -%}
+        <div class="sbz-hero__info">
+          <div class="sbz-hero__info-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4M12 8h.01"/>
+            </svg>
+          </div>
+          <div class="sbz-hero__info-text">
+            <strong>What's a hardiness zone?</strong>
+            <span>The USDA divides North America into 13 zones based on average annual minimum temperatures. Knowing your zone helps you choose plants that will survive your winters.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Zone Selector Section {%- endcomment -%}
+  <section class="sbz-selector">
+    <div class="container">
+      <div class="sbz-selector__wrapper">
+        {%- comment -%} Active Zone Display {%- endcomment -%}
+        <div class="sbz-active" id="sbz-active-zone" hidden>
+          <div class="sbz-active__badge">
+            <span class="sbz-active__zone" id="sbz-zone-number">7</span>
+          </div>
+          <div class="sbz-active__info">
+            <span class="sbz-active__label">Your Growing Zone</span>
+            <span class="sbz-active__temp" id="sbz-zone-temp">0°F to 10°F</span>
+          </div>
+          <button type="button" class="sbz-active__change" onclick="ShopByZone.clearZone()">
+            Change Zone
+          </button>
+        </div>
+
+        {%- comment -%} Zone Selection UI {%- endcomment -%}
+        <div class="sbz-picker" id="sbz-picker">
+          <h2 class="sbz-picker__title">Select Your Zone</h2>
+
+          {%- comment -%} ZIP Input {%- endcomment -%}
+          <div class="sbz-picker__zip">
+            <label for="sbz-zip-input" class="sbz-picker__zip-label">Enter your ZIP code:</label>
+            <div class="sbz-picker__zip-field">
+              <input
+                type="text"
+                id="sbz-zip-input"
+                class="sbz-picker__zip-input"
+                placeholder="e.g. 90210"
+                maxlength="5"
+                pattern="[0-9]{5}"
+                inputmode="numeric"
+              >
+              <button type="button" class="sbz-picker__zip-btn" onclick="ShopByZone.lookupZip()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                Find Zone
+              </button>
+            </div>
+            <span class="sbz-picker__zip-error" id="sbz-zip-error" hidden>Please enter a valid 5-digit ZIP code</span>
+          </div>
+
+          <div class="sbz-picker__divider">
+            <span>or select a zone</span>
+          </div>
+
+          {%- comment -%} Zone Buttons {%- endcomment -%}
+          <div class="sbz-picker__zones">
+            {%- for i in (3..11) -%}
+              {%- assign zone_temp = '' -%}
+              {%- for range in zone_temp_ranges -%}
+                {%- assign parts = range | split: ':' -%}
+                {%- assign zone_num = parts[0] | plus: 0 -%}
+                {%- if zone_num == i -%}
+                  {%- assign zone_temp = parts[1] -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <button
+                type="button"
+                class="sbz-picker__zone-btn"
+                data-zone="{{ i }}"
+                data-temp="{{ zone_temp }}°F"
+                onclick="ShopByZone.selectZone({{ i }}, '{{ zone_temp }}°F')"
+              >
+                <span class="sbz-picker__zone-num">{{ i }}</span>
+                <span class="sbz-picker__zone-temp">{{ zone_temp }}°F</span>
+              </button>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Zone Map Link {%- endcomment -%}
+          <a href="https://planthardiness.ars.usda.gov/" target="_blank" rel="noopener" class="sbz-picker__map-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            View the official USDA Zone Map
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Results Section {%- endcomment -%}
+  <section class="sbz-results" id="sbz-results">
+    <div class="container">
+      {%- comment -%} Results Header {%- endcomment -%}
+      <div class="sbz-results__header" id="sbz-results-header" hidden>
+        <h2 class="sbz-results__title">
+          <span id="sbz-results-count">0</span> Plants for Zone <span id="sbz-results-zone">7</span>
+        </h2>
+        <p class="sbz-results__subtitle">
+          These trees and shrubs are rated to thrive in your growing zone.
+        </p>
+      </div>
+
+      {%- comment -%} No Zone Selected State {%- endcomment -%}
+      <div class="sbz-prompt" id="sbz-prompt">
+        <div class="sbz-prompt__icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L12 6M12 18L12 22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12L6 12M18 12L22 12M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+        </div>
+        <h3 class="sbz-prompt__title">Select Your Zone to Get Started</h3>
+        <p class="sbz-prompt__text">Choose your USDA hardiness zone above to see plants that will thrive in your climate.</p>
+      </div>
+
+      {%- comment -%} Empty State {%- endcomment -%}
+      <div class="sbz-empty" id="sbz-empty" hidden>
+        <div class="sbz-empty__icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 15s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="sbz-empty__title">No Plants Found</h3>
+        <p class="sbz-empty__text">We don't currently have plants rated for Zone <span id="sbz-empty-zone">3</span>. Try selecting a different zone or <a href="/collections/all">browse all plants</a>.</p>
+      </div>
+
+      {%- comment -%} Product Grid {%- endcomment -%}
+      <div class="sbz-grid" id="sbz-grid">
+        {%- paginate collections.all.products by 100 -%}
+          {%- for product in collections.all.products -%}
+            {%- render 'product-card', product: product, show_zone_badge: true, show_quick_add: true -%}
+          {%- endfor -%}
+        {%- endpaginate -%}
+      </div>
+
+      {%- comment -%} Load More Button {%- endcomment -%}
+      <div class="sbz-load-more" id="sbz-load-more" hidden>
+        <button type="button" class="btn btn--secondary" onclick="ShopByZone.loadMore()">
+          Load More Plants
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Zone Education Section {%- endcomment -%}
+  <section class="sbz-education">
+    <div class="container">
+      <div class="sbz-education__grid">
+        <div class="sbz-education__card">
+          <div class="sbz-education__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              <circle cx="12" cy="12" r="5"/>
+            </svg>
+          </div>
+          <h3 class="sbz-education__title">What Affects Your Zone?</h3>
+          <p class="sbz-education__text">Zones are based on average annual extreme minimum temperatures. Factors like elevation, proximity to water, and urban heat islands can create microclimates within your zone.</p>
+        </div>
+
+        <div class="sbz-education__card">
+          <div class="sbz-education__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3 class="sbz-education__title">Why Zone Matters</h3>
+          <p class="sbz-education__text">Choosing plants rated for your zone means they can survive your coldest winters. Plants rated for colder zones will easily thrive, while those rated for warmer zones may not survive.</p>
+        </div>
+
+        <div class="sbz-education__card">
+          <div class="sbz-education__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3 class="sbz-education__title">Zone Ranges</h3>
+          <p class="sbz-education__text">Many plants thrive across multiple zones. A plant rated 5-9 can survive winters in any zone from 5 through 9. We show the full range so you can shop with confidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="{{ 'shop-by-zone.js' | asset_url }}" defer></script>
+
+<style>
+  /* ===== Shop by Zone Styles ===== */
+
+  .shop-by-zone {
+    background: var(--color-cream);
+  }
+
+  /* Hero Section */
+  .sbz-hero {
+    position: relative;
+    padding: var(--space-16) 0 var(--space-12);
+    background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-dark) 100%);
+    color: var(--color-white);
+    overflow: hidden;
+  }
+
+  .sbz-hero__bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+  }
+
+  .sbz-hero__pattern {
+    width: 100%;
+    height: 100%;
+    color: var(--color-sage-light);
+  }
+
+  .sbz-hero__content {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .sbz-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-6);
+  }
+
+  .sbz-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-tight);
+    margin: 0 0 var(--space-4);
+  }
+
+  .sbz-hero__description {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    opacity: 0.9;
+    margin: 0 0 var(--space-8);
+  }
+
+  .sbz-hero__info {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-xl);
+    text-align: left;
+  }
+
+  .sbz-hero__info-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+  }
+
+  .sbz-hero__info-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+  }
+
+  .sbz-hero__info-text strong {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+  }
+
+  .sbz-hero__info-text span {
+    opacity: 0.85;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Zone Selector Section */
+  .sbz-selector {
+    position: relative;
+    margin-top: calc(var(--space-12) * -1);
+    padding-bottom: var(--space-12);
+    z-index: 10;
+  }
+
+  .sbz-selector__wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Active Zone Display */
+  .sbz-active {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    animation: fadeSlideUp 0.4s var(--ease-out);
+  }
+
+  .sbz-active__badge {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--color-sage-light), var(--color-sage));
+    border-radius: var(--radius-xl);
+  }
+
+  .sbz-active__zone {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: var(--weight-bold);
+    color: var(--color-forest-dark);
+  }
+
+  .sbz-active__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .sbz-active__label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-sage);
+  }
+
+  .sbz-active__temp {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+  }
+
+  .sbz-active__change {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-earth);
+    background: transparent;
+    border: 2px solid var(--color-earth);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+  }
+
+  .sbz-active__change:hover {
+    background: var(--color-earth);
+    color: var(--color-white);
+  }
+
+  /* Zone Picker */
+  .sbz-picker {
+    padding: var(--space-8);
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .sbz-picker__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-forest);
+    text-align: center;
+    margin: 0 0 var(--space-6);
+  }
+
+  /* ZIP Input */
+  .sbz-picker__zip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .sbz-picker__zip-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+  }
+
+  .sbz-picker__zip-field {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .sbz-picker__zip-input {
+    flex: 1;
+    padding: var(--space-4);
+    font-size: var(--text-lg);
+    font-family: var(--font-body);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-bark);
+    background: var(--color-cream);
+    border: 2px solid var(--color-sage-light);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-fast);
+  }
+
+  .sbz-picker__zip-input:focus {
+    outline: none;
+    border-color: var(--color-forest);
+    box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.1);
+  }
+
+  .sbz-picker__zip-input::placeholder {
+    color: var(--color-sage);
+  }
+
+  .sbz-picker__zip-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    font-family: var(--font-body);
+    color: var(--color-white);
+    background: var(--color-earth);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    white-space: nowrap;
+  }
+
+  .sbz-picker__zip-btn:hover {
+    background: var(--color-earth-dark);
+    transform: translateY(-1px);
+  }
+
+  .sbz-picker__zip-error {
+    font-size: var(--text-sm);
+    color: var(--color-earth);
+    animation: shake 0.4s ease;
+  }
+
+  /* Divider */
+  .sbz-picker__divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+
+  .sbz-picker__divider::before,
+  .sbz-picker__divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-sage-light);
+  }
+
+  .sbz-picker__divider span {
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* Zone Buttons */
+  .sbz-picker__zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .sbz-picker__zone-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    background: var(--color-cream);
+    border: 2px solid var(--color-sage-light);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+  }
+
+  .sbz-picker__zone-btn:hover {
+    border-color: var(--color-forest);
+    background: var(--color-cream-warm);
+    transform: translateY(-2px);
+  }
+
+  .sbz-picker__zone-btn.active {
+    background: var(--color-forest);
+    border-color: var(--color-forest);
+    transform: scale(1.05);
+  }
+
+  .sbz-picker__zone-btn.active .sbz-picker__zone-num,
+  .sbz-picker__zone-btn.active .sbz-picker__zone-temp {
+    color: var(--color-white);
+  }
+
+  .sbz-picker__zone-num {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-forest);
+    transition: color var(--duration-fast);
+  }
+
+  .sbz-picker__zone-temp {
+    font-size: var(--text-xs);
+    color: var(--color-sage);
+    transition: color var(--duration-fast);
+  }
+
+  /* Map Link */
+  .sbz-picker__map-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    text-decoration: none;
+    transition: color var(--duration-fast);
+  }
+
+  .sbz-picker__map-link:hover {
+    color: var(--color-forest);
+  }
+
+  /* Results Section */
+  .sbz-results {
+    padding: var(--space-8) 0 var(--space-16);
+  }
+
+  .sbz-results__header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+    animation: fadeSlideUp 0.4s var(--ease-out);
+  }
+
+  .sbz-results__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-forest);
+    margin: 0 0 var(--space-2);
+  }
+
+  .sbz-results__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-sage);
+    margin: 0;
+  }
+
+  /* Prompt State */
+  .sbz-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-16) var(--space-8);
+    text-align: center;
+  }
+
+  .sbz-prompt__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    background: var(--color-cream-warm);
+    border-radius: var(--radius-full);
+    color: var(--color-sage);
+  }
+
+  .sbz-prompt__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    margin: 0;
+  }
+
+  .sbz-prompt__text {
+    max-width: 400px;
+    font-size: var(--text-base);
+    color: var(--color-sage);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Empty State */
+  .sbz-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-16) var(--space-8);
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .sbz-empty__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    background: var(--color-cream-warm);
+    border-radius: var(--radius-full);
+    color: var(--color-earth);
+  }
+
+  .sbz-empty__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    margin: 0;
+  }
+
+  .sbz-empty__text {
+    max-width: 400px;
+    font-size: var(--text-base);
+    color: var(--color-sage);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+  }
+
+  .sbz-empty__text a {
+    color: var(--color-earth);
+    text-decoration: underline;
+  }
+
+  /* Product Grid */
+  .sbz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .sbz-grid .product-card {
+    display: none;
+  }
+
+  .sbz-grid .product-card.zone-visible {
+    display: flex;
+    animation: fadeSlideUp 0.4s var(--ease-out) backwards;
+  }
+
+  .sbz-grid .product-card:nth-child(1) { animation-delay: 0.05s; }
+  .sbz-grid .product-card:nth-child(2) { animation-delay: 0.1s; }
+  .sbz-grid .product-card:nth-child(3) { animation-delay: 0.15s; }
+  .sbz-grid .product-card:nth-child(4) { animation-delay: 0.2s; }
+  .sbz-grid .product-card:nth-child(5) { animation-delay: 0.25s; }
+  .sbz-grid .product-card:nth-child(6) { animation-delay: 0.3s; }
+
+  /* Load More */
+  .sbz-load-more {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-10);
+  }
+
+  /* Education Section */
+  .sbz-education {
+    padding: var(--space-12) 0;
+    background: var(--color-white);
+  }
+
+  .sbz-education__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .sbz-education__card {
+    padding: var(--space-6);
+    background: var(--color-cream);
+    border-radius: var(--radius-xl);
+    text-align: center;
+  }
+
+  .sbz-education__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-4);
+    background: var(--color-sage-light);
+    border-radius: var(--radius-full);
+    color: var(--color-forest);
+  }
+
+  .sbz-education__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    color: var(--color-bark);
+    margin: 0 0 var(--space-3);
+  }
+
+  .sbz-education__text {
+    font-size: var(--text-sm);
+    color: var(--color-sage);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  /* Animations */
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-4px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .sbz-hero {
+      padding: var(--space-12) 0 var(--space-10);
+    }
+
+    .sbz-hero__title {
+      font-size: 2rem;
+    }
+
+    .sbz-hero__description {
+      font-size: var(--text-base);
+    }
+
+    .sbz-hero__info {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .sbz-selector {
+      margin-top: calc(var(--space-8) * -1);
+    }
+
+    .sbz-active {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .sbz-picker {
+      padding: var(--space-6);
+    }
+
+    .sbz-picker__zip-field {
+      flex-direction: column;
+    }
+
+    .sbz-picker__zones {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sbz-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop by Zone",
+  "tag": "section",
+  "class": "section-shop-by-zone",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Growing Zone"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Find trees and shrubs that thrive in your climate. Select your USDA hardiness zone or enter your ZIP code to see plants perfectly suited for your garden."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Zone"
+    }
+  ]
+}
+{% endschema %}

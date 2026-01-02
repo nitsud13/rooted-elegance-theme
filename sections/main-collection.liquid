@@ -75,82 +75,93 @@
         </div>
       </div>
 
+      <!-- Zone Filter Panel -->
+      <div class="zone-filter-panel" id="zone-filter-panel" hidden>
+        <div class="zone-filter-panel__inner">
+          <div class="zone-filter-panel__header">
+            <h3 class="zone-filter-panel__title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              Filter by Growing Zone
+            </h3>
+            <button type="button" class="zone-filter-panel__close" onclick="closeFilterPanel()" aria-label="Close filter panel">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="zone-filter-panel__content">
+            <!-- Saved Zone Display -->
+            <div class="zone-filter-panel__saved" id="saved-zone-display" hidden>
+              <span class="zone-filter-panel__saved-label">Your zone:</span>
+              <span class="zone-filter-panel__saved-zone" id="saved-zone-value">Zone 7</span>
+              <button type="button" class="zone-filter-panel__change" onclick="showZoneInput()">Change</button>
+            </div>
+
+            <!-- Zone Input -->
+            <div class="zone-filter-panel__input-group" id="zone-input-group">
+              <label for="filter-zip-input" class="zone-filter-panel__label">Enter your ZIP code to find your growing zone:</label>
+              <div class="zone-filter-panel__input-wrapper">
+                <input
+                  type="text"
+                  id="filter-zip-input"
+                  class="zone-filter-panel__input"
+                  placeholder="Enter ZIP code"
+                  maxlength="5"
+                  pattern="[0-9]{5}"
+                >
+                <button type="button" class="zone-filter-panel__lookup btn btn--primary btn--sm" onclick="lookupZoneFromFilter()">
+                  Find Zone
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Zone Buttons -->
+            <div class="zone-filter-panel__quick">
+              <span class="zone-filter-panel__quick-label">Or select zone directly:</span>
+              <div class="zone-filter-panel__zone-buttons">
+                {% for i in (3..11) %}
+                  <button type="button" class="zone-filter-panel__zone-btn" data-zone="{{ i }}" onclick="setFilterZone({{ i }})">
+                    {{ i }}
+                  </button>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="zone-filter-panel__actions">
+            <button type="button" class="btn btn--primary" onclick="applyZoneFilter()" id="apply-filter-btn" disabled>
+              Apply Filter
+            </button>
+            <button type="button" class="btn btn--ghost" onclick="clearZoneFilter()">
+              Clear Filter
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Status Bar -->
+      <div class="filter-status" id="filter-status" hidden>
+        <span class="filter-status__text">
+          Showing <strong id="visible-count">0</strong> of <strong id="total-count">0</strong> products compatible with <strong id="active-zone-display">Zone 7</strong>
+        </span>
+        <button type="button" class="filter-status__clear" onclick="clearZoneFilter()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          Clear filter
+        </button>
+      </div>
+
       <!-- Products Grid -->
       <div class="collection-grid" id="product-grid">
         {% for product in collection.products %}
-          <article class="product-card card">
-            <a href="{{ product.url }}" class="product-card-link">
-              <div class="card__image">
-                {% if product.featured_image %}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 600 }}"
-                    alt="{{ product.title | escape }}"
-                    loading="lazy"
-                    width="600"
-                    height="600"
-                  >
-                {% else %}
-                  <div class="product-placeholder">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                      <path d="M2 17l10 5 10-5"/>
-                      <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                  </div>
-                {% endif %}
-
-                <!-- Badges -->
-                <div class="product-badges">
-                  {% if product.available == false %}
-                    <span class="badge badge--sale">Sold Out</span>
-                  {% elsif product.compare_at_price > product.price %}
-                    <span class="badge badge--sale">Sale</span>
-                  {% endif %}
-                  {% if product.tags contains 'bestseller' %}
-                    <span class="badge badge--bestseller">Bestseller</span>
-                  {% endif %}
-                  {% if product.tags contains 'new' %}
-                    <span class="badge badge--new">New</span>
-                  {% endif %}
-                </div>
-
-                <!-- Quick Add -->
-                {% if product.available and product.variants.size == 1 %}
-                  <button
-                    type="button"
-                    class="quick-add-btn"
-                    onclick="event.preventDefault(); addToCart('{{ product.variants.first.id }}', 1)"
-                    aria-label="Add {{ product.title }} to cart"
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="12" y1="5" x2="12" y2="19"/>
-                      <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
-                  </button>
-                {% endif %}
-              </div>
-
-              <div class="card__content">
-                <h3 class="product-title">{{ product.title }}</h3>
-
-                {% if product.metafields.custom.zone_compatibility %}
-                  <span class="badge badge--zone">Zone {{ product.metafields.custom.zone_compatibility }}</span>
-                {% endif %}
-
-                <!-- Star Rating -->
-                {% render 'star-rating', rating: 4.5, show_count: false %}
-
-                <div class="product-price">
-                  {% if product.compare_at_price > product.price %}
-                    <span class="price-compare">{{ product.compare_at_price | money }}</span>
-                  {% endif %}
-                  <span class="price-current {% if product.compare_at_price > product.price %}price-sale{% endif %}">
-                    {{ product.price | money }}
-                  </span>
-                </div>
-              </div>
-            </a>
-          </article>
+          {% render 'product-card', product: product, show_zone_badge: true, show_quick_add: true %}
         {% endfor %}
       </div>
 
@@ -204,15 +215,230 @@
 </section>
 
 <script>
+  // Collection Zone Filter Module
+  const CollectionFilter = {
+    selectedZone: null,
+    isFilterActive: false,
+
+    init() {
+      // Check for saved zone on load
+      const savedZone = this.getSavedZone();
+      if (savedZone) {
+        this.selectedZone = parseInt(savedZone.zone);
+        this.updateSavedZoneDisplay(savedZone);
+      }
+
+      // Check if filter was active in session
+      if (sessionStorage.getItem('zone_filter_active') === 'true') {
+        const zone = sessionStorage.getItem('zone_filter_zone');
+        if (zone) {
+          this.selectedZone = parseInt(zone);
+          this.applyFilter();
+        }
+      }
+
+      // Listen for zone changes from other components
+      document.addEventListener('zone:changed', (e) => {
+        if (e.detail && e.detail.zone) {
+          this.selectedZone = parseInt(e.detail.zone);
+          this.updateSavedZoneDisplay({ zone: e.detail.zone });
+          if (this.isFilterActive) {
+            this.applyFilter();
+          }
+        }
+      });
+
+      // Update total count
+      const productGrid = document.getElementById('product-grid');
+      const totalProducts = productGrid ? productGrid.querySelectorAll('.product-card').length : 0;
+      document.getElementById('total-count').textContent = totalProducts;
+    },
+
+    getSavedZone() {
+      try {
+        const saved = localStorage.getItem('rooted_elegance_zone');
+        return saved ? JSON.parse(saved) : null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    updateSavedZoneDisplay(zoneData) {
+      const savedDisplay = document.getElementById('saved-zone-display');
+      const savedValue = document.getElementById('saved-zone-value');
+      const inputGroup = document.getElementById('zone-input-group');
+
+      if (zoneData && zoneData.zone) {
+        savedValue.textContent = `Zone ${zoneData.zone}`;
+        savedDisplay.hidden = false;
+        inputGroup.hidden = true;
+        this.enableApplyButton();
+        this.highlightZoneButton(zoneData.zone);
+      } else {
+        savedDisplay.hidden = true;
+        inputGroup.hidden = false;
+      }
+    },
+
+    highlightZoneButton(zone) {
+      document.querySelectorAll('.zone-filter-panel__zone-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.zone) === parseInt(zone)) {
+          btn.classList.add('active');
+        }
+      });
+    },
+
+    enableApplyButton() {
+      const applyBtn = document.getElementById('apply-filter-btn');
+      applyBtn.disabled = false;
+    },
+
+    applyFilter() {
+      if (!this.selectedZone) return;
+
+      const productGrid = document.getElementById('product-grid');
+      const products = productGrid.querySelectorAll('.product-card');
+      let visibleCount = 0;
+      const totalCount = products.length;
+
+      products.forEach(card => {
+        const zonesAttr = card.dataset.productZone;
+        if (!zonesAttr) {
+          // No zone data - hide by default when filtering
+          card.classList.add('zone-hidden');
+          return;
+        }
+
+        const zones = zonesAttr.split(',').map(z => parseInt(z.trim()));
+        const isCompatible = zones.includes(this.selectedZone);
+
+        if (isCompatible) {
+          card.classList.remove('zone-hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('zone-hidden');
+        }
+      });
+
+      // Update UI
+      this.isFilterActive = true;
+      document.getElementById('visible-count').textContent = visibleCount;
+      document.getElementById('total-count').textContent = totalCount;
+      document.getElementById('active-zone-display').textContent = `Zone ${this.selectedZone}`;
+      document.getElementById('filter-status').hidden = false;
+      document.querySelector('.filter-toggle').classList.add('filter-active');
+
+      // Persist filter state in session
+      sessionStorage.setItem('zone_filter_active', 'true');
+      sessionStorage.setItem('zone_filter_zone', this.selectedZone.toString());
+
+      // Close panel
+      this.closePanel();
+    },
+
+    clearFilter() {
+      const productGrid = document.getElementById('product-grid');
+      const products = productGrid.querySelectorAll('.product-card');
+
+      products.forEach(card => {
+        card.classList.remove('zone-hidden');
+      });
+
+      // Update UI
+      this.isFilterActive = false;
+      document.getElementById('filter-status').hidden = true;
+      document.querySelector('.filter-toggle').classList.remove('filter-active');
+
+      // Clear session storage
+      sessionStorage.removeItem('zone_filter_active');
+      sessionStorage.removeItem('zone_filter_zone');
+
+      this.closePanel();
+    },
+
+    openPanel() {
+      document.getElementById('zone-filter-panel').hidden = false;
+      document.body.classList.add('filter-panel-open');
+    },
+
+    closePanel() {
+      document.getElementById('zone-filter-panel').hidden = true;
+      document.body.classList.remove('filter-panel-open');
+    },
+
+    lookupZone() {
+      const zipInput = document.getElementById('filter-zip-input');
+      const zip = zipInput.value.trim();
+
+      if (!/^\d{5}$/.test(zip)) {
+        zipInput.classList.add('error');
+        return;
+      }
+
+      zipInput.classList.remove('error');
+
+      // Use the ZoneSelector API if available
+      if (window.ZoneSelector && window.ZoneSelector.getZoneFromZip) {
+        const result = window.ZoneSelector.getZoneFromZip(zip);
+        if (result && result.zone) {
+          this.selectedZone = parseInt(result.zone);
+          this.highlightZoneButton(result.zone);
+          this.enableApplyButton();
+
+          // Save to localStorage
+          localStorage.setItem('rooted_elegance_zone', JSON.stringify({
+            zone: result.zone,
+            zip: zip,
+            timestamp: Date.now()
+          }));
+
+          this.updateSavedZoneDisplay({ zone: result.zone });
+        }
+      }
+    },
+
+    setZone(zone) {
+      this.selectedZone = parseInt(zone);
+      this.highlightZoneButton(zone);
+      this.enableApplyButton();
+    }
+  };
+
+  // Global functions for onclick handlers
+  function toggleFilters() {
+    CollectionFilter.openPanel();
+  }
+
+  function closeFilterPanel() {
+    CollectionFilter.closePanel();
+  }
+
+  function applyZoneFilter() {
+    CollectionFilter.applyFilter();
+  }
+
+  function clearZoneFilter() {
+    CollectionFilter.clearFilter();
+  }
+
+  function lookupZoneFromFilter() {
+    CollectionFilter.lookupZone();
+  }
+
+  function setFilterZone(zone) {
+    CollectionFilter.setZone(zone);
+  }
+
+  function showZoneInput() {
+    document.getElementById('saved-zone-display').hidden = true;
+    document.getElementById('zone-input-group').hidden = false;
+  }
+
   function sortCollection(sortBy) {
     const url = new URL(window.location.href);
     url.searchParams.set('sort_by', sortBy);
     window.location.href = url.toString();
-  }
-
-  function toggleFilters() {
-    // Placeholder for filter toggle functionality
-    alert('Filters panel coming soon!');
   }
 
   function addToCart(variantId, quantity) {
@@ -228,13 +454,18 @@
     })
     .then(response => response.json())
     .then(data => {
-      // Show success feedback
-      alert('Added to cart!');
+      // Dispatch cart updated event
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
     })
     .catch(error => {
       console.error('Error:', error);
     });
   }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    CollectionFilter.init();
+  });
 </script>
 
 <style>
@@ -542,6 +773,351 @@
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  /* Zone Filter Panel */
+  .zone-filter-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-white);
+    box-shadow: -4px 0 30px rgba(27, 77, 62, 0.15);
+    z-index: 1000;
+    transform: translateX(0);
+    animation: slideInRight 0.3s var(--ease-out);
+  }
+
+  .zone-filter-panel[hidden] {
+    display: none;
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .zone-filter-panel__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-6);
+  }
+
+  .zone-filter-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-5);
+    border-bottom: 2px solid var(--color-cream-warm);
+    margin-bottom: var(--space-6);
+  }
+
+  .zone-filter-panel__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    color: var(--color-forest);
+    margin: 0;
+  }
+
+  .zone-filter-panel__title svg {
+    color: var(--color-sage);
+  }
+
+  .zone-filter-panel__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-cream-warm);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    color: var(--color-bark);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .zone-filter-panel__close:hover {
+    background: var(--color-forest);
+    color: var(--color-white);
+  }
+
+  .zone-filter-panel__content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* Saved Zone Display */
+  .zone-filter-panel__saved {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: linear-gradient(135deg, var(--color-sage-light), rgba(139, 168, 136, 0.3));
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+  }
+
+  .zone-filter-panel__saved-label {
+    font-size: var(--text-sm);
+    color: var(--color-bark);
+  }
+
+  .zone-filter-panel__saved-zone {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-forest);
+  }
+
+  .zone-filter-panel__change {
+    margin-left: auto;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-earth);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color var(--duration-fast);
+  }
+
+  .zone-filter-panel__change:hover {
+    color: var(--color-forest);
+  }
+
+  /* Zone Input Group */
+  .zone-filter-panel__input-group {
+    margin-bottom: var(--space-6);
+  }
+
+  .zone-filter-panel__label {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-bark);
+    margin-bottom: var(--space-3);
+  }
+
+  .zone-filter-panel__input-wrapper {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .zone-filter-panel__input {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-bark);
+    background: var(--color-white);
+    border: 2px solid var(--color-cream-warm);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .zone-filter-panel__input:focus {
+    outline: none;
+    border-color: var(--color-forest);
+  }
+
+  .zone-filter-panel__input.error {
+    border-color: var(--color-earth);
+    animation: shake 0.3s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .zone-filter-panel__lookup {
+    white-space: nowrap;
+  }
+
+  /* Quick Zone Buttons */
+  .zone-filter-panel__quick {
+    margin-bottom: var(--space-6);
+  }
+
+  .zone-filter-panel__quick-label {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-bark-light);
+    margin-bottom: var(--space-3);
+  }
+
+  .zone-filter-panel__zone-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .zone-filter-panel__zone-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--color-bark);
+    background: var(--color-cream);
+    border: 2px solid var(--color-cream-warm);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .zone-filter-panel__zone-btn:hover {
+    border-color: var(--color-forest);
+    color: var(--color-forest);
+  }
+
+  .zone-filter-panel__zone-btn.active {
+    background: var(--color-forest);
+    border-color: var(--color-forest);
+    color: var(--color-white);
+    transform: scale(1.05);
+  }
+
+  /* Panel Actions */
+  .zone-filter-panel__actions {
+    display: flex;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: 2px solid var(--color-cream-warm);
+    margin-top: auto;
+  }
+
+  .zone-filter-panel__actions .btn {
+    flex: 1;
+  }
+
+  .zone-filter-panel__actions .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Filter Status Bar */
+  .filter-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    background: linear-gradient(135deg, var(--color-sage-light), rgba(139, 168, 136, 0.2));
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+    animation: fadeIn 0.3s var(--ease-out);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .filter-status__text {
+    font-size: var(--text-sm);
+    color: var(--color-bark);
+  }
+
+  .filter-status__text strong {
+    color: var(--color-forest);
+    font-weight: var(--weight-semibold);
+  }
+
+  .filter-status__clear {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-earth);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--duration-fast);
+  }
+
+  .filter-status__clear:hover {
+    color: var(--color-forest);
+  }
+
+  /* Filter Toggle Active State */
+  .filter-toggle.filter-active {
+    background: var(--color-forest);
+    color: var(--color-white);
+    border-color: var(--color-forest);
+  }
+
+  .filter-toggle.filter-active:hover {
+    background: var(--color-forest-dark);
+  }
+
+  /* Product Card Hidden State */
+  .product-card.zone-hidden {
+    display: none;
+    animation: fadeOut 0.3s var(--ease-out);
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+  }
+
+  /* Overlay when panel is open */
+  body.filter-panel-open::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(27, 77, 62, 0.3);
+    z-index: 999;
+    animation: fadeIn 0.3s var(--ease-out);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 767px) {
+    .zone-filter-panel {
+      max-width: 100%;
+    }
+
+    .zone-filter-panel__inner {
+      padding: var(--space-5);
+    }
+
+    .zone-filter-panel__zone-btn {
+      width: 40px;
+      height: 40px;
+      font-size: var(--text-sm);
+    }
+
+    .filter-status {
+      flex-direction: column;
+      gap: var(--space-3);
+      text-align: center;
+    }
+
+    .filter-status__clear {
+      width: 100%;
+      justify-content: center;
+      padding: var(--space-2);
+      background: var(--color-white);
+      border-radius: var(--radius-md);
+    }
   }
 </style>
 

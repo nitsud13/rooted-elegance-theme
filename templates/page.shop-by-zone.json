@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "shop-by-zone",
+      "settings": {
+        "heading": "Shop by Growing Zone",
+        "subheading": "Find trees and shrubs that thrive in your climate. Select your USDA hardiness zone or enter your ZIP code to see plants perfectly suited for your garden."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
