@@ -182,17 +182,17 @@
       justify-self: center;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1280px) {
       .site-header__nav {
         display: flex;
         align-items: center;
-        gap: var(--space-6);
+        gap: var(--space-4);
       }
     }
 
-    @media (min-width: 1200px) {
+    @media (min-width: 1400px) {
       .site-header__nav {
-        gap: var(--space-8);
+        gap: var(--space-6);
       }
     }
 
@@ -262,14 +262,14 @@
       }
     }
 
-    /* Hide zone badge at awkward middle width when nav is visible but space is tight */
-    @media (min-width: 1024px) and (max-width: 1399px) {
+    /* Hide zone badge when desktop nav is visible but space is tight */
+    @media (min-width: 1280px) and (max-width: 1499px) {
       .site-header__zone-badge {
         display: none;
       }
     }
 
-    @media (min-width: 1400px) {
+    @media (min-width: 1500px) {
       .site-header__zone-badge {
         display: flex;
       }
@@ -312,7 +312,7 @@
       justify-content: center;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1280px) {
       .site-header__menu-btn {
         display: none;
       }
