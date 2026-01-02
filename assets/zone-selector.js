@@ -546,6 +546,11 @@
   function updateZoneBadges(userZone) {
     const zoneNumber = parseInt(userZone);
 
+    // Update header zone badge
+    document.querySelectorAll('[data-zone-badge] [data-zone-value]').forEach(el => {
+      el.textContent = userZone;
+    });
+
     // Find all product cards and update compatibility indicators
     document.querySelectorAll('[data-product-zone]').forEach(el => {
       const productZones = el.dataset.productZone.split(',').map(z => parseInt(z.trim()));
@@ -561,35 +566,15 @@
   }
 
   /**
-   * Add persistent zone indicator to header
+   * Update header zone badge on page load if zone is saved
    */
   function initHeaderZoneBadge() {
     const savedZone = getSavedZone();
     if (savedZone) {
-      // Create or update header badge
-      let badge = document.querySelector('.header-zone-badge');
-
-      if (!badge) {
-        badge = document.createElement('a');
-        badge.className = 'header-zone-badge';
-        badge.href = '#zone-selector';
-        badge.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="10" r="3"/>
-            <path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8z"/>
-          </svg>
-          <span class="header-zone-badge__label">Zone</span>
-          <span class="header-zone-badge__value">${savedZone.zone}</span>
-        `;
-
-        // Insert into header (adjust selector as needed)
-        const headerActions = document.querySelector('.header__icons, .header-icons, [data-header-icons]');
-        if (headerActions) {
-          headerActions.prepend(badge);
-        }
-      } else {
-        badge.querySelector('.header-zone-badge__value').textContent = savedZone.zone;
-      }
+      // Update existing header badge
+      document.querySelectorAll('[data-zone-badge] [data-zone-value]').forEach(el => {
+        el.textContent = savedZone.zone;
+      });
     }
   }
 
