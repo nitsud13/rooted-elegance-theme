@@ -7,20 +7,21 @@
 
   const SELECTORS = {
     toggle: '[data-search-toggle]',
-    drawer: '.search-drawer',
-    overlay: '.search-drawer__overlay',
-    panel: '.search-drawer__panel',
-    close: '.search-drawer__close',
-    form: '.search-drawer__form',
-    input: '.search-drawer__input',
-    results: '.search-drawer__results',
-    productsGrid: '.search-drawer__products',
-    collectionsGrid: '.search-drawer__collections',
-    loading: '.search-drawer__loading',
-    noResults: '.search-drawer__no-results',
-    viewAll: '.search-drawer__view-all',
-    viewAllLink: '.search-drawer__view-all-link',
-    liveRegion: '.search-drawer__live-region'
+    drawer: '[data-search-drawer]',
+    close: '[data-search-drawer-close]',
+    input: '[data-search-input]',
+    form: '[data-search-form]',
+    results: '[data-search-results]',
+    resultsContent: '[data-search-results-content]',
+    productsSection: '[data-search-products]',
+    productsList: '[data-search-products-list]',
+    collectionsSection: '[data-search-collections]',
+    collectionsList: '[data-search-collections-list]',
+    loading: '[data-search-loading]',
+    noResults: '[data-search-no-results]',
+    noResultsQuery: '[data-search-query]',
+    viewAll: '[data-search-view-all]',
+    status: '[data-search-status]'
   };
 
   const DEBOUNCE_DELAY = 300;
@@ -29,30 +30,34 @@
   class PredictiveSearch {
     constructor() {
       this.drawer = document.querySelector(SELECTORS.drawer);
-      if (!this.drawer) return;
+      if (!this.drawer) {
+        console.log('Search drawer not found');
+        return;
+      }
 
       this.toggle = document.querySelector(SELECTORS.toggle);
-      this.overlay = this.drawer.querySelector(SELECTORS.overlay);
-      this.panel = this.drawer.querySelector(SELECTORS.panel);
-      this.closeBtn = this.drawer.querySelector(SELECTORS.close);
-      this.form = this.drawer.querySelector(SELECTORS.form);
+      this.closeButtons = this.drawer.querySelectorAll(SELECTORS.close);
       this.input = this.drawer.querySelector(SELECTORS.input);
+      this.form = this.drawer.querySelector(SELECTORS.form);
       this.results = this.drawer.querySelector(SELECTORS.results);
-      this.productsGrid = this.drawer.querySelector(SELECTORS.productsGrid);
-      this.collectionsGrid = this.drawer.querySelector(SELECTORS.collectionsGrid);
+      this.resultsContent = this.drawer.querySelector(SELECTORS.resultsContent);
+      this.productsSection = this.drawer.querySelector(SELECTORS.productsSection);
+      this.productsList = this.drawer.querySelector(SELECTORS.productsList);
+      this.collectionsSection = this.drawer.querySelector(SELECTORS.collectionsSection);
+      this.collectionsList = this.drawer.querySelector(SELECTORS.collectionsList);
       this.loading = this.drawer.querySelector(SELECTORS.loading);
       this.noResults = this.drawer.querySelector(SELECTORS.noResults);
+      this.noResultsQuery = this.drawer.querySelector(SELECTORS.noResultsQuery);
       this.viewAll = this.drawer.querySelector(SELECTORS.viewAll);
-      this.viewAllLink = this.drawer.querySelector(SELECTORS.viewAllLink);
-      this.liveRegion = this.drawer.querySelector(SELECTORS.liveRegion);
+      this.status = this.drawer.querySelector(SELECTORS.status);
 
       this.isOpen = false;
       this.abortController = null;
       this.debounceTimer = null;
-      this.focusableElements = [];
       this.lastFocusedElement = null;
 
       this.bindEvents();
+      console.log('Predictive search initialized');
     }
 
     bindEvents() {
@@ -60,18 +65,18 @@
       if (this.toggle) {
         this.toggle.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation();
           this.open();
         });
       }
 
-      // Close drawer
-      if (this.closeBtn) {
-        this.closeBtn.addEventListener('click', () => this.close());
-      }
-
-      if (this.overlay) {
-        this.overlay.addEventListener('click', () => this.close());
-      }
+      // Close drawer - multiple close buttons (overlay + cancel)
+      this.closeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.close();
+        });
+      });
 
       // Escape key to close
       document.addEventListener('keydown', (e) => {
@@ -98,8 +103,8 @@
     open() {
       this.lastFocusedElement = document.activeElement;
       this.isOpen = true;
-      this.drawer.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      this.drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('search-drawer--open');
 
       if (this.toggle) {
         this.toggle.setAttribute('aria-expanded', 'true');
@@ -107,15 +112,16 @@
 
       // Focus input after animation
       setTimeout(() => {
-        this.input.focus();
-        this.updateFocusableElements();
+        if (this.input) {
+          this.input.focus();
+        }
       }, 100);
     }
 
     close() {
       this.isOpen = false;
-      this.drawer.classList.remove('is-open');
-      document.body.style.overflow = '';
+      this.drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('search-drawer--open');
 
       if (this.toggle) {
         this.toggle.setAttribute('aria-expanded', 'false');
@@ -139,6 +145,9 @@
       // Reset state after animation
       setTimeout(() => {
         this.resetResults();
+        if (this.input) {
+          this.input.value = '';
+        }
       }, 300);
     }
 
@@ -191,7 +200,7 @@
           return;
         }
         console.error('Predictive search error:', error);
-        this.showNoResults();
+        this.showNoResults(query);
       }
     }
 
@@ -202,43 +211,45 @@
       this.hideLoading();
 
       if (products.length === 0 && collections.length === 0) {
-        this.showNoResults();
+        this.showNoResults(query);
         this.announce('No results found');
         return;
       }
 
       // Render products
-      if (products.length > 0) {
-        this.productsGrid.innerHTML = products.map(product => this.renderProduct(product)).join('');
-        this.productsGrid.style.display = '';
-      } else {
-        this.productsGrid.style.display = 'none';
+      if (products.length > 0 && this.productsList) {
+        this.productsList.innerHTML = products.map(product => this.renderProduct(product)).join('');
+        if (this.productsSection) {
+          this.productsSection.hidden = false;
+        }
+      } else if (this.productsSection) {
+        this.productsSection.hidden = true;
       }
 
       // Render collections
-      if (collections.length > 0) {
-        this.collectionsGrid.innerHTML = collections.map(collection => this.renderCollection(collection)).join('');
-        this.collectionsGrid.style.display = '';
-      } else {
-        this.collectionsGrid.style.display = 'none';
+      if (collections.length > 0 && this.collectionsList) {
+        this.collectionsList.innerHTML = collections.map(collection => this.renderCollection(collection)).join('');
+        if (this.collectionsSection) {
+          this.collectionsSection.hidden = false;
+        }
+      } else if (this.collectionsSection) {
+        this.collectionsSection.hidden = true;
       }
 
-      // Show results and view all link
-      this.results.style.display = '';
-      this.noResults.style.display = 'none';
-
-      // Update view all link
-      if (this.viewAllLink) {
-        this.viewAllLink.href = `/search?q=${encodeURIComponent(query)}`;
+      // Hide no results
+      if (this.noResults) {
+        this.noResults.hidden = true;
       }
-      this.viewAll.style.display = '';
+
+      // Update and show view all link
+      if (this.viewAll) {
+        this.viewAll.href = `/search?q=${encodeURIComponent(query)}`;
+        this.viewAll.hidden = false;
+      }
 
       // Announce results to screen readers
       const totalResults = products.length + collections.length;
       this.announce(`${totalResults} result${totalResults !== 1 ? 's' : ''} found`);
-
-      // Update focusable elements for keyboard navigation
-      this.updateFocusableElements();
     }
 
     renderProduct(product) {
@@ -249,26 +260,30 @@
         : null;
 
       return `
-        <a href="${product.url}" class="search-drawer__product">
-          <div class="search-drawer__product-image">
-            ${image ? `<img src="${this.resizeImage(image, '200x200')}" alt="${this.escapeHtml(product.title)}" loading="lazy">` : ''}
-          </div>
-          <div class="search-drawer__product-info">
-            <h4 class="search-drawer__product-title">${this.highlightMatch(product.title)}</h4>
-            <div class="search-drawer__product-price">
-              <span class="search-drawer__price${comparePrice ? ' search-drawer__price--sale' : ''}">${price}</span>
-              ${comparePrice ? `<span class="search-drawer__compare-price">${comparePrice}</span>` : ''}
+        <li role="option">
+          <a href="${product.url}" class="search-drawer__product">
+            <div class="search-drawer__product-image">
+              ${image ? `<img src="${this.resizeImage(image, '200x200')}" alt="${this.escapeHtml(product.title)}" loading="lazy">` : ''}
             </div>
-          </div>
-        </a>
+            <div class="search-drawer__product-info">
+              <h4 class="search-drawer__product-title">${this.escapeHtml(product.title)}</h4>
+              <div class="search-drawer__product-price${comparePrice ? ' search-drawer__product-price--sale' : ''}">
+                <span>${price}</span>
+                ${comparePrice ? `<span class="search-drawer__product-price-compare">${comparePrice}</span>` : ''}
+              </div>
+            </div>
+          </a>
+        </li>
       `;
     }
 
     renderCollection(collection) {
       return `
-        <a href="${collection.url}" class="search-drawer__link">
-          ${this.escapeHtml(collection.title)}
-        </a>
+        <li>
+          <a href="${collection.url}" class="search-drawer__link">
+            ${this.escapeHtml(collection.title)}
+          </a>
+        </li>
       `;
     }
 
@@ -292,41 +307,44 @@
       return div.innerHTML;
     }
 
-    highlightMatch(text) {
-      // Simple escape without highlighting for now
-      return this.escapeHtml(text);
-    }
-
     showLoading() {
-      this.loading.style.display = '';
-      this.results.style.display = 'none';
-      this.noResults.style.display = 'none';
-      this.viewAll.style.display = 'none';
+      if (this.loading) this.loading.hidden = false;
+      if (this.productsSection) this.productsSection.hidden = true;
+      if (this.collectionsSection) this.collectionsSection.hidden = true;
+      if (this.noResults) this.noResults.hidden = true;
+      if (this.viewAll) this.viewAll.hidden = true;
     }
 
     hideLoading() {
-      this.loading.style.display = 'none';
+      if (this.loading) this.loading.hidden = true;
     }
 
-    showNoResults() {
+    showNoResults(query) {
       this.hideLoading();
-      this.results.style.display = 'none';
-      this.noResults.style.display = '';
-      this.viewAll.style.display = 'none';
+      if (this.productsSection) this.productsSection.hidden = true;
+      if (this.collectionsSection) this.collectionsSection.hidden = true;
+      if (this.noResults) {
+        if (this.noResultsQuery) {
+          this.noResultsQuery.textContent = query;
+        }
+        this.noResults.hidden = false;
+      }
+      if (this.viewAll) this.viewAll.hidden = true;
     }
 
     resetResults() {
       this.hideLoading();
-      this.results.style.display = 'none';
-      this.noResults.style.display = 'none';
-      this.viewAll.style.display = 'none';
-      this.productsGrid.innerHTML = '';
-      this.collectionsGrid.innerHTML = '';
+      if (this.productsSection) this.productsSection.hidden = true;
+      if (this.collectionsSection) this.collectionsSection.hidden = true;
+      if (this.noResults) this.noResults.hidden = true;
+      if (this.viewAll) this.viewAll.hidden = true;
+      if (this.productsList) this.productsList.innerHTML = '';
+      if (this.collectionsList) this.collectionsList.innerHTML = '';
     }
 
     announce(message) {
-      if (this.liveRegion) {
-        this.liveRegion.textContent = message;
+      if (this.status) {
+        this.status.textContent = message;
       }
     }
 
@@ -342,7 +360,7 @@
       // Arrow down to move focus to first result
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        const firstResult = this.results.querySelector('a');
+        const firstResult = this.resultsContent?.querySelector('a');
         if (firstResult) {
           firstResult.focus();
         }
@@ -352,7 +370,13 @@
     handleFocusTrap(e) {
       if (e.key !== 'Tab') return;
 
-      const focusable = this.getFocusableElements();
+      const panel = this.drawer.querySelector('.search-drawer__panel');
+      if (!panel) return;
+
+      const focusable = Array.from(panel.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !el.disabled && !el.hidden && el.offsetParent !== null);
+
       if (focusable.length === 0) return;
 
       const firstFocusable = focusable[0];
@@ -371,16 +395,6 @@
           firstFocusable.focus();
         }
       }
-    }
-
-    getFocusableElements() {
-      return Array.from(this.panel.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )).filter(el => !el.disabled && el.offsetParent !== null);
-    }
-
-    updateFocusableElements() {
-      this.focusableElements = this.getFocusableElements();
     }
   }
 
