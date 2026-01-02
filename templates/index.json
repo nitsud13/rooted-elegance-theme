@@ -48,6 +48,7 @@
       "blocks": {
         "category-1": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Shade Trees",
             "icon": "🌳",
@@ -59,7 +60,7 @@
           "settings": {
             "title": "Flowering Trees",
             "icon": "🌸",
-            "link": ""
+            "link": "shopify://collections/flowering-plants"
           }
         },
         "category-3": {
@@ -67,11 +68,12 @@
           "settings": {
             "title": "Evergreens",
             "icon": "🌲",
-            "link": ""
+            "link": "shopify://collections/evergreen-plants"
           }
         },
         "category-4": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Fruit Trees",
             "icon": "🍎",
@@ -83,7 +85,7 @@
           "settings": {
             "title": "Shrubs",
             "icon": "🌿",
-            "link": ""
+            "link": "shopify://collections/shrubs"
           }
         },
         "category-6": {
@@ -91,7 +93,7 @@
           "settings": {
             "title": "Privacy Trees",
             "icon": "🏡",
-            "link": ""
+            "link": "shopify://collections/privacy"
           }
         }
       },
