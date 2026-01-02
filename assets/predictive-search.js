@@ -289,8 +289,17 @@
 
     formatMoney(cents) {
       if (typeof cents === 'string') {
-        cents = parseInt(cents.replace(/[^0-9]/g, ''), 10);
+        cents = parseInt(cents.replace(/[^0-9-]/g, ''), 10);
       }
+
+      const moneyFormat = (window.theme && window.theme.moneyFormat) ||
+        (window.Shopify && window.Shopify.currency && window.Shopify.currency.money_format) ||
+        '${{amount}}';
+
+      if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+        return window.Shopify.formatMoney(cents, moneyFormat);
+      }
+
       const dollars = (cents / 100).toFixed(2);
       return `$${dollars}`;
     }

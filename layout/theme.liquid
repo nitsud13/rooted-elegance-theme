@@ -44,7 +44,15 @@
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
 
     {%- comment -%} Store zone in window for global access {%- endcomment -%}
-    window.customerZone = localStorage.getItem('customer_zone') || null;
+    (function() {
+      let storedZone = null;
+      try {
+        storedZone = localStorage.getItem('customer_zone');
+      } catch (e) {
+        storedZone = null;
+      }
+      window.customerZone = storedZone;
+    })();
 
     {%- comment -%} Theme settings accessible globally {%- endcomment -%}
     window.theme = {

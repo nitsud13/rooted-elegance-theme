@@ -42,21 +42,37 @@
 
   # Try plural metafield first (list of zones), then singular
   if product.metafields.custom.usda_hardiness_zones != blank
-    assign zone_compatible = true
     assign zone_list = product.metafields.custom.usda_hardiness_zones.value
-    if zone_list.size > 1
-      assign zone_values = zone_list | join: ','
-      assign first_zone = zone_list | first
-      assign last_zone = zone_list | last
-      assign zone_range = first_zone | append: '-' | append: last_zone
-    else
-      assign zone_values = zone_list | first
-      assign zone_range = zone_list | first
+    assign normalized_zones = ''
+
+    # Normalize zones to numeric strings (handles values like "Zone 7" or "zone-7a")
+    for zone in zone_list
+      assign normalized = zone | downcase | replace: 'zone', '' | replace: ' ', '' | replace: '-', '' | strip
+      if normalized != ''
+        if normalized_zones == ''
+          assign normalized_zones = normalized
+        else
+          assign normalized_zones = normalized_zones | append: ',' | append: normalized
+        endif
+      endif
+    endfor
+
+    if normalized_zones != ''
+      assign zone_compatible = true
+      assign zones_array = normalized_zones | split: ','
+      assign zone_values = normalized_zones
+      assign zone_range = zones_array | first
+      if zones_array.size > 1
+        assign zone_range = zones_array | first | append: '-' | append: zones_array | last
+      endif
     endif
   elsif product.metafields.custom.usda_hardiness_zone != blank
-    assign zone_compatible = true
-    assign zone_values = product.metafields.custom.usda_hardiness_zone.value
-    assign zone_range = product.metafields.custom.usda_hardiness_zone.value
+    assign normalized = product.metafields.custom.usda_hardiness_zone.value | downcase | replace: 'zone', '' | replace: ' ', '' | replace: '-', '' | strip
+    if normalized != ''
+      assign zone_compatible = true
+      assign zone_values = normalized
+      assign zone_range = normalized
+    endif
   endif
 -%}
 

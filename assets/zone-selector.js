@@ -441,21 +441,23 @@
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             try {
-              // Use a reverse geocoding service to get ZIP from coordinates
-              // For production, use Google Maps, Mapbox, or similar
               const { latitude, longitude } = position.coords;
 
-              // Fallback: Use a simple lat/long to zone estimation
-              // This is a rough estimation - for production use proper geocoding
-              const zone = estimateZoneFromCoords(latitude, longitude);
-
-              if (zone) {
-                saveZone('GEOLOCATION', zone);
-                showResult({ zipCode: 'Your Location', ...zone });
-                dispatchZoneChange({ zipCode: 'GEOLOCATION', ...zone });
-              } else {
-                showError('Could not determine your zone. Please enter your ZIP code.');
+              const zipCode = await reverseGeocodeToZip(latitude, longitude);
+              if (!zipCode) {
+                showError('Could not determine your ZIP code. Please enter it manually.');
+                return;
               }
+
+              const zone = getZoneFromZip(zipCode);
+              if (!zone) {
+                showError('We could not map your ZIP to a growing zone. Please enter it manually.');
+                return;
+              }
+
+              saveZone(zipCode, zone);
+              showResult({ zipCode, ...zone });
+              dispatchZoneChange({ zipCode, ...zone });
             } catch (e) {
               showError('Could not determine your location. Please enter your ZIP code.');
             } finally {
@@ -474,27 +476,34 @@
       }
 
       /**
-       * Estimate zone from coordinates (rough estimation)
+       * Reverse geocode coordinates to a ZIP code (best-effort, no persistence on failure)
        */
-      function estimateZoneFromCoords(lat, lng) {
-        // Very rough estimation based on latitude
-        // For production, use proper geocoding + database lookup
-        let zoneCode;
+      async function reverseGeocodeToZip(lat, lng) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-        if (lat >= 45) zoneCode = '4b';
-        else if (lat >= 42) zoneCode = '5b';
-        else if (lat >= 39) zoneCode = '6b';
-        else if (lat >= 36) zoneCode = '7a';
-        else if (lat >= 33) zoneCode = '7b';
-        else if (lat >= 30) zoneCode = '8a';
-        else if (lat >= 27) zoneCode = '9a';
-        else if (lat >= 25) zoneCode = '10a';
-        else zoneCode = '10b';
+        try {
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+            { signal: controller.signal }
+          );
 
-        return {
-          zone: zoneCode,
-          ...ZONE_DATA.zones[zoneCode]
-        };
+          if (!response.ok) {
+            return null;
+          }
+
+          const data = await response.json();
+          const postal = data.postcode || data.postalCode;
+          if (postal && /^\d{5}$/.test(postal)) {
+            return postal;
+          }
+        } catch (err) {
+          console.warn('Reverse geocoding failed', err);
+        } finally {
+          clearTimeout(timeoutId);
+        }
+
+        return null;
       }
 
       /**
