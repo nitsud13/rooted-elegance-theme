@@ -46,6 +46,14 @@
     "featured-categories": {
       "type": "featured-categories",
       "blocks": {
+        "category_QYEWda": {
+          "type": "category",
+          "settings": {
+            "title": "Roses",
+            "icon": "🌹",
+            "link": "shopify://collections/roses"
+          }
+        },
         "category-1": {
           "type": "category",
           "disabled": true,
@@ -73,11 +81,10 @@
         },
         "category-4": {
           "type": "category",
-          "disabled": true,
           "settings": {
-            "title": "Fruit Trees",
-            "icon": "🍎",
-            "link": ""
+            "title": "Groundcovers",
+            "icon": "",
+            "link": "shopify://collections/groundcovers"
           }
         },
         "category-5": {
@@ -98,6 +105,7 @@
         }
       },
       "block_order": [
+        "category_QYEWda",
         "category-1",
         "category-2",
         "category-3",
