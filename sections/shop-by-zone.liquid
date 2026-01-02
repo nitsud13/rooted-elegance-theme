@@ -717,6 +717,14 @@
     text-decoration: underline;
   }
 
+  /* Ensure hidden attribute works with display:flex elements */
+  .sbz-empty[hidden],
+  .sbz-prompt[hidden],
+  .sbz-active[hidden],
+  .sbz-results__header[hidden] {
+    display: none;
+  }
+
   /* Product Grid */
   .sbz-grid {
     display: grid;
