@@ -137,9 +137,9 @@
     }
 
     .site-header__wrapper {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
       gap: var(--space-6);
       padding: var(--space-4) 0;
     }
@@ -150,6 +150,7 @@
       gap: var(--space-3);
       text-decoration: none;
       color: var(--color-forest);
+      max-width: 280px;
     }
 
     .site-header__logo-icon {
@@ -165,9 +166,12 @@
       font-family: var(--font-heading);
       font-size: var(--text-xl);
       font-weight: var(--weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    @media (min-width: 480px) {
+    @media (min-width: 600px) {
       .site-header__logo-text {
         display: block;
       }
@@ -175,12 +179,19 @@
 
     .site-header__nav {
       display: none;
+      justify-self: center;
     }
 
     @media (min-width: 1024px) {
       .site-header__nav {
         display: flex;
         align-items: center;
+        gap: var(--space-6);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .site-header__nav {
         gap: var(--space-8);
       }
     }
@@ -193,6 +204,7 @@
       text-decoration: none;
       padding: var(--space-2) 0;
       transition: color var(--duration-fast);
+      white-space: nowrap;
     }
 
     .site-header__nav-link:hover {
@@ -226,11 +238,6 @@
       .site-header__actions {
         gap: var(--space-4);
       }
-    }
-
-    .site-header__logo {
-      min-width: 0;
-      flex-shrink: 1;
     }
 
     .site-header__zone-badge {
