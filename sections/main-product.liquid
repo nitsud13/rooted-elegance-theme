@@ -93,7 +93,16 @@
               {% when 'zone_badge' %}
                 {% if product.metafields.custom.growing_zones or product.metafields.custom.usda_hardiness_zones %}
                   {% liquid
-                    assign zones = product.metafields.custom.growing_zones | default: product.metafields.custom.usda_hardiness_zones
+                    assign zones_raw = product.metafields.custom.growing_zones | default: product.metafields.custom.usda_hardiness_zones
+                    assign zones_formatted = ''
+                    for zone in zones_raw.value
+                      assign zone_number = zone | remove: 'zone-' | remove: 'Zone ' | remove: 'zone '
+                      if zones_formatted == ''
+                        assign zones_formatted = zone_number
+                      else
+                        assign zones_formatted = zones_formatted | append: ', ' | append: zone_number
+                      endif
+                    endfor
                   %}
                   <div class="zone-badge" {{ block.shopify_attributes }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,7 +110,7 @@
                       <path d="M2 17l10 5 10-5"/>
                       <path d="M2 12l10 5 10-5"/>
                     </svg>
-                    <span>Grows in Zones {{ zones }}</span>
+                    <span>Grows in Zones {{ zones_formatted }}</span>
                   </div>
                 {% endif %}
 
