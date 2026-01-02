@@ -271,12 +271,19 @@
     }
 
     .site-header__menu-btn {
-      display: flex;
+      display: flex !important;
+      background: var(--color-earth) !important;
+      color: white !important;
+    }
+
+    .site-header__cart-btn {
+      display: flex !important;
     }
 
     @media (min-width: 1024px) {
       .site-header__menu-btn {
-        display: none;
+        display: none !important;
+        background: transparent !important;
       }
     }
 
