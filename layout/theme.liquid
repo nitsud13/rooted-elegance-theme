@@ -457,7 +457,7 @@
               </svg>
             </a>
 
-            <a href="{{ routes.cart_url }}" class="site-header__icon-btn" aria-label="Cart" style="position: relative;">
+            <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart-btn" aria-label="Cart">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M6 6h15l-1.5 9h-12z"/>
                 <circle cx="9" cy="20" r="1"/>
@@ -469,7 +469,7 @@
               {%- endif -%}
             </a>
 
-            <button type="button" class="site-header__icon-btn site-header__menu-btn" aria-label="Menu" aria-expanded="false">
+            <button type="button" class="site-header__icon-btn site-header__menu-btn" aria-label="Open menu" aria-expanded="false" id="mobile-menu-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <line x1="3" y1="12" x2="21" y2="12"/>
