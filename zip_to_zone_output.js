@@ -3,7 +3,8 @@
 // https://prism.oregonstate.edu/phzm/
 // Total prefixes: 912
 
-const zipToZone = {
+// Expose on window for lazy-loading
+window.zipToZoneData = {
   '005': '7b',
   '010': '6a',
   '011': '6b',

@@ -373,7 +373,7 @@
       document.body.classList.remove('filter-panel-open');
     },
 
-    lookupZone() {
+    async lookupZone() {
       const zipInput = document.getElementById('filter-zip-input');
       const zip = zipInput.value.trim();
 
@@ -386,7 +386,7 @@
 
       // Use the ZoneSelector API if available
       if (window.ZoneSelector && window.ZoneSelector.getZoneFromZip) {
-        const result = window.ZoneSelector.getZoneFromZip(zip);
+        const result = await window.ZoneSelector.getZoneFromZip(zip);
         if (result && result.zone) {
           this.selectedZone = parseInt(result.zone);
           this.highlightZoneButton(result.zone);
@@ -428,8 +428,8 @@
     CollectionFilter.clearFilter();
   }
 
-  function lookupZoneFromFilter() {
-    CollectionFilter.lookupZone();
+  async function lookupZoneFromFilter() {
+    await CollectionFilter.lookupZone();
   }
 
   function setFilterZone(zone) {
