@@ -338,21 +338,28 @@
     },
 
     clearFilter() {
-      const productGrid = document.getElementById('product-grid');
-      const products = productGrid.querySelectorAll('.product-card');
-
-      products.forEach(card => {
-        card.classList.remove('zone-hidden');
-      });
-
-      // Update UI
-      this.isFilterActive = false;
-      document.getElementById('filter-status').hidden = true;
-      document.querySelector('.filter-toggle').classList.remove('filter-active');
-
-      // Clear session storage
+      // Clear session storage FIRST to prevent re-application on reload
       sessionStorage.removeItem('zone_filter_active');
       sessionStorage.removeItem('zone_filter_zone');
+
+      // Update state
+      this.isFilterActive = false;
+
+      // Show all products
+      const productGrid = document.getElementById('product-grid');
+      if (productGrid) {
+        const products = productGrid.querySelectorAll('.product-card');
+        products.forEach(card => {
+          card.classList.remove('zone-hidden');
+        });
+      }
+
+      // Update UI with null checks
+      const filterStatus = document.getElementById('filter-status');
+      if (filterStatus) filterStatus.hidden = true;
+
+      const filterToggle = document.querySelector('.filter-toggle');
+      if (filterToggle) filterToggle.classList.remove('filter-active');
 
       this.closePanel();
     },
