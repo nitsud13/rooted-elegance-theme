@@ -1,14 +1,25 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero-dual-cta",
       "settings": {
+        "eyebrow": "Premium Quality Trees & Shrubs",
         "heading": "Transform Your Landscape",
         "subheading": "Premium trees and shrubs delivered to your door, guaranteed to thrive in your growing zone.",
         "primary_button_text": "Shop by Growing Zone",
         "primary_button_link": "/collections/all",
         "secondary_button_text": "Browse All Trees",
-        "secondary_button_link": "/collections/all"
+        "secondary_button_link": "/collections/all",
+        "show_trust_badges": true
       }
     },
     "zone-selector": {
@@ -16,58 +27,59 @@
       "settings": {
         "heading": "Find Plants Perfect for Your Zone",
         "subheading": "Enter your ZIP code to discover trees and shrubs that will thrive in your climate.",
-        "shop_link": "/collections/all"
+        "shop_link": "/collections/all",
+        "zone_map_link": ""
       }
     },
     "featured-categories": {
       "type": "featured-categories",
-      "settings": {
-        "heading": "Shop by Category",
-        "subheading": "Find the perfect trees and shrubs for every purpose",
-        "show_view_all": true,
-        "view_all_text": "View All Categories"
-      },
       "blocks": {
         "category-1": {
           "type": "category",
           "settings": {
             "title": "Shade Trees",
-            "icon": "🌳"
+            "icon": "🌳",
+            "link": ""
           }
         },
         "category-2": {
           "type": "category",
           "settings": {
             "title": "Flowering Trees",
-            "icon": "🌸"
+            "icon": "🌸",
+            "link": ""
           }
         },
         "category-3": {
           "type": "category",
           "settings": {
             "title": "Evergreens",
-            "icon": "🌲"
+            "icon": "🌲",
+            "link": ""
           }
         },
         "category-4": {
           "type": "category",
           "settings": {
             "title": "Fruit Trees",
-            "icon": "🍎"
+            "icon": "🍎",
+            "link": ""
           }
         },
         "category-5": {
           "type": "category",
           "settings": {
             "title": "Shrubs",
-            "icon": "🌿"
+            "icon": "🌿",
+            "link": ""
           }
         },
         "category-6": {
           "type": "category",
           "settings": {
             "title": "Privacy Trees",
-            "icon": "🏡"
+            "icon": "🏡",
+            "link": ""
           }
         }
       },
@@ -78,7 +90,14 @@
         "category-4",
         "category-5",
         "category-6"
-      ]
+      ],
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": "Find the perfect trees and shrubs for every purpose",
+        "show_view_all": true,
+        "view_all_link": "",
+        "view_all_text": "View All Categories"
+      }
     },
     "bestsellers": {
       "type": "bestsellers-carousel",
@@ -86,6 +105,7 @@
         "subtitle": "Most Popular",
         "heading": "Customer Favorites",
         "description": "Tried, tested, and loved by thousands of gardeners across the country.",
+        "collection": "best-sellers",
         "products_to_show": 8,
         "show_view_all": true,
         "view_all_text": "View All Bestsellers"
@@ -93,9 +113,6 @@
     },
     "trust-bar": {
       "type": "trust-bar",
-      "settings": {
-        "layout": "grid"
-      },
       "blocks": {
         "trust-1": {
           "type": "trust_item",
@@ -135,26 +152,24 @@
         "trust-2",
         "trust-3",
         "trust-4"
-      ]
+      ],
+      "settings": {
+        "layout": "grid",
+        "background_color": "#1b4d3e"
+      }
     },
     "reviews": {
       "type": "customer-reviews",
-      "settings": {
-        "subtitle": "Real Customer Stories",
-        "heading": "Why Gardeners Love Us",
-        "show_rating_summary": true,
-        "average_rating": "4.8",
-        "total_reviews": "12,400+",
-        "show_photo_gallery": true
-      },
       "blocks": {
         "review-1": {
           "type": "testimonial",
           "settings": {
             "rating": 5,
+            "title": "Absolutely Beautiful Trees!",
             "content": "The maple tree arrived in perfect condition and has thrived since day one. Customer service helped me pick the perfect variety for my zone. Couldn't be happier!",
             "author": "Sarah M.",
             "location": "Colorado",
+            "product": "",
             "verified": true
           }
         },
@@ -162,9 +177,11 @@
           "type": "testimonial",
           "settings": {
             "rating": 5,
+            "title": "Absolutely Beautiful Trees!",
             "content": "I've ordered from many nurseries online, and Rooted Elegance is by far the best. Healthy plants, great packaging, and they actually care about helping you succeed.",
             "author": "Michael T.",
             "location": "Texas",
+            "product": "",
             "verified": true
           }
         },
@@ -172,9 +189,11 @@
           "type": "testimonial",
           "settings": {
             "rating": 5,
+            "title": "Absolutely Beautiful Trees!",
             "content": "The zone selector made it so easy to find trees that would work in my area. Three years later, my privacy screen is absolutely beautiful!",
             "author": "Jennifer K.",
             "location": "Michigan",
+            "product": "",
             "verified": true
           }
         },
@@ -182,9 +201,11 @@
           "type": "testimonial",
           "settings": {
             "rating": 4,
+            "title": "Absolutely Beautiful Trees!",
             "content": "Great selection of fruit trees. My peach tree took a little time to establish but is now producing beautifully. Support team was very helpful with planting tips.",
             "author": "David R.",
             "location": "Georgia",
+            "product": "",
             "verified": true
           }
         }
@@ -194,18 +215,21 @@
         "review-2",
         "review-3",
         "review-4"
-      ]
+      ],
+      "settings": {
+        "subtitle": "Real Customer Stories",
+        "heading": "Why Gardeners Love Us",
+        "show_rating_summary": true,
+        "average_rating": "4.8",
+        "total_reviews": "12,400+",
+        "show_photo_gallery": true,
+        "show_cta": true,
+        "cta_text": "Read All Reviews",
+        "cta_link": ""
+      }
     },
     "newsletter": {
       "type": "newsletter-signup",
-      "settings": {
-        "icon_type": "leaf",
-        "heading": "Get Growing Tips & Exclusive Offers",
-        "subheading": "Join 50,000+ gardeners receiving seasonal planting guides, care tips, and subscriber-only savings.",
-        "button_text": "Subscribe",
-        "show_privacy_note": true,
-        "show_benefits": true
-      },
       "blocks": {
         "benefit-1": {
           "type": "benefit",
@@ -230,7 +254,18 @@
         "benefit-1",
         "benefit-2",
         "benefit-3"
-      ]
+      ],
+      "settings": {
+        "icon_type": "leaf",
+        "heading": "Get Growing Tips & Exclusive Offers",
+        "subheading": "Join 50,000+ gardeners receiving seasonal planting guides, care tips, and subscriber-only savings.",
+        "placeholder": "Enter your email address",
+        "button_text": "Subscribe",
+        "success_message": "You're in! Check your inbox for a welcome surprise.",
+        "show_privacy_note": true,
+        "privacy_note": "We respect your privacy. Unsubscribe anytime.",
+        "show_benefits": true
+      }
     }
   },
   "order": [
