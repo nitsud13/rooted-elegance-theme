@@ -22,6 +22,18 @@
         "show_trust_badges": true
       }
     },
+    "bestsellers": {
+      "type": "bestsellers-carousel",
+      "settings": {
+        "subtitle": "Most Popular",
+        "heading": "Customer Favorites",
+        "description": "Tried, tested, and loved by thousands of gardeners across the country.",
+        "collection": "best-sellers",
+        "products_to_show": 8,
+        "show_view_all": true,
+        "view_all_text": "View All Bestsellers"
+      }
+    },
     "zone-selector": {
       "type": "zone-selector",
       "settings": {
@@ -97,18 +109,6 @@
         "show_view_all": true,
         "view_all_link": "",
         "view_all_text": "View All Categories"
-      }
-    },
-    "bestsellers": {
-      "type": "bestsellers-carousel",
-      "settings": {
-        "subtitle": "Most Popular",
-        "heading": "Customer Favorites",
-        "description": "Tried, tested, and loved by thousands of gardeners across the country.",
-        "collection": "best-sellers",
-        "products_to_show": 8,
-        "show_view_all": true,
-        "view_all_text": "View All Bestsellers"
       }
     },
     "trust-bar": {
@@ -270,9 +270,9 @@
   },
   "order": [
     "hero",
+    "bestsellers",
     "zone-selector",
     "featured-categories",
-    "bestsellers",
     "trust-bar",
     "reviews",
     "newsletter"
