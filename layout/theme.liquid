@@ -232,6 +232,7 @@
       align-items: center;
       gap: var(--space-2);
       flex-shrink: 0;
+      justify-self: end;
     }
 
     @media (min-width: 480px) {
@@ -310,6 +311,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* Mobile menu button accent styling */
+    .site-header__menu-btn {
+      background: var(--color-earth);
+      color: var(--color-white);
+      border-radius: var(--radius-lg);
+    }
+
+    .site-header__menu-btn:hover {
+      background: var(--color-forest);
+      color: var(--color-white);
     }
 
     @media (min-width: 1280px) {
