@@ -128,9 +128,33 @@
       "settings": {
         "enable_zoom": true
       }
+    },
+    "1767367106d078b12e": {
+      "type": "apps",
+      "blocks": {
+        "smps_product_question_answer_sqa_wNEML6": {
+          "type": "shopify://apps/smps-product-question-answer/blocks/SQA/84c5ea51-4ec6-4681-8c2f-c95d8846ed7e",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_gydFpw": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "smps_product_question_answer_sqa_wNEML6",
+        "judge_me_reviews_review_widget_gydFpw"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "1767367106d078b12e"
   ]
 }
