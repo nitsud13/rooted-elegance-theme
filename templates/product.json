@@ -14,6 +14,7 @@
       "blocks": {
         "vendor_block": {
           "type": "vendor",
+          "disabled": true,
           "settings": {}
         },
         "title_block": {
