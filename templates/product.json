@@ -49,9 +49,9 @@
             "border_radius": 0,
             "borderless": false,
             "header_background_color": "#8ba888",
-            "header_text_color": "#FFFFFF",
+            "header_text_color": "#ffffff",
             "cell_padding": 14,
-            "body_background_color": "#FFFFFF",
+            "body_background_color": "#ffffff",
             "body_text_color": "#555555",
             "highlight_unlocked_tier": true,
             "highlight_color": "#999999",
@@ -141,10 +141,15 @@
         "smps_product_question_answer_sqa_wNEML6"
       ],
       "settings": {}
+    },
+    "17673684418994052d": {
+      "type": "apps",
+      "settings": {}
     }
   },
   "order": [
     "main",
-    "1767367106d078b12e"
+    "1767367106d078b12e",
+    "17673684418994052d"
   ]
 }
