@@ -1,5 +1,4 @@
 {
-  "name": "Homepage",
   "sections": {
     "hero": {
       "type": "hero-dual-cta",
@@ -9,9 +8,7 @@
         "primary_button_text": "Shop by Growing Zone",
         "primary_button_link": "/collections/all",
         "secondary_button_text": "Browse All Trees",
-        "secondary_button_link": "/collections/all",
-        "text_position": "center",
-        "overlay_opacity": 40
+        "secondary_button_link": "/collections/all"
       }
     },
     "zone-selector": {
@@ -152,47 +149,43 @@
       },
       "blocks": {
         "review-1": {
-          "type": "review",
+          "type": "testimonial",
           "settings": {
             "rating": 5,
             "content": "The maple tree arrived in perfect condition and has thrived since day one. Customer service helped me pick the perfect variety for my zone. Couldn't be happier!",
-            "author_name": "Sarah M.",
-            "author_location": "Colorado",
-            "verified": true,
-            "product_name": "Autumn Blaze Maple"
+            "author": "Sarah M.",
+            "location": "Colorado",
+            "verified": true
           }
         },
         "review-2": {
-          "type": "review",
+          "type": "testimonial",
           "settings": {
             "rating": 5,
             "content": "I've ordered from many nurseries online, and Rooted Elegance is by far the best. Healthy plants, great packaging, and they actually care about helping you succeed.",
-            "author_name": "Michael T.",
-            "author_location": "Texas",
-            "verified": true,
-            "product_name": "Leyland Cypress"
+            "author": "Michael T.",
+            "location": "Texas",
+            "verified": true
           }
         },
         "review-3": {
-          "type": "review",
+          "type": "testimonial",
           "settings": {
             "rating": 5,
             "content": "The zone selector made it so easy to find trees that would work in my area. Three years later, my privacy screen is absolutely beautiful!",
-            "author_name": "Jennifer K.",
-            "author_location": "Michigan",
-            "verified": true,
-            "product_name": "Thuja Green Giant"
+            "author": "Jennifer K.",
+            "location": "Michigan",
+            "verified": true
           }
         },
         "review-4": {
-          "type": "review",
+          "type": "testimonial",
           "settings": {
             "rating": 4,
             "content": "Great selection of fruit trees. My peach tree took a little time to establish but is now producing beautifully. Support team was very helpful with planting tips.",
-            "author_name": "David R.",
-            "author_location": "Georgia",
-            "verified": true,
-            "product_name": "Elberta Peach"
+            "author": "David R.",
+            "location": "Georgia",
+            "verified": true
           }
         }
       },
