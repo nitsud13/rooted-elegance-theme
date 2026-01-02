@@ -42,6 +42,33 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "discount_kit_product_volume_6dnYqz": {
+          "type": "shopify://apps/discount-kit/blocks/product_volume/baf3f84c-ff2c-442d-a0fc-e8e16b834acd",
+          "settings": {
+            "border_color": "#555555",
+            "border_radius": 0,
+            "borderless": false,
+            "header_background_color": "#8ba888",
+            "header_text_color": "#FFFFFF",
+            "cell_padding": 14,
+            "body_background_color": "#FFFFFF",
+            "body_text_color": "#555555",
+            "highlight_unlocked_tier": true,
+            "highlight_color": "#999999",
+            "quantities_as_range": false,
+            "header_prereq_quantity_label": "Buy",
+            "header_prereq_spend_label": "Spend",
+            "show_savings": true,
+            "header_savings_label": "Get",
+            "body_off_each_text": "off each",
+            "show_prices": false,
+            "header_price_label": "Price",
+            "show_base_row": false,
+            "messageText": "",
+            "messagePosition": "above",
+            "custom_css": ""
+          }
+        },
         "buy_buttons_block": {
           "type": "buy_buttons",
           "settings": {
@@ -91,6 +118,7 @@
         "zone_badge_block",
         "variant_picker_block",
         "quantity_block",
+        "discount_kit_product_volume_6dnYqz",
         "buy_buttons_block",
         "description_block",
         "trust_badges_block",
