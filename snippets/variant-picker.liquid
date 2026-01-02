@@ -25,6 +25,10 @@
             {% for value in option.values %}
               {% liquid
                 assign option_disabled = true
+                assign is_selected = false
+                if option.selected_value == value
+                  assign is_selected = true
+                endif
                 for variant in product.variants
                   if variant.available
                     assign variant_option_name = 'option' | append: forloop.parentloop.index
@@ -37,11 +41,11 @@
               %}
               <button
                 type="button"
-                class="option-btn{% if option.selected_value == value %} active{% endif %}{% if option_disabled %} disabled{% endif %}"
+                class="option-btn{% if is_selected %} active{% endif %}{% if option_disabled %} disabled{% endif %}"
                 data-option-position="{{ option.position }}"
                 data-option-value="{{ value | escape }}"
                 {% if option_disabled %}disabled aria-disabled="true"{% endif %}
-                aria-pressed="{{ option.selected_value == value }}"
+                aria-pressed="{% if is_selected %}true{% else %}false{% endif %}"
               >
                 {{ value }}
               </button>

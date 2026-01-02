@@ -145,7 +145,8 @@
 
               {% when 'buy_buttons' %}
                 <div class="buy-buttons-wrapper" {{ block.shopify_attributes }}>
-                  {% form 'product', product, id: 'product-form-' | append: section.id, class: 'product-form', novalidate: 'novalidate' %}
+                  {%- assign form_id = 'product-form-' | append: section.id -%}
+                  {% form 'product', product, id: form_id, class: 'product-form', novalidate: 'novalidate' %}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="variant-id">
                     <input type="hidden" name="quantity" value="1" id="form-quantity">
 
