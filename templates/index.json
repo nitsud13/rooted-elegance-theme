@@ -1,4 +1,5 @@
 {
+  "name": "Homepage",
   "sections": {
     "hero": {
       "type": "hero-dual-cta",
