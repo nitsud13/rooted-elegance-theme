@@ -16,8 +16,8 @@
         "heading": "Transform Your Landscape",
         "subheading": "Premium trees and shrubs delivered to your door, guaranteed to thrive in your growing zone.",
         "primary_button_text": "Shop by Growing Zone",
-        "primary_button_link": "/collections/all",
-        "secondary_button_text": "Browse All Trees",
+        "primary_button_link": "shopify://pages/shop-by-growing-zone",
+        "secondary_button_text": "Browse All Plants",
         "secondary_button_link": "/collections/all",
         "show_trust_badges": true
       }
