@@ -290,20 +290,9 @@
       justify-content: center;
     }
 
-    .site-header__menu-btn {
-      display: flex !important;
-      background: var(--color-earth) !important;
-      color: white !important;
-    }
-
-    .site-header__cart-btn {
-      display: flex !important;
-    }
-
     @media (min-width: 1024px) {
       .site-header__menu-btn {
-        display: none !important;
-        background: transparent !important;
+        display: none;
       }
     }
 
@@ -484,7 +473,7 @@
               </svg>
             </a>
 
-            <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart-btn" aria-label="Cart" style="display: flex !important;">
+            <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart-btn" aria-label="Cart">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M6 6h15l-1.5 9h-12z"/>
                 <circle cx="9" cy="20" r="1"/>
@@ -496,7 +485,7 @@
               {%- endif -%}
             </a>
 
-            <button type="button" class="site-header__icon-btn site-header__menu-btn" aria-label="Open menu" aria-expanded="false" id="mobile-menu-btn" style="display: flex !important; background: #C45C26 !important; width: 44px; height: 44px;">
+            <button type="button" class="site-header__icon-btn site-header__menu-btn" aria-label="Open menu" aria-expanded="false" id="mobile-menu-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <line x1="3" y1="12" x2="21" y2="12"/>
