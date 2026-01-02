@@ -880,7 +880,7 @@ body.mobile-menu--open {
   font-size: var(--text-lg);
   color: var(--color-bark);
   background: var(--color-cream);
-  border: 2px solid transparent;
+  border: 2px solid var(--color-cream-warm, #E8E4DE);
   border-radius: var(--radius-xl);
   transition: all var(--duration-fast) var(--ease-out);
 }
@@ -939,6 +939,14 @@ body.mobile-menu--open {
 /* Results Container */
 .search-drawer__results {
   margin-top: var(--space-4);
+}
+
+/* Hidden attribute support */
+.search-drawer__loading[hidden],
+.search-drawer__section[hidden],
+.search-drawer__no-results[hidden],
+.search-drawer__view-all[hidden] {
+  display: none !important;
 }
 
 /* Loading State */
@@ -1014,9 +1022,16 @@ body.mobile-menu--open {
   width: 64px;
   height: 64px;
   border-radius: var(--radius-md);
-  object-fit: cover;
   background: var(--color-white);
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.search-drawer__product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .search-drawer__product-info {
@@ -1155,16 +1170,46 @@ body.search-drawer--open {
 
   .search-drawer__products-list {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Stack cards vertically in grid layout */
+  .search-drawer__product {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: var(--space-3);
   }
 
   .search-drawer__product-image {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: 120px;
+    margin-bottom: var(--space-2);
+  }
+
+  .search-drawer__product-info {
+    align-items: center;
+  }
+
+  .search-drawer__product-title {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .search-drawer__product:hover,
+  .search-drawer__product:focus {
+    transform: translateY(-2px);
   }
 }
 
 @media (min-width: 1024px) {
   .search-drawer__products-list {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .search-drawer__product-image {
+    height: 140px;
   }
 }
