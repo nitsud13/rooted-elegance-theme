@@ -290,6 +290,8 @@
         ...zoneData,
         timestamp: Date.now()
       }));
+      // Also set simple customer_zone key for theme.liquid header badge
+      localStorage.setItem('customer_zone', zoneData.zone);
     } catch (e) {
       console.warn('Could not save zone to localStorage:', e);
     }
@@ -316,6 +318,8 @@
   function clearSavedZone() {
     try {
       localStorage.removeItem(STORAGE_KEY);
+      // Also clear simple customer_zone key
+      localStorage.removeItem('customer_zone');
     } catch (e) {
       console.warn('Could not clear zone from localStorage:', e);
     }
@@ -546,20 +550,15 @@
   function updateZoneBadges(userZone) {
     const zoneNumber = parseInt(userZone);
 
-    // Update header zone badge - try multiple selectors for robustness
-    const headerBadges = document.querySelectorAll('[data-zone-badge] [data-zone-value]');
-    const siteHeaderBadge = document.querySelector('.site-header [data-zone-value]');
-
-    console.log('Updating zone badges, found:', headerBadges.length, 'badge elements, site header badge:', !!siteHeaderBadge, 'zone:', userZone);
-
-    headerBadges.forEach(el => {
+    // Update header zone badge
+    document.querySelectorAll('[data-zone-badge] [data-zone-value]').forEach(el => {
       el.textContent = userZone;
     });
 
-    // Fallback: directly update site header badge if not already updated
-    if (siteHeaderBadge && siteHeaderBadge.textContent !== userZone) {
-      siteHeaderBadge.textContent = userZone;
-    }
+    // Also update any other header zone displays
+    document.querySelectorAll('.site-header [data-zone-value]').forEach(el => {
+      el.textContent = userZone;
+    });
 
     // Find all product cards and update compatibility indicators
     document.querySelectorAll('[data-product-zone]').forEach(el => {
