@@ -61,9 +61,11 @@
       assign zone_compatible = true
       assign zones_array = normalized_zones | split: ','
       assign zone_values = normalized_zones
-      assign zone_range = zones_array | first
+      assign first_zone = zones_array | first
+      assign last_zone = zones_array | last
+      assign zone_range = first_zone
       if zones_array.size > 1
-        assign zone_range = zones_array | first | append: '-' | append: zones_array | last
+        assign zone_range = first_zone | append: '-' | append: last_zone
       endif
     endif
   elsif product.metafields.custom.usda_hardiness_zone != blank
