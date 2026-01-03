@@ -10,6 +10,7 @@
  *   node populate-zones.js              # Run with updates
  *   node populate-zones.js --dry-run    # Preview changes without updating
  *   node populate-zones.js --verbose    # Show detailed logging
+ *   node populate-zones.js --normalize  # Convert old "zone-X" format to "X"
  *
  * Prerequisites:
  *   1. Create a .env file with your Shopify credentials
@@ -29,6 +30,7 @@ const CONFIG = {
   metafieldKey: 'usda_hardiness_zones',
   dryRun: process.argv.includes('--dry-run'),
   verbose: process.argv.includes('--verbose'),
+  normalize: process.argv.includes('--normalize'),
 };
 
 // Load plant zones database
@@ -177,6 +179,23 @@ function extractPlantName(title) {
   return cleanTitle.trim();
 }
 
+// Normalize zone format from "zone-7" to "7"
+function normalizeZoneFormat(zones) {
+  return zones.map((zone) =>
+    zone
+      .toLowerCase()
+      .replace('zone', '')
+      .replace('-', '')
+      .replace(' ', '')
+      .trim()
+  );
+}
+
+// Check if zones need normalization (have old "zone-X" format)
+function needsNormalization(zones) {
+  return zones.some((z) => typeof z === 'string' && z.toLowerCase().includes('zone'));
+}
+
 // Look up zones for a plant name
 function lookupZones(plantName) {
   const plants = plantDatabase.plants;
@@ -300,6 +319,10 @@ async function main() {
     console.log('🔍 DRY RUN MODE - No changes will be made\n');
   }
 
+  if (CONFIG.normalize) {
+    console.log('🔄 NORMALIZE MODE - Will convert old zone-X format to plain numbers\n');
+  }
+
   validateConfig();
 
   const products = await fetchAllProducts();
@@ -308,6 +331,7 @@ async function main() {
     updated: [],
     skipped: [],
     notFound: [],
+    normalized: [],
     errors: [],
   };
 
@@ -322,15 +346,48 @@ async function main() {
       console.log(`    Extracted: "${plantName}"`);
     }
 
-    // Skip if already has zones and we're not forcing update
+    // Handle products that already have zones
     if (product.existingZones && product.existingZones.length > 0) {
-      results.skipped.push({
-        title: product.title,
-        reason: 'Already has zones',
-        existingZones: product.existingZones,
-      });
-      if (CONFIG.verbose) {
-        console.log(`    ⏭ Skipped (existing zones: ${product.existingZones.join(', ')})`);
+      // Check if normalization is needed and requested
+      if (CONFIG.normalize && needsNormalization(product.existingZones)) {
+        const normalizedZones = normalizeZoneFormat(product.existingZones);
+
+        try {
+          await updateProductZones(product, normalizedZones);
+
+          results.normalized.push({
+            title: product.title,
+            oldZones: product.existingZones,
+            newZones: normalizedZones,
+          });
+
+          if (CONFIG.verbose) {
+            console.log(`    🔄 Normalized: ${product.existingZones.join(', ')} → ${normalizedZones.join(', ')}`);
+          } else {
+            process.stdout.write(`  Normalized: ${results.normalized.length} | Skipped: ${results.skipped.length}\r`);
+          }
+
+          // Rate limiting
+          await new Promise((resolve) => setTimeout(resolve, 550));
+        } catch (error) {
+          results.errors.push({
+            title: product.title,
+            error: error.message,
+          });
+          if (CONFIG.verbose) {
+            console.log(`    ✗ Error normalizing: ${error.message}`);
+          }
+        }
+      } else {
+        // Skip - already has zones in correct format (or --normalize not passed)
+        results.skipped.push({
+          title: product.title,
+          reason: 'Already has zones',
+          existingZones: product.existingZones,
+        });
+        if (CONFIG.verbose) {
+          console.log(`    ⏭ Skipped (existing zones: ${product.existingZones.join(', ')})`);
+        }
       }
       continue;
     }
@@ -385,10 +442,11 @@ async function main() {
     console.log('🔍 DRY RUN - No actual changes were made\n');
   }
 
-  console.log(`✓ Updated:   ${results.updated.length} products`);
-  console.log(`⏭ Skipped:   ${results.skipped.length} products (already had zones)`);
-  console.log(`⚠ Not Found: ${results.notFound.length} products (need manual review)`);
-  console.log(`✗ Errors:    ${results.errors.length} products\n`);
+  console.log(`✓ Updated:    ${results.updated.length} products`);
+  console.log(`🔄 Normalized: ${results.normalized.length} products (format fixed)`);
+  console.log(`⏭ Skipped:    ${results.skipped.length} products (already had zones)`);
+  console.log(`⚠ Not Found:  ${results.notFound.length} products (need manual review)`);
+  console.log(`✗ Errors:     ${results.errors.length} products\n`);
 
   // List products needing manual review
   if (results.notFound.length > 0) {
@@ -422,6 +480,7 @@ async function main() {
     summary: {
       total: products.length,
       updated: results.updated.length,
+      normalized: results.normalized.length,
       skipped: results.skipped.length,
       notFound: results.notFound.length,
       errors: results.errors.length,
